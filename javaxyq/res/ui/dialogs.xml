@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialogs>
+  <Dialog id="com.javaxyq.action.dialog.退出游戏" align="center" x="159" y="170" width="321" height="139" background="/resources/dialog/空白短.was">
+    <Action id="com.javaxyq.action.游戏主页" class="com.javaxyq.action.SystemActions"/>
+    <Button text="退出游戏" actionId="com.javaxyq.action.退出游戏" x="30" y="60" was="/resources/button/空白7222.was"/>
+    <Button text="我的BLOG" actionId="com.javaxyq.action.游戏主页" x="130" y="60" was="/resources/button/空白7222.was"/>
+    <Button text="继续游戏" actionId="com.javaxyq.action.CloseAction" x="230" y="60" was="/resources/button/空白7222.was"/>
+    <Text text="你确定要退出游戏吗?" x="10" y="28" width="300" height="21" font="" size="" color="white" align="center"/>
+    <Text text="讨论QQ群:9106334" x="10" y="98" width="300" height="16" font="" size="" color="white" align="center"/>
+    <Text name="version" text="版权所有 2006-2008 龚德伟" x="10" y="116" width="300" height="16" font="" size="" color="white" align="center"/>
+  </Dialog>
+  <Dialog id="com.javaxyq.action.dialog.talk" talk="true" x="79" y="250" width="482" height="167" background="/resources/dialog/空白长.was"/>
+  <Dialog id="com.javaxyq.action.dialog.color" x="234" y="99" width="169" height="264" background="/resources/color/dlg_clothing_color.was" initial="com.javaxyq.action.color.initial">
+    <Button name="btn1" toggle="true" actionId="com.javaxyq.action.color.section1" x="13" y="200" was="/resources/color/btn_1.was" width="22" height="23"/>
+    <Button name="btn2" toggle="true" actionId="com.javaxyq.action.color.section2" x="38" y="200" was="/resources/color/btn_2.was"/>
+    <Button name="btn3" toggle="true" actionId="com.javaxyq.action.color.section3" x="63" y="200" was="/resources/color/btn_3.was"/>
+    <Button actionId="com.javaxyq.action.color.coloring" x="110" y="200" was="/resources/color/btn_coloring.was"/>
+    <Button actionId="com.javaxyq.action.color.rotate" x="135" y="200" was="/resources/color/btn_reset.was"/>
+    <Text name="textMaterial" text="所需彩果" x="15" y="234" width="100" height="16" color="white"/>
+    <Text name="textCost" text="0" x="80" y="233" width="30" height="16" color="blue"/>
+    <Button text="确定" actionId="com.javaxyq.action.color.save" x="120" y="230" was="/resources/button/空白4321.was"/>
+  </Dialog>
+  <Dialog id="com.javaxyq.action.dialog.主技能" x="0" y="0" width="451" height="465" background="/resources/dialog/主技能.was" initial="com.javaxyq.action.mainskill.initial"/>
+  <Dialog id="com.javaxyq.action.dialog.任务提示" width="395" height="350" halign="center" valign="center" background="/resources/dialog/任务提示.was" initial="com.javaxyq.action.tasklist.initial" x="147" y="77"/>
+</Dialogs>

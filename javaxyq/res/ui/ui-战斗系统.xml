@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialogs>
+  <Dialog id="battle.战斗指令" x="521" y="98" width="66" height="143" tooltip="" background="/wzife/dialog/warsummon.tcp" closable="false" movable="true" initial="com.javaxyq.action.battle.initial" dispose="com.javaxyq.action.battle.dispose">
+    <Button id="" name="btn法术" text="" x="3" y="5" width="" height="" actionId="com.javaxyq.action.battle.warmagic" was="/wzife/button/warmagic.tcp" tooltip="" toggle=""/>
+    <Button id="" name="btn道具" text="" x="3" y="28" width="" height="" actionId="com.javaxyq.action.battle.waritem" was="/wzife/button/waritem.tcp" tooltip="" toggle=""/>
+    <Button id="" name="btn防御" text="" x="3" y="51" width="" height="" actionId="com.javaxyq.action.battle.wardefend" was="/wzife/button/wardefend.tcp" tooltip="" toggle=""/>
+    <Button id="" name="btn捕捉" text="" x="3" y="74" width="" height="" actionId="com.javaxyq.action.battle.warcatch" was="/wzife/button/warcatch.tcp" tooltip="" toggle=""/>
+    <Button id="" name="btn逃跑" text="" x="3" y="97" width="" height="" actionId="com.javaxyq.action.battle.warrunaway" was="/wzife/button/warrunaway.tcp" tooltip="" toggle=""/>
+  </Dialog>
+  <Dialog id="battle.战斗提示" x="142" y="400" width="400" height="30" tooltip="" background="" initial="" dispose="" closable="" movable="">
+    <Text id="" name="text战斗消息" x="" y="" width="400" height="30" tooltip="" text="" font="" size="" color="white" align="center" actionId=""/>
+  </Dialog>
+  <Dialog id="battle.useitem" x="175" y="101" width="295" height="260" tooltip="" background="/wzife/dialog/useitem.tcp" initial="" dispose="" closable="false" movable="true">
+    <Item id="" name="item1" x="19" y="34" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item2" x="71" y="34" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item3" x="122" y="34" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item4" x="218" y="79" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item5" x="224" y="35" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item6" x="20" y="84" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item7" x="71" y="85" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item8" x="122" y="85" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item9" x="173" y="85" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item10" x="224" y="85" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item11" x="20" y="136" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item12" x="71" y="136" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item13" x="157" y="171" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item14" x="173" y="136" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item15" x="224" y="135" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item16" x="20" y="187" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item17" x="71" y="186" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item18" x="122" y="187" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item19" x="173" y="186" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+    <Item id="" name="item20" x="224" y="187" width="50" height="50" tooltip="" text="" font="" size="" color="" align="" actionId=""/>
+  </Dialog>
+</Dialogs>

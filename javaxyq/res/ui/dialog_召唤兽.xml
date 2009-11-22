@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialogs>
+  <Dialog id="com.javaxyq.action.dialog.召唤兽属性" x="0" y="0" width="281" height="460" background="/resources/dialog/召唤兽属性.was">
+    <Text name="text等级" text="100" x="180" y="145" width="30" height="18" actionId=""/>
+    <Text name="text名称" text="大海龟" x="53" y="192" width="130" height="17" actionId=""/>
+    <Text name="text气血" text="10/10" x="53" y="217" width="80" height="14" actionId=""/>
+    <Text name="text魔法" text="10/10" x="53" y="242" width="80" height="14" actionId=""/>
+    <Text name="text攻击" text="10" x="53" y="267" width="80" height="13" actionId=""/>
+    <Text name="text防御" text="10" x="53" y="292" width="80" height="12" actionId=""/>
+    <Text name="text速度" text="10" x="53" y="315" width="80" height="15" actionId=""/>
+    <Text name="text灵力" text="10" x="53" y="342" width="80" height="9" actionId=""/>
+    <Text name="text体质" text="100" x="182" y="216" width="40" height="16" actionId=""/>
+    <Text name="text法力" text="100" x="183" y="241" width="40" height="16" actionId=""/>
+    <Text name="text力量" text="100" x="183" y="264" width="40" height="16" actionId=""/>
+    <Text name="text耐力" text="100" x="183" y="288" width="40" height="16" actionId=""/>
+    <Text name="text敏捷" text="100" x="183" y="312" width="40" height="16" actionId=""/>
+    <Text name="text潜能" text="100" x="182" y="337" width="40" height="16" actionId=""/>
+    <Text name="text经验" text="1002309" x="85" y="358" width="80" height="20" actionId=""/>
+    <Text name="text忠诚" text="100" x="53" y="408" width="30" height="14" actionId=""/>
+    <Text id="null" name="text携带数量" x="79" y="169" width="45" height="20" tooltip="null" text="3/3" font="null" size="null" color="red" align="null" actionId=""/>
+    <Text id="null" name="text携带等级" x="210" y="168" width="40" height="20" tooltip="null" text="15" font="null" size="null" color="red" align="null" actionId=""/>
+    <Text name="textLevelExp" text="2352309" x="85" y="383" width="80" height="18" actionId=""/>
+  </Dialog>
+  <Dialog id="com.javaxyq.action.dialog.召唤兽资质" x="280" y="3" width="207" height="456" background="/resources/dialog/召唤兽资质.was">
+    <Text name="攻击资质" text="100" x="127" y="99" width="57" height="16" actionId=""/>
+    <Text name="成长" text="100" x="127" y="260" width="57" height="16" actionId=""/>
+    <Text name="五行" text="100" x="127" y="284" width="57" height="16" actionId=""/>
+    <Text name="寿命" text="100" x="128" y="237" width="57" height="16" actionId=""/>
+    <Text name="躲闪资质" text="100" x="128" y="214" width="57" height="16" actionId=""/>
+    <Text name="速度资质" text="100" x="127" y="190" width="57" height="16" actionId=""/>
+    <Text name="法力资质" text="100" x="128" y="168" width="57" height="16" actionId=""/>
+    <Text name="体力资质" text="100" x="127" y="145" width="57" height="16" actionId=""/>
+    <Text name="防御资质" text="100" x="127" y="123" width="57" height="16" actionId=""/>
+  </Dialog>
+  <Dialog id="com.javaxyq.action.dialog.召唤兽" x="94" y="61" width="451" height="381" background="/resources/dialog/召唤兽.was"/>
+</Dialogs>
