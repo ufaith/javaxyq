@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialogs>
+  <Dialog id="com.javaxyq.action.dialog.道具行囊" x="22" y="10" width="273" height="451" background="/resources/dialog/道具行囊.was" initial="com.javaxyq.action.items.initial" dispose="com.javaxyq.action.items.dispose">
+    <Sprite id="" name="武器" x="160" y="78" width="" height="" tooltip="" path="/item/23ff2c01" actionId=""/>
+    <Sprite id="" name="武器底" x="158" y="79" width="" height="" tooltip="" path="/resources/dialog/单元格底.was" actionId=""/>
+    <Sprite id="" name="face" x="25" y="1" width="136" height="156" tooltip="" path="/wzife/photo/facebig/0001.tcp" actionId=""/>
+    <Button id="" name="" text="" x="250" y="5" width="" height="" actionId="" was="/resources/button/关闭.was" tooltip="" toggle=""/>
+    <Text id="" name="现金" x="59" y="142" width="90" height="20" tooltip="" text="${money}" font="" size="" color="blue" align="" actionId=""/>
+    <Text id="" name="存银" x="59" y="162" width="90" height="20" tooltip="" text="${deposit}" font="" size="" color="blue" align="" actionId=""/>
+    <Button id="" name="" text="" x="231" y="5" width="" height="" actionId="" was="/resources/button/帮助.was" tooltip="" toggle=""/>
+    <Image x="0" y="21" width="271" height="163" path="/resources/dialog/道具人物装备.was" actionId=""/>
+    <Sprite id="" name="腰带" x="162" y="134" width="" height="" tooltip="" path="/item/22acb047" actionId=""/>
+    <Sprite id="" name="头盔" x="162" y="23" width="" height="" tooltip="" path="/item/242ae31d" actionId=""/>
+    <Sprite id="" name="饰品" x="214" y="25" width="" height="" tooltip="" path="/item/2ea16c08" actionId=""/>
+    <Sprite id="" name="靴子" x="212" y="136" width="" height="" tooltip="" path="/item/170dca03" actionId=""/>
+    <Sprite id="" name="铠甲" x="218" y="82" width="" height="" tooltip="" path="/item/4037ac1" actionId=""/>
+    <Sprite id="" name="头盔底" x="160" y="25" width="" height="" tooltip="" path="/resources/dialog/单元格底.was" actionId=""/>
+    <Sprite id="" name="铠甲底" x="213" y="79" width="" height="" tooltip="" path="/resources/dialog/单元格底.was" actionId=""/>
+    <Sprite id="" name="腰带底" x="159" y="134" width="" height="" tooltip="" path="/resources/dialog/单元格底.was" actionId=""/>
+    <Sprite id="" name="靴子底" x="213" y="134" width="" height="" tooltip="" path="/resources/dialog/单元格底.was" actionId=""/>
+    <Sprite id="" name="饰品底" x="213" y="25" width="" height="" tooltip="" path="/resources/dialog/单元格底.was" actionId=""/>
+    <Button id="" name="道具" text="" x="9" y="400" width="" height="" actionId="" was="/resources/button/道具.was" tooltip="" toggle="true"/>
+    <Button id="" name="行囊" text="" x="66" y="400" width="" height="" actionId="" was="/resources/button/行囊.was" tooltip="" toggle="true"/>
+    <Button id="" name="销毁" text="销毁" x="174" y="399" width="" height="" actionId="" was="/resources/button/空白4321.was" tooltip="" toggle="false"/>
+    <Button id="" name="整理" text="整理" x="225" y="400" width="" height="" actionId="" was="/resources/button/空白4321.was" tooltip="" toggle="false"/>
+  </Dialog>
+</Dialogs>

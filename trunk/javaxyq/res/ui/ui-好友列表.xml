@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialogs>
+  <Dialog id="com.javaxyq.action.dialog.好友列表" x="507" y="42" width="130" height="407" tooltip="" background="/resources/dialog/好友列表.was" initial="" dispose="" closable="true" movable="true">
+    <Button id="" name="group1" text="" x="10" y="25" width="" height="" actionId="" was="/resources/button/number/1.was" tooltip="" toggle=""/>
+  </Dialog>
+</Dialogs>
