@@ -1,4 +1,6 @@
 #summary ResourceManager的使用帮助.
+Sections: 
+ <wiki:toc max_depth="2"/>  
 
 = Introduction =
 
