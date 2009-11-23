@@ -7,7 +7,7 @@
     <Button text="访问主页" actionId="com.javaxyq.action.游戏主页" x="135" y="55" was="/resources/button/空白7222.was"/>
     <Button text="继续游戏" actionId="com.javaxyq.action.CloseAction" x="230" y="50" was="/resources/button/空白7222.was"/>
     <Text text="你确定要退出游戏吗?" x="10" y="24" width="300" height="21" font="" size="" color="white" align="center" actionId="null"/>
-    <Text text="欢迎留言或者qq群讨论(9106334)" x="10" y="102" width="300" height="16" font="" size="" color="white" align="center" actionId="null"/>
+    <Text text="欢迎留言或者qq群讨论(35896251)" x="10" y="102" width="300" height="16" font="" size="" color="white" align="center" actionId="null"/>
     <Text name="version" text="最后更新：2009-11-22" x="9" y="120" width="300" height="16" font="" size="" color="white" align="center" actionId="null"/>
     <Button text="贡献者" actionId="com.javaxyq.action.dialog.贡献者" x="25" y="77" was="/resources/button/空白7222.was"/>
     <Button text="访问博客" actionId="com.javaxyq.action.游戏博客" x="135" y="79" was="/resources/button/空白7222.was"/>

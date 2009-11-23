@@ -543,7 +543,7 @@ public class MapBrowser extends javax.swing.JFrame implements WindowListener {
     }
 
     private void showIntroduction() {
-        final String url = "http://kylixs.blog.163.com";
+        final String url = "http://javaxyq.googlecode.com";
         String msg =
         	"Ctrl+O : 打开地图文件\n" + "Ctrl+S : 导出当前区域的地图图像\n" + "支持鼠标拖动地图\n"
         		+ "点击右下角文字标签可以精确设置可视区域大小\n\n" + "更多信息，请访问以下网址：\n";

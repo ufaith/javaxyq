@@ -7,7 +7,6 @@
 
 package com.javaxyq.core;
 
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,6 @@ import com.javaxyq.config.ImageConfig;
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.config.PlayerConfig;
 import com.javaxyq.config.PlayerDefine;
-import com.javaxyq.config.StateConfig;
 import com.javaxyq.trigger.Trigger;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
@@ -49,6 +47,8 @@ public class ResourceStore {
 	private Map<String, PlayerDefine> playerDefines = new HashMap<String, PlayerDefine>();
 
 	private Map<String, Cursor> cursorMap = new HashMap<String, Cursor>();
+	
+	private List<PlayerConfig> allNpcs = new ArrayList<PlayerConfig>();
 
 	private DefaultTalkAction defaultTalkAction = new DefaultTalkAction();
 
@@ -152,6 +152,11 @@ public class ResourceStore {
 		return playerDefines.get(character);
 	}
 
+	/**
+	 * 注册NPC
+	 * @param sceneId
+	 * @param cfg
+	 */
 	public void registerNPC(String sceneId, PlayerConfig cfg) {
 		List<PlayerConfig> listPlayer = this.sceneNpcsMap.get(sceneId);
 		if (listPlayer == null) {
@@ -159,8 +164,14 @@ public class ResourceStore {
 			this.sceneNpcsMap.put(sceneId, listPlayer);
 		}
 		listPlayer.add(cfg);
+		allNpcs.add(cfg);
 	}
 
+	/**
+	 * 创建NPC实例
+	 * @param cfg
+	 * @return
+	 */
 	public Player createNPC(PlayerConfig cfg) {
 		Player p = this.createPlayer(cfg);
 		p.setNameForeground(GameMain.TEXT_NAME_NPC_COLOR);
@@ -203,4 +214,10 @@ public class ResourceStore {
 		return SpriteFactory.loadSprite("/wzife/photo/npc/" + character + ".tcp");
 	}
 
+	/**
+	 * @return 注册的NPC列表
+	 */
+	public List<PlayerConfig> getAllNpcs() {
+		return allNpcs;
+	}
 }

@@ -36,7 +36,11 @@ public class Panel extends JPanel {
 	/** 是否可以右击关闭 */
 	private boolean closable;
 
+	/** 是否初始化 */
 	private boolean initialized;
+
+	/** 鼠标左键点击是否允许关闭 */
+	private boolean clickClosabled;
 
 	private MouseListener mouseHandler = new MouseAdapter() {
 		public void mousePressed(MouseEvent e) {
@@ -46,8 +50,12 @@ public class Panel extends JPanel {
 				// 如果点击在有效区域
 				Point p = e.getPoint();
 				if (isValid(p)) {
-					lastPosition = p;
-					parent.setComponentZOrder(dlg, 0);// 移到最上层
+					if (clickClosabled) {
+						GameMain.hideDialog(Panel.this);
+					} else {
+						lastPosition = p;
+						parent.setComponentZOrder(dlg, 0);// 移到最上层
+					}
 				} else {
 					// 如果点击的是穿透的区域,把事件传递给父容器
 					int x = dlg.getX();
@@ -59,7 +67,6 @@ public class Panel extends JPanel {
 				e.consume();
 			} else if (e.getButton() == MouseEvent.BUTTON3) {// 右击关闭
 				if (closable) {
-					// close();
 					GameMain.hideDialog(Panel.this);
 				}
 			}
@@ -115,7 +122,7 @@ public class Panel extends JPanel {
 		if (!isVisible()) {
 			return false;
 		}
-		if(bgImage!=null && bgImage.contains(p.x - bgImage.getX(), p.y-bgImage.getY())) {
+		if (bgImage != null && bgImage.contains(p.x - bgImage.getX(), p.y - bgImage.getY())) {
 			return true;
 		}
 		for (SpriteImage image : sprites) {
@@ -177,13 +184,14 @@ public class Panel extends JPanel {
 		// paintComponent(g);
 		paintBorder(g);
 		paintChildren(g);
-//		Component[] comps = getComponents();
-//		for (int i = comps.length - 1; i >= 0; i--) {
-//			Component c = comps[i];
-//			Graphics g2 = g.create(c.getX(), c.getY(), c.getWidth(), c.getHeight());
-//			c.paint(g2);
-//			g2.dispose();
-//		}
+		// Component[] comps = getComponents();
+		// for (int i = comps.length - 1; i >= 0; i--) {
+		// Component c = comps[i];
+		// Graphics g2 = g.create(c.getX(), c.getY(), c.getWidth(),
+		// c.getHeight());
+		// c.paint(g2);
+		// g2.dispose();
+		// }
 		// System.out.println("paint panel ...");
 	}
 
@@ -271,6 +279,13 @@ public class Panel extends JPanel {
 
 	public void setBgImage(ImageConfig cfg) {
 		this.bgImage = ResourceStore.getInstance().createImage(cfg);
-		;
+	}
+
+	public boolean isClickClosabled() {
+		return clickClosabled;
+	}
+
+	public void setClickClosabled(boolean clickClosabled) {
+		this.clickClosabled = clickClosabled;
 	}
 }

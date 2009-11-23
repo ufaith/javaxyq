@@ -128,7 +128,11 @@ public class WdfDirectoryObject implements FileObject {
     }
 
     public int compareTo(FileObject o) {
-        // FIXME directory compare
+    	if(this.isDirectory() && !o.isDirectory()) {
+    		return 1;
+    	}else if(!this.isDirectory()&& o.isDirectory()) {
+    		return -1;
+    	}
         return this.path.compareTo(o.getPath());
     }
 
