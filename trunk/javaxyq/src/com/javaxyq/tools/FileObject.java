@@ -16,29 +16,6 @@ import java.io.Serializable;
  * @history 2008-7-6 ¹¨µÂÎ° ÐÂ½¨
  */
 public interface FileObject extends Comparable<FileObject>,Serializable{
-
-    boolean isDirectory();
-
-    boolean isFile();
-
-    FileObject[] listFiles();
-
-    String getName();
-
-    String getPath();
-    
-    FileObject getParent();
-
-    byte[] getData() throws IOException;
-
-    InputStream getDataStream() throws IOException;
-    
-    String getContentType();
-    
-    FileSystem getFileSystem();
-
-	long getSize();
-	
 	public static final String BMP_FILE = "bmp";
 	
 	public static final String MIDI_FILE = "midi";
@@ -66,4 +43,27 @@ public interface FileObject extends Comparable<FileObject>,Serializable{
 	public static final String DIRECTORY = "directory";
 	
 	public static final String MAP_FILE = "map";
+
+    boolean isDirectory();
+
+    boolean isFile();
+
+    FileObject[] listFiles();
+
+    String getName();
+
+    String getPath();
+    
+    FileObject getParent();
+
+    byte[] getData() throws IOException;
+
+    InputStream getDataStream() throws IOException;
+    
+    String getContentType();
+    
+    FileSystem getFileSystem();
+
+	long getSize();
+	
 }

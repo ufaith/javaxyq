@@ -1,5 +1,8 @@
-/**
- * 
+/*
+ * JavaXYQ Source Code
+ * by kylixs
+ * http://javaxyq.googlecode.com
+ * kylixs@qq.com
  */
 package com.javaxyq.core;
 

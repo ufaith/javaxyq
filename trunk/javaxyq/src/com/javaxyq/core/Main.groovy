@@ -9,6 +9,7 @@ import com.javaxyq.action.*;
 import com.javaxyq.event.*;
 import com.javaxyq.core.*;
 import com.javaxyq.config.*;
+import com.javaxyq.task.TaskManager;
 import com.javaxyq.trigger.Transport;
 import javax.swing.KeyStroke;
 import com.javaxyq.trigger.JumpTrigger;
@@ -52,6 +53,9 @@ class Main {
 		
 		GameMain.registerAction("com.javaxyq.action.transport",new DefaultTransportAction());
 		MovementManager.addMovementAction("random", new RandomMovementAction());
+		
+		//task
+		TaskManager.instance.register('school', 'com.javaxyq.task.SchoolTaskCoolie');
 		
 		GameMain.init(args);
 //		installUI();

@@ -3,7 +3,7 @@
  * ItemLabel ItemLabel.groovy
  * by kylixs 2009-10
  * All Rights Reserved.
- * Please see also http://javaxyq.cn or http://kylixs.blog.163.com.
+ * Please see also http://javaxyq.cn or http://javaxyq.googlecode.com.
  * Please email to  javaxyq@qq.com.
  */
 package com.javaxyq.ui;

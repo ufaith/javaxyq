@@ -125,6 +125,17 @@ public class WdfFileNode implements FileObject {
     }
 
     public int compareTo(FileObject o) {
+    	if(this.isDirectory() && !o.isDirectory()) {
+    		return 1;
+    	}else if(!this.isDirectory()&& o.isDirectory()) {
+    		return -1;
+    	}
+    	//FIXME 完善带数字的文件名的比较
+    	int len1 = this.path.length();
+		int len2 = o.getPath().length();
+		if(len1!= len2) {
+    		return len1 - len2;
+    	}
         return this.path.compareTo(o.getPath());
     }
 

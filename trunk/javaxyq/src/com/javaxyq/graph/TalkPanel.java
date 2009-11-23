@@ -30,6 +30,7 @@ public class TalkPanel extends Panel {
 
 	public TalkPanel(int width, int height, boolean closable, boolean movable) {
 		super(width, height, closable, movable);
+		setClickClosabled(true);
 	}
 
 	@Override

@@ -2,7 +2,7 @@
  * JavaXYQ Source Code
  * by kylixs
  * at 2009-11-14
- * http://kylixs.blog.163.com
+ * http://javaxyq.googlecode.com
  * kylixs@qq.com
  */
 package com.javaxyq.battle;

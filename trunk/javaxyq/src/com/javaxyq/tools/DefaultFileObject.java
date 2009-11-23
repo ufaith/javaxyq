@@ -103,7 +103,12 @@ public class DefaultFileObject implements FileObject {
     }
 
     public int compareTo(FileObject o) {
-        return this.file.getPath().compareTo(o.getPath());
+    	if(this.isDirectory() && !o.isDirectory()) {
+    		return 1;
+    	}else if(!this.isDirectory()&& o.isDirectory()) {
+    		return -1;
+    	}
+        return this.getPath().compareTo(o.getPath());
     }
 
     public FileSystem getFileSystem() {
