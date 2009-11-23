@@ -1,0 +1,29 @@
+#summary UIMaker的使用帮助.
+Sections: 
+ <wiki:toc max_depth="2"/>  
+
+= Introduction =
+
+本文介绍UIMaker的使用方式。
+
+= 基本概念 =
+ == 描述脚本 ==
+ == 界面预览 ==
+
+= 基本操作 =
+ == 打开UI ==
+ == 保存UI ==
+ ==预览界面==
+ ==将修改更新到脚本 ==
+
+= 新建UI =
+ == 创建Dialog ==
+ == 创建Button ==
+ == 创建Label ==
+ == `创建TextField` ==
+
+= 编辑UI =
+ == 复制结点 ==
+ == 粘贴结点 ==
+ == 编辑结点 ==
+ == 删除结点 ==
