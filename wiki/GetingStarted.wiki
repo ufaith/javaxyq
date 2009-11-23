@@ -1,4 +1,4 @@
-#summary Project Hosting on Google Code javaxyq
+#summary javaxyq getting started
 
 目录
 <wiki:toc max_depth="2"/> 
