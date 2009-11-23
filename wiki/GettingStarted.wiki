@@ -15,7 +15,7 @@
  ==下载源码包==
  打开以下地址[http://code.google.com/p/javaxyq/downloads/list Downloads]，下载源码包(javaxyq-xx-srcxxxx.zip)。<br>
  下载完成后将源码包解压到本地磁盘，然后导入到Eclipse中即可。<br>
- _*注意* ：JavaXYQ的工程类型是Groovy，要先安装Groovy-Eclipse插件，详细请查看下面的[GettingStarted# 安装Groovy-Eclipse] 。_
+ _*注意* ：JavaXYQ的工程类型是Groovy，要先安装Groovy-Eclipse插件，详细请查看下面的[GettingStarted#Groovy-Eclipse Groovy-Eclipse] 。_
 
  ==从svn检出==
  如果要从源码库中直接检出，请先安装[http://subversion.tigris.org/links.html#clients svn客户端工具]。
@@ -27,11 +27,11 @@
   [http://subclipse.tigris.org/]
 
 =搭建开发环境=
- ==安装eclipse3.5==
+ ==eclipse3.5==
  eclipse下载地址：[http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/galileo/SR1/eclipse-java-galileo-SR1-win32.zip eclipse-java-galileo-SR1-win32.zip]<br>
  下载后，解压到本地目录，然后运行eclipse.exe就可以了。
 
- ==安装subeclipse==
+ ==subeclipse==
  安装eclipse的svn插件，这个是可选的。<br>
  [http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA subeclipse下载页面]<br>
  Links for 1.6.x Release:<br>
@@ -41,7 +41,7 @@
 
 
 
- ==安装Groovy-Eclipse==
+ ==Groovy-Eclipse==
  [http://groovy.codehaus.org/Install+GroovyEclipse+Plugin 官方安装教程]<br>
  GroovyEclipse update site for Eclipse 3.5.n,M1 build:  http://dist.springsource.org/milestone/GRECLIPSE/e3.5/ <br>
   
