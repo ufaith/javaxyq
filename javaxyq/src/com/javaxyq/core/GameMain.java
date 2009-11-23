@@ -217,7 +217,7 @@ public final class GameMain {
         sceneCanvas.setSize(preferredSize);
         
 		gameWindow = new Window(displayMode);
-		gameWindow.setTitle(applicationName);
+		gameWindow.setTitle(applicationName +" "+ version);
 		gameWindow.setCanvas(loadingCanvas);
 		fontMetrics = gameWindow.getFontMetrics(TEXT_NAME_FONT);
 

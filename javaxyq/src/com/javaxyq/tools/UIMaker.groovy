@@ -627,8 +627,10 @@ class UIMaker extends MouseAdapter implements KeyListener,ListSelectionListener,
 	
 	private Component processNode(Panel dialog,Node el) {
 		//FIXME 去掉ActionId，如果有Action导致显示有问题？？
+		def actionId = el.@actionId;
 		el.@actionId = '';
 		def comp = xmlDlgBuilder.invokeMethod ('process'+el.name(),[dialog,el])
+		el.@actionId = actionId;
 		if(comp) {
 			node2comp[el] = comp;
 			comp2node[comp] = el;

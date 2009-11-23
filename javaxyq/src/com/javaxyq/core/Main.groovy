@@ -35,8 +35,8 @@ class Main {
 		GameMain.setDebug(true);
 		GameMain.showCopyright = false;
 		GameMain.setApplicationName("JavaXYQ ");
-		GameMain.setVersion('1.4 build 20091021(Groovy)');
-		GameMain.setHomeURL('http://kylixs.blog.163.com/');
+		GameMain.setVersion('1.4');
+		GameMain.setHomeURL('http://javaxyq.googlecode.com/');
 		
 		defActions();
 		

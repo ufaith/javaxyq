@@ -38,6 +38,14 @@ public class SystemActions extends BaseAction {
                 System.err.println("打开homeURL失败！");
                 //e1.printStackTrace();
             }
+        } else if (cmd.startsWith("com.javaxyq.action.游戏博客")) {
+        	try {
+        		//TODO 添加游戏博客参数
+        		BrowserLauncher.openURL("http://blog.csdn.net/Kylixs");
+        	} catch (IOException e1) {
+        		System.err.println("打开blog失败！");
+        		//e1.printStackTrace();
+        	}
         } else if (cmd.startsWith("com.javaxyq.action.人物动作")) {
             Player player = GameMain.getSceneCanvas().getPlayer();
             //String desc = cmd.substring(23);
