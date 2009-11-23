@@ -137,7 +137,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	}
 
 	public void init() {
-		battleMask = SpriteFactory.loadAnimation("/resources/’Ω∂∑±≥æ∞.was");
+		battleMask = SpriteFactory.loadAnimation("/addon/708c11a0");
 		cmddlg = DialogFactory.getDialog("battle.’Ω∂∑÷∏¡Ó");
 		warmagicDlg = DialogFactory.getDialog("battle.warmagic10");
 		useitemDlg = DialogFactory.getDialog("battle.useitem");
