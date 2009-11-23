@@ -1,0 +1,25 @@
+#summary Project Hosting on Google Code javaxyq
+
+目录
+<wiki:toc max_depth="2"/> 
+
+= JavaXYQ入门 =
+
+本文介绍如何搭建JavaXYQ的相关环境。
+
+
+
+
+
+=下载源代码=
+ ==下载源码包==
+ 打开以下地址[http://code.google.com/p/javaxyq/downloads/list Downloads]，下载源码包(javaxyq-xx-srcxxxx.zip)。<br>
+ 下载完成后将源码包解压到本地磁盘，然后导入到Eclipse中即可。<br>
+  _*注意* ：JavaXYQ的工程类型是Groovy，要先安装Groovy-Eclipse插件，详细请查看下面的*安装Groovy-Eclipse* 。_
+
+ ==从svn检出==
+
+=搭建开发环境=
+ ==安装eclipse3.5==
+ ==安装subeclipse==
+ ==安装Groovy-Eclipse==
