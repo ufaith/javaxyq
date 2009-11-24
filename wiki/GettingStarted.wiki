@@ -58,13 +58,13 @@
  游戏入口类：com.javaxyq.core.Main.groovy<br>
  运行方式：在Package Explorer中展开src，选择Main.groovy文件，右键点击-Run As，Java Application或者Groovy Application。<br><br>
 
- UIMaker: com.javaxyq.tools.UIMaker.groovy<br>
+ UIMaker : com.javaxyq.tools.UIMaker.groovy<br>
  游戏界面生成工具，提供强大的编辑功能，鼠标拖曳、键盘控制，所见即所得。<br><br>
 
- ResourceManager: `com.javaxyq.tools.ResourceManager.java`<br>
+ ResourceManager : `com.javaxyq.tools.ResourceManager.java`<br>
  游戏资源管理器，方便浏览游戏的资源wdf、tcp等，并可以直接导出。<br><br>
 
- MapBrowser: `com.javaxyq.tools.MapBrowser.java`<br>
+ MapBrowser : `com.javaxyq.tools.MapBrowser.java`<br>
  游戏地图查看器，可以查看游戏scene目录下的地图文件(`*.map`)。<br><br>
 
  第一次运行时，会提示某些资源文件找不到，这是因为没有设置好运行的工作目录。<br>
