@@ -103,4 +103,8 @@ public class Helper {
 		}
 		store.registerNPC(sceneId, playerCfg);
 	}
+
+	public static void clearNPC(String sceneId) {
+		store.clearNPC(sceneId);
+	}
 }

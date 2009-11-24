@@ -50,8 +50,6 @@ public class ResourceStore {
 	
 	private List<PlayerConfig> allNpcs = new ArrayList<PlayerConfig>();
 
-	private DefaultTalkAction defaultTalkAction = new DefaultTalkAction();
-
 	private ResourceStore() {
 	}
 
@@ -166,6 +164,14 @@ public class ResourceStore {
 		listPlayer.add(cfg);
 		allNpcs.add(cfg);
 	}
+	
+	public void clearNPC(String sceneId) {
+		List<PlayerConfig> listPlayer = this.sceneNpcsMap.get(sceneId);
+		if (listPlayer != null) {
+			allNpcs.removeAll(listPlayer);
+			listPlayer.clear();
+		}
+	}
 
 	/**
 	 * ´´½¨NPCÊµÀý
@@ -175,7 +181,7 @@ public class ResourceStore {
 	public Player createNPC(PlayerConfig cfg) {
 		Player p = this.createPlayer(cfg);
 		p.setNameForeground(GameMain.TEXT_NAME_NPC_COLOR);
-		p.addPlayerListener(defaultTalkAction);
+		//p.addPlayerListener(defaultTalkAction);
 		return p;
 	}
 

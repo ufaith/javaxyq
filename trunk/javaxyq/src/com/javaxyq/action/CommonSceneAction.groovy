@@ -23,6 +23,7 @@ class CommonSceneAction implements SceneListener{
 	
 	void onInit(SceneEvent e) {
 		String sceneId = e.getScene();
+		Helper.clearNPC(sceneId);
 		def xml =  new XmlParser().parse(new File("resources/npcs.xml"));
 		def npcs = xml.Scene.find {it.@id==sceneId }.NPC;
 		for(def npc in npcs) {
@@ -78,6 +79,9 @@ class CommonSceneAction implements SceneListener{
 				def currTasks = TaskManager.instance.getTasksOfType('school');
 				if(currTasks && currTasks.size()>0) {
 					def currTask = currTasks[0];
+					if(!currTask.finished && !currTask.autoSpark &&currTask.subtype!='patrol') {//非自动触发完成的任务
+						TaskManager.instance.process(currTask);
+					}
 					if(currTask.finished) {//任务已完成
 						TaskManager.instance.remove(currTask);
 						def player = GameMain.getPlayer();
@@ -116,7 +120,8 @@ class CommonSceneAction implements SceneListener{
 				}
 			}
 			GameMain.registerAction("com.javaxyq.action.取消师门任务",new ClosureAction(cancelTaskAction));
-			
+
+/*			//战斗任务
 			def battleAction = { evt->
 				GameMain.hideDialog(GameMain.getTalkPanel());
 				int level = GameMain.getPlayer().getData().getLevel();
@@ -155,7 +160,7 @@ class CommonSceneAction implements SceneListener{
 				}
 			}
 			GameMain.registerAction("com.javaxyq.action.练武",new ClosureAction(battleAction));
-			
+*/			
 		}
 		//play background music
 		
@@ -164,7 +169,8 @@ class CommonSceneAction implements SceneListener{
 	void onUnload(SceneEvent e) {
 		//stop background music
 		//MapConfig cfg = (MapConfig) ResourceStore.getInstance().findConfig(id);
-				;
+		String sceneId = e.getScene();
+		Helper.clearNPC(sceneId);
 	}
 	
 }

@@ -170,7 +170,7 @@ public abstract class Canvas extends JPanel {
 	 */
 	public void addNPC(Player npc, int x, int y) {
 		npc.setSceneLocation(x, y);
-		npcs.add(npc);
+		this.addNPC(npc);
 	}
 
 	protected void clearNPCs() {

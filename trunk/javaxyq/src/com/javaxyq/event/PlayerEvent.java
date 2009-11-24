@@ -76,4 +76,10 @@ public class PlayerEvent extends EventObject {
         return player;
     }
 
+	@Override
+	public String toString() {
+		return "PlayerEvent [arguments=" + arguments + ", attributes=" + attributes + ", id=" + id + ", player="
+				+ player + "]";
+	}
+
 }

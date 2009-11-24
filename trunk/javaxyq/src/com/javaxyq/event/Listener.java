@@ -7,6 +7,7 @@ package com.javaxyq.event;
 public class Listener {
     private String type;
     private Class handler; 
+    private Object instance;
     
     public Listener(String type,Class handler) {
         this.type = type;
@@ -28,5 +29,18 @@ public class Listener {
     public void setHandler(Class handler) {
         this.handler = handler;
     }
+    
+	/**
+	 * 获取处理类实例
+	 * @return
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 */
+	public Object getInstance() throws InstantiationException, IllegalAccessException {
+		if(instance==null) {
+			instance = handler.newInstance();
+		}
+		return instance;
+	}
     
 }

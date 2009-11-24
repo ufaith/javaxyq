@@ -17,8 +17,10 @@
 		<NPC id="东海湾.船夫" character="3307" name="船夫" direction="1" state="stand"
 			x="59" y="22" movement="walk" period="3000">
 		</NPC>
+		<!-- 
+		 -->
 		<NPC id="东海湾.大海龟" character="2036" name="被吹到岸上的海龟" direction="1" state="stand"
-			x="69" y="17"  movement="random" period="2000">
+			x="69" y="17"  movement="walk" period="2000">
 		</NPC>
 	</Scene>
 	<Scene id="hss">
