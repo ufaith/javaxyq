@@ -1,0 +1,15 @@
+#summary JavaXYQ最新进展
+
+= Introduction =
+
+JavaXYQ更新说明、进展情况等。
+
+
+= Doing =
+ # 师门任务
+
+= Updates =
+
+ _2009-11-23_ JavaXYQ1.4
+ # 游戏任务系统框架
+ 
