@@ -7,10 +7,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+import com.javaxyq.action.DefaultTalkAction;
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
@@ -18,8 +27,8 @@ import com.javaxyq.core.ResourceStore;
 import com.javaxyq.event.PlayerAdapter;
 import com.javaxyq.event.PlayerListener;
 import com.javaxyq.model.PlayerVO;
-import com.javaxyq.search.AStar;
-import com.javaxyq.search.Node;
+import com.javaxyq.model.Task;
+import com.javaxyq.task.TaskManager;
 import com.javaxyq.trigger.JumpTrigger;
 import com.javaxyq.trigger.Trigger;
 import com.javaxyq.widget.Cursor;
@@ -27,13 +36,17 @@ import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
 import com.javaxyq.widget.SpriteImage;
 import com.javaxyq.widget.TileMap;
+import com.soulnew.AStar;
+import com.soulnew.BreadthFirstSearcher;
+import com.soulnew.Searcher;
+import com.javaxyq.ui.*;
 
 /**
  * @author dewitt
  * 
  */
 public class SceneCanvas extends Canvas {
-	
+
 	/** 游戏地图 */
 	private TileMap map;
 
@@ -42,11 +55,9 @@ public class SceneCanvas extends Canvas {
 	 */
 	private Image mapMask;
 
-	private AStar searcher;
+	private Searcher searcher;
 
-	private PlayerListener sceneTransitionHandler = new TransportHandler();
-
-	private PlayerListener spriteMoveHandler = new SpriteMovementHandler();
+	private PlayerListener scenePlayerHandler = new ScenePlayerHandler();
 
 	private Color trackColor = new Color(128, 0, 0, 200);
 
@@ -54,16 +65,27 @@ public class SceneCanvas extends Canvas {
 
 	private Label sceneLabel;
 
+	/** 当前场景名称 */
 	private String sceneName;
+
+	/** 当前场景id */
+	private String sceneId;
 
 	private Label coordinateLabel;
 
+	private byte[] maskdata;
+
+	private int sceneWidth;
+
+	private int sceneHeight;
+
 	/**
-	 * 
+	 * 创建场景画布实例
 	 */
 	public SceneCanvas() {
 		searcher = new AStar();
-		Thread th= new MovementThread();
+		//searcher = new BreadthFirstSearcher();
+		Thread th = new MovementThread();
 		th.start();
 	}
 
@@ -102,7 +124,7 @@ public class SceneCanvas extends Canvas {
 			s.update(elapsedTime);
 			Point p = t.getLocation();
 			p = sceneToView(p);
-			s.draw(g, p.x-s.getWidth()/2+s.getCenterX(), p.y-s.getHeight()/2+s.getCenterY());
+			s.draw(g, p.x - s.getWidth() / 2 + s.getCenterX(), p.y - s.getHeight() / 2 + s.getCenterY());
 		}
 	}
 
@@ -118,7 +140,10 @@ public class SceneCanvas extends Canvas {
 		return this.getPlayer().getSceneLocation();
 	}
 
-	protected void updatePlayerState() {
+	/**
+	 * 更新人物等状态
+	 */
+	private void updateStatus() {
 		if (this.getPlayer() == null)
 			return;
 		// 人物坐标
@@ -166,6 +191,13 @@ public class SceneCanvas extends Canvas {
 		return new Point(p.x / GameMain.STEP_DISTANCE, (map.getHeight() - p.y) / GameMain.STEP_DISTANCE);
 	}
 
+	/**
+	 * 判断某点是否可以通行
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean pass(int x, int y) {
 		return searcher.pass(x, y);
 	}
@@ -197,10 +229,17 @@ public class SceneCanvas extends Canvas {
 		return this.localToView(this.sceneToLocal(p));
 	}
 
+	/**
+	 * 搜索行走路径
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public List<Point> searchPathTo(int x, int y) {
 		Point p = getPlayerSceneLocation();
-		searcher.computeShortPath(new Node(p.x, p.y), new Node(x, y));
-		return searcher.getResult();
+		List<Point> path = searcher.findPath(p.x, p.y, x, y);
+		return path;
 	}
 
 	public void setMap(TileMap map) {
@@ -209,9 +248,12 @@ public class SceneCanvas extends Canvas {
 		}
 		setMaxWidth(map.getWidth());
 		setMaxHeight(map.getHeight());
+		sceneWidth = map.getWidth()/GameMain.STEP_DISTANCE;;
+		sceneHeight = map.getHeight()/GameMain.STEP_DISTANCE;
 		this.map = map;
 		clearNPCs();
 		MapConfig cfg = map.getConfig();
+		this.setSceneId(cfg.getId());
 		this.setSceneName(cfg.getName());
 		this.triggerList = ResourceStore.getInstance().findTriggers(cfg.getId());
 		List<Player> _npcs = ResourceStore.getInstance().findNPCs(cfg.getId());
@@ -220,18 +262,72 @@ public class SceneCanvas extends Canvas {
 			npc.setLocation(p.x, p.y);
 			this.addNPC(npc);
 		}
-		// test! get mask image
-		this.mapMask = new ImageIcon(cfg.getPath().replaceAll(".map", "_mask.png")).getImage();
-		searcher.init();
+		// test! get barrier image
+		this.mapMask = new ImageIcon(cfg.getPath().replace(".map", "_bar.png")).getImage();
+		maskdata = loadMask(cfg.getPath().replace(".map", ".msk"));
+		searcher.init(sceneWidth,sceneHeight, maskdata);
 
+	}
+	
+	/**
+	 * 加载地图的掩码
+	 * 
+	 * @param filename
+	 * @return 
+	 */
+	private byte[] loadMask(String filename) {
+		System.out.println("map : " + map.getWidth() + "*" + map.getHeight()+", scene: "+sceneWidth+"*"+sceneHeight+", msk: "+filename);
+		byte[] maskdata = new byte[sceneWidth* sceneHeight];
+		try {
+			InputStream in = new FileInputStream(filename);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String str;
+			int pos = 0;
+			while ((str = reader.readLine()) != null) {
+				int len = str.length();
+				for (int i = 0; i < len; i++) {
+					maskdata[pos++] = (byte) (str.charAt(i) - '0');
+				}
+			}
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("加载地图掩码失败！filename=" + filename);
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("加载地图掩码失败！filename=" + filename);
+			e.printStackTrace();
+		}
+		return maskdata;
+	}
+	
+	/** 默认人物对话事件 */
+	private DefaultTalkAction defaultTalkAction = new DefaultTalkAction();
+
+	public synchronized void addNPC(Player npc) {
+		super.addNPC(npc);
+		npc.removeAllListeners();
+		npc.addPlayerListener(defaultTalkAction);
+	}
+
+	@Override
+	protected void clearNPCs() {
+		List<Player> npclist = getNpcs();
+		for (Player player : npclist) {
+			player.removePlayerListener(defaultTalkAction);
+		}
+		super.clearNPCs();
 	}
 
 	public void setPlayer(Player player) {
+		Player player0 = getPlayer();
+		if (player0 != null) {
+			player0.stop(false);
+			player0.removePlayerListener(scenePlayerHandler);
+		}
+
 		player.stop(false);
 		super.setPlayer(player);
 		if (player != null) {
-			player.addPlayerListener(spriteMoveHandler);
-			player.addPlayerListener(sceneTransitionHandler);
+			player.addPlayerListener(scenePlayerHandler);
 			setPlayerSceneLocation(player.getSceneLocation());
 		}
 	}
@@ -317,8 +413,12 @@ public class SceneCanvas extends Canvas {
 		Point p = this.getPlayerSceneLocation();
 		System.out.printf("walk to:(%s,%s) -> (%s,%s)\n", p.x, p.y, x, y);
 		List<Point> path = this.searchPathTo(x, y);
-		getPlayer().setPath(path);
-		getPlayer().move();
+		if(path != null) {
+			getPlayer().setPath(path);
+			getPlayer().move();
+		}else {
+			UIHelper.prompt("不能到达那里", 1000);
+		}
 	}
 
 	public void walkToView(int x, int y) {
@@ -352,15 +452,15 @@ public class SceneCanvas extends Canvas {
 		this.getGameCursor().setOffset(p.x, p.y);
 		if (effectSprite != null) {
 			effectSprite.setRepeat(2);
-			//取消点击效果
+			// 取消点击效果
 			new Thread() {
 				public void run() {
-					while(effectSprite.isVisible()) {
+					while (effectSprite.isVisible()) {
 						try {
 							Thread.sleep(500);
 						} catch (InterruptedException e) {
 						}
-						if(effectSprite.getSprite().getRepeat()==0) {
+						if (effectSprite.getSprite().getRepeat() == 0) {
 							effectSprite.setVisible(false);
 							break;
 						}
@@ -389,48 +489,46 @@ public class SceneCanvas extends Canvas {
 	private final class MovementThread extends Thread {
 		private long lastTime;
 		{
-            this.setName("movementThread");
-        }
+			this.setName("movementThread");
+		}
 
 		public void run() {
-            while (true) {
-            	//System.out.println(this.getId()+" "+this.getName());
-                synchronized (Canvas.MOVEMENT_LOCK) {
-                    long t1 = System.currentTimeMillis();
-                    long currTime = System.currentTimeMillis();
-                    if (lastTime == 0)
-                        lastTime = currTime;
-                    long elapsedTime = currTime - lastTime;
-                    // update movement
-                    updateMovements(elapsedTime);
-                    long t2 = System.currentTimeMillis();
-                    if (t2 - t1 > 20) {
-                        System.out.printf("update movement costs: %sms\n", t2 - t1);
-                    }
-                    lastTime = currTime;
-                }
-                try {
-                    Thread.sleep(40);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-	}
-
-	private final class SpriteMovementHandler extends PlayerAdapter {
-		public void move(Player player, Point increment) {
-			// FIXME
-			syncSceneAndPlayer(increment);
-			// 更新场景坐标
-			GameMain.revisePlayerSceneLocation(player);
-			// System.out.println("player view position: " +
-			// localToView(player.getLocation()));
+			while (true) {
+				// System.out.println(this.getId()+" "+this.getName());
+				synchronized (Canvas.MOVEMENT_LOCK) {
+					long t1 = System.currentTimeMillis();
+					long currTime = System.currentTimeMillis();
+					if (lastTime == 0)
+						lastTime = currTime;
+					long elapsedTime = currTime - lastTime;
+					// update movement
+					updateMovements(elapsedTime);
+					long t2 = System.currentTimeMillis();
+					if (t2 - t1 > 20) {
+						System.out.printf("update movement costs: %sms\n", t2 - t1);
+					}
+					lastTime = currTime;
+				}
+				try {
+					Thread.sleep(40);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
-	private final class TransportHandler extends PlayerAdapter {
+	/**
+	 * 场景的人物事件监听器
+	 */
+	private final class ScenePlayerHandler extends PlayerAdapter {
+
 		public void move(Player player, Point increment) {
+			// 1. 更新场景坐标
+			syncSceneAndPlayer(increment);
+			GameMain.revisePlayerSceneLocation(player);
+
+			// 2. 触发地图跳转
 			if (triggerList == null) {
 				return;
 			}
@@ -439,53 +537,94 @@ public class SceneCanvas extends Canvas {
 				Trigger t = triggerList.get(i);
 				if (t.hit(p)) {
 					t.doAction();
-					break;
+					return;
+				}
+			}
+
+			// TODO 3. 师门巡逻任务
+			Task task = TaskManager.instance.getTaskOfType("school", "patrol");
+			if (task != null && !task.isFinished() && sceneId.equals(task.get("sceneId"))) {
+				long nowtime = System.currentTimeMillis();
+				if (nowtime - lastPatrolTime > patrolInterval) {
+					// FIXME 改进巡逻触发战斗机率的判断
+					Random rand = new Random();
+					if (rand.nextInt(100) < 5) {
+						TaskManager.instance.process(task);
+					}
 				}
 			}
 		}
 	}
 
-    /**
-     * @param elapsedTime
-     */
-    private void updateMovements(long elapsedTime) {
-        Player p = getPlayer();
-        if (p != null) {
-            p.updateMovement(elapsedTime);
-        }
-    }
+	/** 最后一次巡逻时间 */
+	private long lastPatrolTime;
 
+	/** 两次巡逻的最小时间间隔 */
+	private long patrolInterval = 10000;
 
-	
+	/**
+	 * 设置最后一次巡逻时间
+	 * 
+	 * @param lastPatrolTime
+	 */
+	public void setLastPatrolTime(long lastPatrolTime) {
+		this.lastPatrolTime = lastPatrolTime;
+	}
+
+	/**
+	 * 设置两次巡逻的时间间隔(ms)
+	 * 
+	 * @param patrolInterval
+	 */
+	public void setPatrolInterval(long patrolInterval) {
+		this.patrolInterval = patrolInterval;
+	}
+
+	/**
+	 * @param elapsedTime
+	 */
+	private void updateMovements(long elapsedTime) {
+		Player p = getPlayer();
+		if (p != null) {
+			p.updateMovement(elapsedTime);
+		}
+	}
+
 	public synchronized void draw(Graphics g, long elapsedTime) {
 		if (g == null) {
 			return;
 		}
 		try {
 			g.setColor(Color.BLACK);
-			// draw map
+			// 场景地图
 			drawMap(g);
-			// trigers
+			// 场景跳转
 			drawTrigger(g, elapsedTime);
+
 			// npcs
 			drawNPC(g, elapsedTime);
-
-			// update player
+			// 人物
 			drawPlayer(g, elapsedTime);
-			// draw map's mask
+
+			// 地图掩码(mask)
 			drawMask(g);
-			// draw path
-			// XXX this.drawPath(g);
+			// 人物行走路线
+			if (GameMain.isDebug()) {
+				this.drawPath(g);
+			}
+			// 鼠标点击效果
 			this.drawClick(g, elapsedTime);
 
-			// update comps on the canvas
-			updatePlayerState();
+			// 游戏UI控件
+			updateStatus();
 			drawComponents(g, elapsedTime);
 
-			// draw fade
-			g.setColor(new Color(0, 0, 0, alpha));
-			g.fillRect(0, 0, getWidth(), getHeight());
-			
+			// 过渡效果：谈出淡入
+			if (alpha > 0) {
+				g.setColor(new Color(0, 0, 0, alpha));
+				g.fillRect(0, 0, getWidth(), getHeight());
+			}
+			// 内存使用量
 			drawMemory(g);
 		} catch (Exception e) {
 			System.out.printf("更新Canvas时失败！\n");
@@ -499,6 +638,22 @@ public class SceneCanvas extends Canvas {
 
 	protected void setSceneName(String sceneName) {
 		this.sceneName = sceneName;
+	}
+
+	public String getSceneId() {
+		return sceneId;
+	}
+
+	public void setSceneId(String sceneId) {
+		this.sceneId = sceneId;
+	}
+
+	public long getLastPatrolTime() {
+		return lastPatrolTime;
+	}
+
+	public long getPatrolInterval() {
+		return patrolInterval;
 	}
 
 }

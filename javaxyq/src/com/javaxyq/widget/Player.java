@@ -414,22 +414,37 @@ public class Player extends AbstractWidget {
 
 	private Point calculateIncrement(long elapsedTime) {
 		int dx = 0, dy = 0;
-		// 计算起点与目标点的弧度角
-		double radian = Math.atan(1.0 * (nextStep.y - sceneY) / (nextStep.x - sceneX));
-		// 计算移动量
-		int distance = (int) (GameMain.NORMAL_SPEED * elapsedTime);
-		dx = (int) (distance * Math.cos(radian));
-		dy = (int) (distance * Math.sin(radian));
-		// 修正移动方向
-		if (nextStep.x > sceneX) {
-			dx = Math.abs(dx);
-		} else {
-			dx = -Math.abs(dx);
-		}
-		if (nextStep.y > sceneY) {
-			dy = -Math.abs(dy);
-		} else {
-			dy = Math.abs(dy);
+		//如果该坐标可以到达移动
+		if(GameMain.getSceneCanvas().pass(this.nextStep.x,this.nextStep.y)) {
+			// 计算起点与目标点的弧度角
+			double radian = Math.atan(1.0 * (nextStep.y - sceneY) / (nextStep.x - sceneX));
+			// 计算移动量
+			int distance = (int) (GameMain.NORMAL_SPEED * elapsedTime);
+			dx = (int) (distance * Math.cos(radian));
+			dy = (int) (distance * Math.sin(radian));
+			// 修正移动方向
+			if (nextStep.x > sceneX) {
+				dx = Math.abs(dx);
+			} else {
+				dx = -Math.abs(dx);
+			}
+			if (nextStep.y > sceneY) {
+				dy = -Math.abs(dy);
+			} else {
+				dy = Math.abs(dy);
+			}
+		}else if(this.movingOn) {//遇到障碍物时，按住方向键移动
+			//TODO 修正移动的方向
+//			switch (this.direction) {
+//			case Sprite.DIRECTION_BOTTOM:
+//				
+//				break;
+//
+//			default:
+//				break;
+//			}
+		}else if(!this.movingOn){//遇到障碍物时，松开方向键(没有继续移动)
+			stopAction();
 		}
 		return new Point(dx, dy);
 	}
@@ -477,7 +492,7 @@ public class Player extends AbstractWidget {
 		}
 	}
 
-	public void removeListener(PlayerListener l) {
+	public void removePlayerListener(PlayerListener l) {
 		listenerList.remove(PlayerListener.class, l);
 	}
 
@@ -822,5 +837,15 @@ public class Player extends AbstractWidget {
 
 	public void setData(PlayerVO data) {
 		this.data = data;
+	}
+
+	/**
+	 * 清楚全部监听器
+	 */
+	public void removeAllListeners() {
+		PlayerListener[] listeners = listenerList.getListeners(PlayerListener.class);
+		for (int i = 0; i < listeners.length; i++) {
+			this.removePlayerListener(listeners[i]);
+		}
 	}
 }

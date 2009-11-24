@@ -61,6 +61,16 @@ public class TaskManager {
 	}
 	
 	/**
+	 * 读取某类型的任务
+	 * @param type
+	 * @param subtype
+	 * @return
+	 */
+	public Task getTaskOfType(String type, String subtype) {
+		return tasklist.find{task-> task.type==type && task.subtype == subtype};;
+	}
+		
+	/**
 	 * 删除任务
 	 * @param task
 	 */
@@ -117,6 +127,5 @@ public class TaskManager {
 			return;
 		}
 		coolie.desc(task);
-	}
-	
+	}
 }

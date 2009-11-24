@@ -30,7 +30,7 @@ public class EventDispatcher {
     }
 
     public void dispatchEvent(Player source, PlayerEvent e) {
-        eventQueue.add(new EventPeer(source,e));
+        eventQueue.offer(new EventPeer(source,e));
     }
 
     public static EventDispatcher getInstance() {

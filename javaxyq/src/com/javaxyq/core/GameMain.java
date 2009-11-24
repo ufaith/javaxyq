@@ -303,28 +303,32 @@ public final class GameMain {
 	}
 
 	public static void installListener() {
-		String strType;
-		Class handler;
+		//TODO Canvas«–ªª ±£¨±‹√‚÷ÿ∏¥ÃÌº”º‡Ã˝∆˜
 		for (Listener l : listeners) {
-			strType = l.getType();
-			handler = l.getHandler();
+			String strType = l.getType();
 			try {
+				Object instance = l.getInstance();
 				if ("MouseListener".equals(strType)) {
-					sceneCanvas.addMouseListener((MouseListener) handler.newInstance());
+					sceneCanvas.removeMouseListener((MouseListener) instance);
+					sceneCanvas.addMouseListener((MouseListener) instance);
 				} else if ("MouseMotionListener".equals(strType)) {
-					sceneCanvas.addMouseMotionListener((MouseMotionListener) handler.newInstance());
+					sceneCanvas.removeMouseMotionListener((MouseMotionListener) instance);
+					sceneCanvas.addMouseMotionListener((MouseMotionListener) instance);
 				} else if ("KeyListener".equals(strType)) {
-					sceneCanvas.addKeyListener((KeyListener) handler.newInstance());
+					sceneCanvas.removeKeyListener((KeyListener) instance);
+					sceneCanvas.addKeyListener((KeyListener) instance);
 				} else if ("MouseWheelListener".equals(strType)) {
-					sceneCanvas.addMouseWheelListener((MouseWheelListener) handler.newInstance());
+					sceneCanvas.removeMouseWheelListener((MouseWheelListener) instance);
+					sceneCanvas.addMouseWheelListener((MouseWheelListener) instance);
 				} else if ("WindowListener".equals(strType)) {
-					gameWindow.addWindowListener((WindowListener) handler.newInstance());
+					gameWindow.removeWindowListener((WindowListener) instance);
+					gameWindow.addWindowListener((WindowListener) instance);
 				} else if ("WindowStateListener".equals(strType)) {
-					gameWindow.addWindowStateListener((WindowStateListener) handler.newInstance());
+					gameWindow.removeWindowStateListener((WindowStateListener) instance);
+					gameWindow.addWindowStateListener((WindowStateListener) instance);
 				}
 			} catch (Exception e) {
-				System.err
-						.printf("install listener error: type=%s, handler=%s\n", strType, handler);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -617,7 +621,7 @@ public final class GameMain {
         for (Panel c : uiComponents) {
         	showDialog(c);
         }
-        installListener();
+        //installListener();
 
 		battleCanvas.init();
 		
