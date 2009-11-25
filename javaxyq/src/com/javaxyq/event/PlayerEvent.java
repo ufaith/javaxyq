@@ -1,5 +1,6 @@
 package com.javaxyq.event;
 
+import java.awt.Point;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,15 +16,17 @@ import com.javaxyq.widget.Player;
 public class PlayerEvent extends EventObject {
 
     /** 行走完一步的事件 */
-    public static final int STEP_OVER = 0x0001;
+    public static final int STEP_OVER = 1;
 
     /** 移动事件 */
-    public static final int MOVE = 0x0002;
+    public static final int MOVE = 2;
 
     /** 点击事件 */
-    public static final int CLICK = 0x0003;
+    public static final int CLICK = 3;
 
-    public static final int TALK = 0x0004;
+    public static final int TALK = 4;
+
+    public static final int WALK = 5;
 
     public static final String MOVE_INCREMENT = "move.increment";
 
@@ -35,10 +38,19 @@ public class PlayerEvent extends EventObject {
 
     private Player player;
 
+	/** 人物行走到的目的坐标 */
+	private Point coords;
+
     public PlayerEvent(Player player, int id) {
         super(player);
         this.player = player;
         this.id = id;
+    }
+    public PlayerEvent(Player player, int id,Point coords) {
+    	super(player);
+    	this.player = player;
+    	this.id = id;
+    	this.coords = coords;
     }
 
     public PlayerEvent(Player player, int id, String args) {
@@ -76,10 +88,13 @@ public class PlayerEvent extends EventObject {
         return player;
     }
 
+	public Point getCoords() {
+		return coords;
+	}
 	@Override
 	public String toString() {
-		return "PlayerEvent [arguments=" + arguments + ", attributes=" + attributes + ", id=" + id + ", player="
-				+ player + "]";
+		return "PlayerEvent [arguments=" + arguments + ", attributes=" + attributes + ", coords=" + coords + ", id="
+				+ id + ", player=" + player + "]";
 	}
 
 }

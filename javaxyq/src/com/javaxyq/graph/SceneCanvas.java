@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -25,21 +24,22 @@ import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
 import com.javaxyq.event.PlayerAdapter;
+import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.event.PlayerListener;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.model.Task;
+import com.javaxyq.search.SearchUtils;
+import com.javaxyq.search.Searcher;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.trigger.JumpTrigger;
 import com.javaxyq.trigger.Trigger;
+import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
 import com.javaxyq.widget.SpriteImage;
 import com.javaxyq.widget.TileMap;
 import com.soulnew.AStar;
-import com.soulnew.BreadthFirstSearcher;
-import com.soulnew.Searcher;
-import com.javaxyq.ui.*;
 
 /**
  * @author dewitt
@@ -59,7 +59,7 @@ public class SceneCanvas extends Canvas {
 
 	private PlayerListener scenePlayerHandler = new ScenePlayerHandler();
 
-	private Color trackColor = new Color(128, 0, 0, 200);
+	private Color trackColor = new Color(255, 0, 0, 200);
 
 	private List<Trigger> triggerList;
 
@@ -79,12 +79,16 @@ public class SceneCanvas extends Canvas {
 
 	private int sceneHeight;
 
+	private List<Point> path;
+
 	/**
 	 * 创建场景画布实例
 	 */
 	public SceneCanvas() {
 		searcher = new AStar();
-		//searcher = new BreadthFirstSearcher();
+		// searcher = new OptimizeAStar();
+		// searcher = new Dijkstra();
+		// searcher = new BreadthFirstSearcher();
 		Thread th = new MovementThread();
 		th.start();
 	}
@@ -106,12 +110,6 @@ public class SceneCanvas extends Canvas {
 			int sy2 = viewY + getHeight();
 			g.drawImage(mapMask, 0, 0, getWidth(), getHeight(), viewX, viewY, sx2, sy2, null);
 		}
-	}
-
-	private void drawTrack(Graphics g, Point p) {
-		Point vp = this.sceneToView(p);
-		g.setColor(trackColor);
-		g.fillOval(vp.x - 2, vp.y - 2, 16, 16);
 	}
 
 	private void drawTrigger(Graphics g, long elapsedTime) {
@@ -236,9 +234,36 @@ public class SceneCanvas extends Canvas {
 	 * @param y
 	 * @return
 	 */
-	public List<Point> searchPathTo(int x, int y) {
-		Point p = getPlayerSceneLocation();
-		List<Point> path = searcher.findPath(p.x, p.y, x, y);
+	public List<Point> findPath(int x, int y) {
+		Point source = getPlayerSceneLocation();
+		Point target = new Point(x, y);
+		// 计算两点的直线
+		// List<Point> path =
+		// SearchUtils.getLinePath(source.x,source.y,target.x,target.y);
+		// 计算两点间的二次曲线
+		path = SearchUtils.getBezierPath(source, target);
+		// 修正终点为最近可以到达点
+		for (int i = path.size() - 1; i >= 0; i--) {
+			Point p = path.get(i);
+			if (pass(p.x, p.y)) {
+				target = p;
+				break;
+			}
+			path.remove(i);
+		}
+		// 如果直线上全部点可通行，则返回
+		boolean passed = true;
+		for (int i = 0; i < path.size(); i++) {
+			Point p = path.get(i);
+			if (!pass(p.x, p.y)) {
+				passed = false;
+				break;
+			}
+		}
+		if (passed)
+			return path;
+		// 否则计算两点间的路径
+		path = searcher.findPath(source.x, source.y, target.x, target.y);
 		return path;
 	}
 
@@ -248,8 +273,9 @@ public class SceneCanvas extends Canvas {
 		}
 		setMaxWidth(map.getWidth());
 		setMaxHeight(map.getHeight());
-		sceneWidth = map.getWidth()/GameMain.STEP_DISTANCE;;
-		sceneHeight = map.getHeight()/GameMain.STEP_DISTANCE;
+		sceneWidth = map.getWidth() / GameMain.STEP_DISTANCE;
+		;
+		sceneHeight = map.getHeight() / GameMain.STEP_DISTANCE;
 		this.map = map;
 		clearNPCs();
 		MapConfig cfg = map.getConfig();
@@ -265,19 +291,20 @@ public class SceneCanvas extends Canvas {
 		// test! get barrier image
 		this.mapMask = new ImageIcon(cfg.getPath().replace(".map", "_bar.png")).getImage();
 		maskdata = loadMask(cfg.getPath().replace(".map", ".msk"));
-		searcher.init(sceneWidth,sceneHeight, maskdata);
+		searcher.init(sceneWidth, sceneHeight, maskdata);
 
 	}
-	
+
 	/**
 	 * 加载地图的掩码
 	 * 
 	 * @param filename
-	 * @return 
+	 * @return
 	 */
 	private byte[] loadMask(String filename) {
-		System.out.println("map : " + map.getWidth() + "*" + map.getHeight()+", scene: "+sceneWidth+"*"+sceneHeight+", msk: "+filename);
-		byte[] maskdata = new byte[sceneWidth* sceneHeight];
+		System.out.println("map : " + map.getWidth() + "*" + map.getHeight() + ", scene: " + sceneWidth + "*"
+				+ sceneHeight + ", msk: " + filename);
+		byte[] maskdata = new byte[sceneWidth * sceneHeight];
 		try {
 			InputStream in = new FileInputStream(filename);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -298,7 +325,7 @@ public class SceneCanvas extends Canvas {
 		}
 		return maskdata;
 	}
-	
+
 	/** 默认人物对话事件 */
 	private DefaultTalkAction defaultTalkAction = new DefaultTalkAction();
 
@@ -412,11 +439,11 @@ public class SceneCanvas extends Canvas {
 	public void walkTo(int x, int y) {
 		Point p = this.getPlayerSceneLocation();
 		System.out.printf("walk to:(%s,%s) -> (%s,%s)\n", p.x, p.y, x, y);
-		List<Point> path = this.searchPathTo(x, y);
-		if(path != null) {
+		List<Point> path = this.findPath(x, y);
+		if (path != null) {
 			getPlayer().setPath(path);
 			getPlayer().move();
-		}else {
+		} else {
 			UIHelper.prompt("不能到达那里", 1000);
 		}
 	}
@@ -428,11 +455,32 @@ public class SceneCanvas extends Canvas {
 
 	private void drawPath(Graphics g) {
 		Player player = getPlayer();
-		if (player != null) {// XXX DEBUG
-			List<Point> path = player.getPath();
+		if (player != null && path != null) {// XXX DEBUG
+			// List<Point> path = player.getPath();
+			Point p0 = null;
 			for (Point p : path) {
-				this.drawTrack(g, p);
+				this.drawTrack(g, p0, p);
+				p0 = p;
 			}
+			drawTrack(g, p0,null);
+		}
+	}
+
+	private void drawTrack(Graphics g, Point p0, Point p) {
+		g.setColor(trackColor);
+		if (p0 == null) {//画起点
+			Point vp = this.sceneToView(p);
+			g.fillOval(vp.x - 4, vp.y - 4, 14, 14);
+		} else if(p==null){//画终点
+			Point vp = this.sceneToView(p0);
+			g.fillOval(vp.x - 4, vp.y - 4, 12, 12);
+			g.drawOval(vp.x -6, vp.y -6, 16, 16);
+			g.drawOval(vp.x -7, vp.y -7, 18, 18);
+		} else {
+			p0 = sceneToView(p0);
+			p = sceneToView(p);
+			g.drawLine(p0.x, p0.y, p.x, p.y);
+			g.drawLine(p0.x + 1, p0.y + 1, p.x + 1, p.y + 1);
 		}
 	}
 
@@ -523,6 +571,11 @@ public class SceneCanvas extends Canvas {
 	 */
 	private final class ScenePlayerHandler extends PlayerAdapter {
 
+		public void walk(PlayerEvent evt) {
+			Point coords = evt.getCoords();
+			walkTo(coords.x, coords.y);
+		}
+
 		public void move(Player player, Point increment) {
 			// 1. 更新场景坐标
 			syncSceneAndPlayer(increment);
@@ -598,6 +651,10 @@ public class SceneCanvas extends Canvas {
 			g.setColor(Color.BLACK);
 			// 场景地图
 			drawMap(g);
+			// 人物行走路线
+			if (GameMain.isDebug()) {
+				this.drawPath(g);
+			}
 			// 场景跳转
 			drawTrigger(g, elapsedTime);
 
@@ -608,10 +665,6 @@ public class SceneCanvas extends Canvas {
 
 			// 地图掩码(mask)
 			drawMask(g);
-			// 人物行走路线
-			if (GameMain.isDebug()) {
-				this.drawPath(g);
-			}
 			// 鼠标点击效果
 			this.drawClick(g, elapsedTime);
 

@@ -40,4 +40,7 @@ public class PlayerAdapter implements PlayerListener {
     public void talk(PlayerEvent evt) {
     }
 
+	public void walk(PlayerEvent evt) {
+	}
+
 }

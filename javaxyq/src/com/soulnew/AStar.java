@@ -18,6 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.javaxyq.search.Searcher;
+
 
 public class AStar implements Searcher{
 
@@ -178,8 +180,8 @@ public class AStar implements Searcher{
 					if(n!=null) {
 						node.neighbors.add(n);
 					}
-					//左上 ↖
-					n = getNode(x-1, y-1);
+					//右  →
+					n = getNode(x+1, y);
 					if(n!=null) {
 						node.neighbors.add(n);
 					}
@@ -188,23 +190,23 @@ public class AStar implements Searcher{
 					if(n!=null) {
 						node.neighbors.add(n);
 					}
+					//下 ↓
+					n = getNode(x, y+1);
+					if(n!=null) {
+						node.neighbors.add(n);
+					}
+					//左上 ↖
+					n = getNode(x-1, y-1);
+					if(n!=null) {
+						node.neighbors.add(n);
+					}
 					//右上  ↗
 					n = getNode(x+1, y-1);
 					if(n!=null) {
 						node.neighbors.add(n);
 					}
-					//右  →
-					n = getNode(x+1, y);
-					if(n!=null) {
-						node.neighbors.add(n);
-					}
 					//右下 ↘
 					n = getNode(x+1, y+1);
-					if(n!=null) {
-						node.neighbors.add(n);
-					}
-					//下 ↓
-					n = getNode(x, y+1);
 					if(n!=null) {
 						node.neighbors.add(n);
 					}

@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.javaxyq.search.Searcher;
+
 
 public class BreadthFirstSearcher implements Searcher {
 
