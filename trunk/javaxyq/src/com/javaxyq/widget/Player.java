@@ -102,8 +102,8 @@ public class Player extends AbstractWidget {
 
 	private int[] profileData;
 
-	private int[] colorations = null;//new int[3];
-	
+	private int[] colorations = null;// new int[3];
+
 	/**
 	 * 人物数据
 	 */
@@ -112,8 +112,8 @@ public class Player extends AbstractWidget {
 	/**
 	 * 状态效果动画
 	 */
-	private Map<String,Animation> stateEffects = new HashMap<String,Animation>();
-	
+	private Map<String, Animation> stateEffects = new HashMap<String, Animation>();
+
 	/**
 	 * 单次效果动画
 	 */
@@ -131,11 +131,11 @@ public class Player extends AbstractWidget {
 	public String getId() {
 		return id;
 	}
-	
+
 	public int getHeight() {
 		return this.person.getHeight();
 	}
-	
+
 	public int getWidth() {
 		return this.person.getWidth();
 	}
@@ -289,8 +289,8 @@ public class Player extends AbstractWidget {
 		// next.y);
 		this.prepareStep();
 	}
-	
-	public void moveBy(int dx,int dy) {
+
+	public void moveBy(int dx, int dy) {
 		this.x += dx;
 		this.y += dy;
 	}
@@ -298,7 +298,7 @@ public class Player extends AbstractWidget {
 	public void setDirection(int direction) {
 		if (this.direction != direction) {
 			this.direction = direction;
-			//System.out.printf("player.direction=%s\n", this.direction);
+			// System.out.printf("player.direction=%s\n", this.direction);
 			person.setDirection(direction);
 			person.resetFrames();
 			if (weapon != null) {
@@ -336,9 +336,9 @@ public class Player extends AbstractWidget {
 			}
 		}
 	}
-	
+
 	private Sprite createPerson(String state) {
-		Sprite sprite = SpriteFactory.loadSprite("/shape/char/"+this.character+"/"+state+".tcp",colorations);
+		Sprite sprite = SpriteFactory.loadSprite("/shape/char/" + this.character + "/" + state + ".tcp", colorations);
 		return sprite;
 	}
 
@@ -352,10 +352,10 @@ public class Player extends AbstractWidget {
 	}
 
 	public synchronized void stop(boolean force) {
-		if(force) {
+		if (force) {
 			stopAction();
-		}else {
-			this.movingOn = false;			
+		} else {
+			this.movingOn = false;
 		}
 		// this.setState(GameMain.STATE_NORMAL);
 		// System.out.println("stop");
@@ -365,7 +365,7 @@ public class Player extends AbstractWidget {
 		this.moving = false;
 		this.movingOn = false;
 		this.setState(GameMain.STATE_NORMAL);
-//		System.out.println("stop action!");
+		// System.out.println("stop action!");
 	}
 
 	public synchronized void update(long elapsedTime) {
@@ -379,9 +379,9 @@ public class Player extends AbstractWidget {
 		for (Animation effect : stateEffs) {
 			effect.update(elapsedTime);
 		}
-		if(this.onceEffect!=null) {
+		if (this.onceEffect != null) {
 			this.onceEffect.update(elapsedTime);
-			if(this.onceEffect.getRepeat() ==0) {
+			if (this.onceEffect.getRepeat() == 0) {
 				// 播放完毕，移除动画
 				this.onceEffect = null;
 			}
@@ -414,8 +414,8 @@ public class Player extends AbstractWidget {
 
 	private Point calculateIncrement(long elapsedTime) {
 		int dx = 0, dy = 0;
-		//如果该坐标可以到达移动
-		if(GameMain.getSceneCanvas().pass(this.nextStep.x,this.nextStep.y)) {
+		// 如果该坐标可以到达移动
+		if (GameMain.getSceneCanvas().pass(this.nextStep.x, this.nextStep.y)) {
 			// 计算起点与目标点的弧度角
 			double radian = Math.atan(1.0 * (nextStep.y - sceneY) / (nextStep.x - sceneX));
 			// 计算移动量
@@ -433,17 +433,17 @@ public class Player extends AbstractWidget {
 			} else {
 				dy = Math.abs(dy);
 			}
-		}else if(this.movingOn) {//遇到障碍物时，按住方向键移动
-			//TODO 修正移动的方向
-//			switch (this.direction) {
-//			case Sprite.DIRECTION_BOTTOM:
-//				
-//				break;
-//
-//			default:
-//				break;
-//			}
-		}else if(!this.movingOn){//遇到障碍物时，松开方向键(没有继续移动)
+		} else if (this.movingOn) {// 遇到障碍物时，按住方向键移动
+			// TODO 修正移动的方向
+			// switch (this.direction) {
+			// case Sprite.DIRECTION_BOTTOM:
+			//				
+			// break;
+			//
+			// default:
+			// break;
+			// }
+		} else if (!this.movingOn) {// 遇到障碍物时，松开方向键(没有继续移动)
 			stopAction();
 		}
 		return new Point(dx, dy);
@@ -470,6 +470,11 @@ public class Player extends AbstractWidget {
 		case PlayerEvent.STEP_OVER:
 			for (PlayerListener listener : listeners) {
 				listener.stepOver(this);
+			}
+			break;
+		case PlayerEvent.WALK:
+			for (PlayerListener listener : listeners) {
+				listener.walk(event);
 			}
 			break;
 		case PlayerEvent.MOVE:
@@ -590,9 +595,10 @@ public class Player extends AbstractWidget {
 		// effect
 		Collection<Animation> stateEffs = stateEffects.values();
 		for (Animation effect : stateEffs) {
-			effect.draw(g,x,y);
+			effect.draw(g, x, y);
 		}
-		if(this.onceEffect!=null)onceEffect.draw(g, x, y);
+		if (this.onceEffect != null)
+			onceEffect.draw(g, x, y);
 	}
 
 	private boolean shouldDisplay(FloatPanel chatPanel) {
@@ -660,7 +666,7 @@ public class Player extends AbstractWidget {
 	}
 
 	private void stepAction() {
-		if(this.nextStep!=null) {
+		if (this.nextStep != null) {
 			// 计算下一步的方向
 			int dir = calculateStepDirection(this.nextStep);
 			if (dir != -1) {
@@ -725,7 +731,7 @@ public class Player extends AbstractWidget {
 
 	public void setColorations(int[] colorations, boolean recreate) {
 		this.colorations = colorations;
-		if(recreate) {
+		if (recreate) {
 			this.coloring(colorations);
 		}
 	}
@@ -754,7 +760,7 @@ public class Player extends AbstractWidget {
 		if (this.profileData == null) {
 			// 解析着色方案
 			WASDecoder decoder = new WASDecoder();
-			decoder.loadColorationProfile("shape/char/"+this.character+"/00.pp");
+			decoder.loadColorationProfile("shape/char/" + this.character + "/00.pp");
 			int partCount = decoder.getSectionCount();
 			this.profileData = new int[partCount];
 			for (int i = 0; i < partCount; i++) {
@@ -766,6 +772,7 @@ public class Player extends AbstractWidget {
 
 	/**
 	 * 单次播放效果动画
+	 * 
 	 * @param name
 	 */
 	public void playEffect(String name) {
@@ -773,60 +780,66 @@ public class Player extends AbstractWidget {
 		s.setRepeat(1);
 		this.onceEffect = s;
 		try {
-			MP3Player.play("sound/magic/"+name+".mp3");
-		}catch(Exception e) {
+			MP3Player.play("sound/magic/" + name + ".mp3");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 添加状态效果
+	 * 
 	 * @param name
 	 */
 	public void addStateEffect(String name) {
 		Animation s = SpriteFactory.loadAnimation("/magic/" + name + ".tcp");
-		this.stateEffects.put(name,s);
+		this.stateEffects.put(name, s);
 	}
+
 	/**
 	 * 取消状态效果
+	 * 
 	 * @param name
 	 */
 	public void removeStateEffect(String name) {
 		this.stateEffects.remove(name);
 	}
-	
+
 	/**
 	 * 播放某个动作的动画
+	 * 
 	 * @param state
 	 */
 	public void playOnce(String state) {
 		this.setState(state);
 		this.person.setRepeat(1);
-		if(this.weapon!=null) {
+		if (this.weapon != null) {
 			this.weapon.setRepeat(1);
 		}
-		MP3Player.play("sound/char/"+this.character+"/"+state+".mp3");
+		MP3Player.play("sound/char/" + this.character + "/" + state + ".mp3");
 	}
-	
+
 	/**
 	 * 等待当前动作结束
 	 */
 	public void waitFor() {
 		this.person.getCurrAnimation().waitFor();
 	}
-	
+
 	/**
 	 * 等待效果动画结束
+	 * 
 	 * @param name
 	 */
 	public void waitForEffect(String name) {
-		if(this.onceEffect!=null)
-			this.onceEffect.waitFor(); 
+		if (this.onceEffect != null)
+			this.onceEffect.waitFor();
 	}
 
 	public int getTop() {
-		return y -this.person.getCenterY();
+		return y - this.person.getCenterY();
 	}
+
 	public int getLeft() {
 		return x - this.person.getCenterX();
 	}

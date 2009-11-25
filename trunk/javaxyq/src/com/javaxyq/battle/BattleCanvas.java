@@ -383,7 +383,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		int dx = 60, dy = 40;
 		int x0 = 340, y0 = 400;
 		int x1 = 300, y1 = 80;
-		//排列敌方单位
+		// 排列敌方单位
 		switch (adversaryTeam.size()) {
 		case 1:
 			x1 -= 2 * dx;
@@ -409,7 +409,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			addNPC(player);
 		}
 
-		//排列我方单位
+		// 排列我方单位
 		switch (ownsideTeam.size()) {
 		case 1:
 			x0 += 2 * dx;
@@ -434,7 +434,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			player.setDirection(Sprite.DIRECTION_TOP_LEFT);
 			addNPC(player);
 		}
-		ranked =true;
+		ranked = true;
 	}
 
 	private ItemDetailLabel detailLabel = new ItemDetailLabel();
@@ -444,7 +444,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		Item[] items = DataStore.getPlayerItems(canvas.getPlayer());
 		// 设置显示的道具
 		for (int i = 0; i < items.length; i++) {
-			ItemLabel label = (ItemLabel) useitemDlg.getComponentByName("item"+(i+1));
+			ItemLabel label = (ItemLabel) useitemDlg.getComponentByName("item" + (i + 1));
 			label.setItem(items[i]);
 			if (!installItemListener) {
 				label.addMouseListener(itemMouseHandler);
@@ -493,7 +493,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			return;
 		}
 		try {
-			g.setColor(Color.BLACK);		
+			g.setColor(Color.BLACK);
 			updatePlayerState();
 			g.setColor(Color.WHITE);
 			g.clearRect(0, 0, getWidth(), getHeight());
@@ -536,9 +536,10 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			targetAnim.draw(g, waitingPlayer.getX(), waitingPlayer.getTop() - 20);
 		}
 	}
-	
+
 	private void drawHpSlot(Graphics g, long elapsedTime) {
-		if(!ranked)return;
+		if (!ranked)
+			return;
 		if (soltAnim == null) {
 			soltAnim = SpriteFactory.loadAnimation("/addon/4fd9fff3");
 			emptysoltAnim = SpriteFactory.loadAnimation("/addon/4d0a334c");
@@ -547,11 +548,11 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		for (int i = 0; i < ownsideTeam.size(); i++) {
 			Player player = ownsideTeam.get(i);
 			PlayerVO data = player.getData();
-			int slotx = player.getX() - maxWidth/2; 
-			int slotw = data.getHp()*maxWidth / data.getMaxHp();
-			emptysoltAnim.draw(g,slotx, player.getTop() - 10);
+			int slotx = player.getX() - maxWidth / 2;
+			int slotw = data.getHp() * maxWidth / data.getMaxHp();
+			emptysoltAnim.draw(g, slotx, player.getTop() - 10);
 			soltAnim.setWidth(slotw);
-			soltAnim.draw(g, slotx+1, player.getTop()+1 - 10);
+			soltAnim.draw(g, slotx + 1, player.getTop() + 1 - 10);
 		}
 	}
 
@@ -668,7 +669,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		if (e.isAltDown() && waitingCmd) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				if (target == null || target.getData().getHp() == 0) {
+				if (target == null || target.getData().getHp() == 0 || isOwnside(target)) {
 					target = randomEnemy();
 				}
 				attackCmd();
@@ -680,8 +681,9 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 				}
 				break;
 			case KeyEvent.VK_Q:
+				// TODO 判断：如果是我方的增益法术.....
 				if (lastMagic != null) {
-					if (target == null || target.getData().getHp() == 0) {
+					if (target == null || target.getData().getHp() == 0 || isOwnside(target)) {
 						target = randomEnemy();
 					}
 					selectedMagic = lastMagic;
@@ -699,16 +701,16 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 				}
 				break;
 			case KeyEvent.VK_W: // show magic
-				if(selectingMagic) {
+				if (selectingMagic) {
 					cancelSelectMagic();
-				}else {
+				} else {
 					selectMagic();
 				}
 				break;
 			case KeyEvent.VK_E: // item
-				if(selectingItem) {
+				if (selectingItem) {
 					cancelSelectItem();
-				}else {
+				} else {
 					selectItem();
 				}
 				break;
@@ -727,6 +729,16 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			target = adversaryTeam.get(random.nextInt(adversaryTeam.size()));
 		} while (target.getData().getHp() == 0);
 		return target;
+	}
+
+	/**
+	 * 判断对象是否为玩家的队伍
+	 * 
+	 * @param p
+	 * @return
+	 */
+	private boolean isOwnside(Player p) {
+		return ownsideTeam.contains(p);
 	}
 
 	public void keyReleased(KeyEvent e) {

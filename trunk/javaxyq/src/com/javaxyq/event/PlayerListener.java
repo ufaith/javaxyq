@@ -8,8 +8,14 @@ import com.javaxyq.widget.Player;
 public interface PlayerListener extends EventListener {
 
     void stepOver(Player player);
-
+    
     void move(Player player, Point increment);
+
+    /**
+     * 人物行走事件
+     * @param evt
+     */
+    void walk(PlayerEvent evt);
 
     void click(PlayerEvent evt);
     

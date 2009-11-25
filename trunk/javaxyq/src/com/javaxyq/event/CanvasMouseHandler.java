@@ -37,7 +37,10 @@ public class CanvasMouseHandler implements MouseListener, MouseMotionListener {
             canvas.click(e.getPoint());
             canvas.requestFocus(true);
             // search path
-            canvas.walkToView(p.x, p.y);
+            //canvas.walkToView(p.x, p.y);
+            //Asynchronized walk!
+            Point coords = canvas.viewToScene(p);
+            player.fireEvent(new PlayerEvent(player, PlayerEvent.WALK,coords));
         } else if (e.getButton() == MouseEvent.BUTTON3) {
             player.stop(false);
             player.changeDirection(e.getPoint());
