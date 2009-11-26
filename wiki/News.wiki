@@ -1,4 +1,5 @@
 #summary JavaXYQ最新进展
+#labels Featured,Phase-Deploy
 
 = Introduction =
 
@@ -6,10 +7,17 @@ JavaXYQ更新说明、进展情况等。
 
 
 = Doing =
- # 师门任务
+ # 嵌入脚本
+ # 改进UI事件框架
+ # 完善系统UI
 
 = Updates =
+ _20091125_ JavaXYQ1.4
+ # 改进地图8方向寻路算法
+ # 增加部分地图掩码
+ # 键盘方向键行走时掩码判定
+ # 完成简单师门任务（送信、寻物、巡逻）
 
- _2009-11-23_ JavaXYQ1.4
+ _20091123_ JavaXYQ1.4
  # 游戏任务系统框架
  
