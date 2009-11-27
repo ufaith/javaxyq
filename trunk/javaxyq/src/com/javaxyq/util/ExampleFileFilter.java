@@ -159,7 +159,7 @@ public class ExampleFileFilter extends FileFilter {
 			if (extension != null && filters.get(getExtension(f)) != null) {
 				return true;
 			}
-			if (pattern != null) {
+			if (extension != null && pattern != null) {
 				return pattern.matcher(extension).matches();
 			}
 		}
