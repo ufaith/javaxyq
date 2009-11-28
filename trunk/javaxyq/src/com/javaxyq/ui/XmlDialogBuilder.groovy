@@ -55,6 +55,7 @@ class XmlDialogBuilder implements DialogBuilder{
 		}else {
 			dialog = new Panel(width,height);
 		}
+		dialog.setName(dlgEl.@id);
 		try {
 			dialog.setLocation(dlgEl.@x.toInteger(), dlgEl.@y.toInteger())
 		}catch(Exception e) {
@@ -70,29 +71,46 @@ class XmlDialogBuilder implements DialogBuilder{
 			dialog.setBgImage(new ImageConfig(background));
 		}
 		try {
-		dialog.setClosable(dlgEl.@closable.toBoolean());
+			dialog.setClosable(dlgEl.@closable.toBoolean());
 		}catch(Exception e) {}
 		try {
-		dialog.setMovable(dlgEl.@movable.toBoolean());
+			dialog.setMovable(dlgEl.@movable.toBoolean());
 		}catch(Exception e) {}
 		dialog.setActionMap(GameMain.getActionMap());
-		dialog.setInitialAction(dlgEl.@initial);
-		dialog.setDisposeAction(dlgEl.@dispose);
+		// 注册监听器
+		//dialog.setInitialAction(dlgEl.@initial);
+		//dialog.setDisposeAction(dlgEl.@dispose);
 		
+		//加载面板的脚本
+		def listener = GroovyScript.loadUIScript(dlgEl.@id);
+		if(listener) {
+			dialog.addPanelListener(listener);
+		}
+
 		return dialog;
 	}
-
-	void processComponents(dialog,dlgEl) {
-		def comps = dlgEl.children();
-		for(def el in comps) {
+	
+	void processComponents(dialog,dlgNode) {
+		def nodes = dlgNode.children();
+		for(def node in nodes) {
 			try {
-				this.invokeMethod ('process'+el.name(),[dialog,el])
+				def comp = this.invokeMethod ('process'+node.name(),[dialog,node])
+				if(comp) {
+					//绑定事件
+					['mousePressed','mouseReleased','mouseClicked','keyPressed','keyReleased','keyTyped'].each{type ->
+						def actionId = node.@"$type"; 
+						if(actionId) {
+							dialog.bindAction(comp,type,actionId)
+						}
+					}
+				}
 			}catch(e) {
-				println "处理控件失败：${el.name()} ${el.attributes()}"
+				println "处理控件失败：${node.name()} ${node.attributes()}"
 				e.printStackTrace();
 			}
 		}		
 	}
+
 
 	AbstractButton processButton(Panel dialog,el) {
 		boolean toggle = el.@toggle as Boolean;
@@ -104,25 +122,25 @@ class XmlDialogBuilder implements DialogBuilder{
 			btn = new Button();
 		}
 		if(actionId) {
-			Action action = dialog.actionMap.get(actionId);
-			if (!action) {
-				try {
-					String wildcard = actionId.substring(0, actionId.lastIndexOf('.')) + ".*";
-					action = dialog.actionMap.get(wildcard);
-				}catch(e) {}
-			}
-			if (!action) {
-				println("Warning: Action not found, actionId=$actionId");
-			}else {
-				btn.setAction(action);
-			}
-			//set cmd after action
+//			Action action = dialog.actionMap.get(actionId);
+//			if (!action) {
+//				try {
+//					String wildcard = actionId.substring(0, actionId.lastIndexOf('.')) + ".*";
+//					action = dialog.actionMap.get(wildcard);
+//				}catch(e) {}
+//			}
+//			if (!action) {
+//				println("Warning: Action not found, actionId=$actionId");
+//			}else {
+//				btn.setAction(action);
+//			}
+//			//set cmd after action
 			btn.setActionCommand(actionId);
 		}
+		btn.text = el.@text;
 		try {
 			btn.setEnabled(el.@enable.toBoolean() )
 		}catch(Exception e) {}
-		btn.text = el.@text;
 		try {
 			btn.location = [el.@x.toInteger(),el.@y.toInteger()];
 		}catch(e) {}
@@ -245,8 +263,8 @@ class XmlDialogBuilder implements DialogBuilder{
 			editor.setSize(100,20);
 		}
 		if (actionId) {
-			Action action = dialog.actionMap.get(actionId);
-			editor.addActionListener(action);
+//			Action action = dialog.actionMap.get(actionId);
+//			editor.addActionListener(action);
 			editor.setActionCommand(actionId);
 		}
 		editor.setToolTipText(el.@tooltip);

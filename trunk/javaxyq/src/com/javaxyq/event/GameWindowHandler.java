@@ -3,7 +3,7 @@ package com.javaxyq.event;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import com.javaxyq.core.GameMain;
+import com.javaxyq.ui.*;
 
 public class GameWindowHandler implements WindowListener {
 
@@ -14,8 +14,7 @@ public class GameWindowHandler implements WindowListener {
 	}
 
 	public void windowClosing(WindowEvent e) {
-		String cmd="com.javaxyq.action.dialog.ÍË³öÓÎÏ·";
-		GameMain.doAction(e.getSource(), cmd);
+		UIHelper.showDialog("game_exit");
 	}
 
 	public void windowDeactivated(WindowEvent e) {

@@ -3,6 +3,7 @@ package com.javaxyq.graph;
 import groovy.text.SimpleTemplateEngine;
 import groovy.text.Template;
 
+import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -21,14 +22,15 @@ import org.codehaus.groovy.control.CompilationFailedException;
 
 import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
+import com.javaxyq.event.EventDelegator;
 import com.javaxyq.widget.Animation;
 
 public class Label extends JLabel {
 
-    private static final String uiClassID = "GameLabelUI";
+	private static final String uiClassID = "GameLabelUI";
 	private static final long serialVersionUID = 7814113439988128271L;
 
-	static{
+	static {
 		UIManager.put("GameLabelUI", "com.javaxyq.graph.GameLabelUI");
 	}
 	private Animation anim;
@@ -76,7 +78,7 @@ public class Label extends JLabel {
 		// setForeground(Color.WHITE);
 		setFont(GameMain.TEXT_FONT);
 	}
-	
+
 	@Override
 	public String getUIClassID() {
 		return uiClassID;
@@ -84,12 +86,13 @@ public class Label extends JLabel {
 
 	@Override
 	public void paint(Graphics g) {
-		if(System.currentTimeMillis() - lastUpdateTime < 40)return;
+		if (System.currentTimeMillis() - lastUpdateTime < 40)
+			return;
 		if (anim != null) {
 			anim.update(System.currentTimeMillis() - lastUpdateTime);
 			lastUpdateTime = System.currentTimeMillis();
 			setIcon(new ImageIcon(anim.getImage()));
-			//System.out.println(" paint label "+lastUpdateTime);
+			// System.out.println(" paint label "+lastUpdateTime);
 		}
 		super.paint(g);
 	}
@@ -100,7 +103,7 @@ public class Label extends JLabel {
 
 	public void setAnim(Animation anim) {
 		this.anim = anim;
-		if(anim!=null) {
+		if (anim != null) {
 			this.lastUpdateTime = System.currentTimeMillis();
 			this.setSize(anim.getWidth(), anim.getHeight());
 		}
@@ -135,7 +138,8 @@ public class Label extends JLabel {
 			if (template != null) {
 				return template.make(DataStore.getProperties(GameMain.getPlayer())).toString();
 			}
-		}catch(Exception e) {}
+		} catch (Exception e) {
+		}
 		return super.getToolTipText();
 	}
 
@@ -180,7 +184,7 @@ public class Label extends JLabel {
 			SwingUtilities.convertPointFromScreen(p, this);
 			return p;
 		} catch (Exception e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return super.getToolTipLocation(evt);
 	}
@@ -197,16 +201,30 @@ public class Label extends JLabel {
 		}
 		this.oldToolTipText = text;
 	}
-	
+
 	@Override
 	public void paintImmediately(int x, int y, int w, int h) {
-		//super.paintImmediately(x, y, w, h);
+		// super.paintImmediately(x, y, w, h);
 	}
-	
-	public boolean isValid(int x,int y) {
-		if(this.anim!=null) {
-			return this.anim.contains(x, y);	
+
+	public boolean isValid(int x, int y) {
+		if (this.anim != null) {
+			return this.anim.contains(x, y);
 		}
 		return true;
+	}
+
+	/**
+	 * 转发事件到代理器
+	 */
+	protected void processMouseEvent(MouseEvent e) {
+		super.processMouseEvent(e);
+		EventDelegator.delegateEvent(e);
+	}
+
+	@Override
+	protected void processMouseMotionEvent(MouseEvent e) {
+		super.processMouseMotionEvent(e);
+		EventDelegator.delegateEvent(e);
 	}
 }

@@ -1,5 +1,7 @@
 package com.javaxyq.action;
 
+import com.javaxyq.event.ActionEvent;
+
 class ClosureAction extends BaseAction {
 	
 	private Closure closure;

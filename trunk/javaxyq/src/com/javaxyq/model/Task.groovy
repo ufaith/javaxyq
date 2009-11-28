@@ -24,6 +24,16 @@ public class Task {
 		params = [:];
 		createDate = new Date();
 	}
+	
+	public Task(String type,String subtype,String sender,String receiver) {
+		params = [:];
+		createDate = new Date();
+		this.type = type;
+		this.subtype = subtype;
+		this.sender = sender;
+		this.receiver = receiver;
+	}
+	
 	/**
 	 * 设置某个参数的值
 	 * @param paramName

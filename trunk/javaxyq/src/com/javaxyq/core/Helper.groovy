@@ -23,14 +23,17 @@ public class Helper {
 	public static ResourceStore store = ResourceStore.getInstance(); 
 	public static Player createPlayer(String character,Map cfg) {
 		def player = store.createPlayer(character,cfg.colorations);
+		def data = new PlayerVO(cfg['id'],cfg['name'],character);
 		for(attr in cfg.keySet()) {
 			try {
-			player[attr] = cfg.get(attr);
+				player[attr] = cfg[attr];
+			}catch(e) {};
+			try {
+				data[attr] = cfg[attr];
 			}catch(e) {};
 		}
 		//FIXME ≥ı ºªØ Ù–‘
-		def data = new PlayerVO(cfg['id'],cfg['name'],character);
-		data.level = cfg.level;
+		//data.level = cfg.level;
 		DataStore.initPlayerData(data);
 		DataStore.recalcProperties(data);
 		println "create player: $data"

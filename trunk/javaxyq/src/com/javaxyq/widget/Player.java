@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ import javax.swing.event.EventListenerList;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.event.EventDispatcher;
+import com.javaxyq.event.EventException;
+import com.javaxyq.event.EventTarget;
 import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.event.PlayerListener;
 import com.javaxyq.graph.FloatPanel;
@@ -34,7 +37,7 @@ import com.javaxyq.util.WASDecoder;
  * @author 龚德伟
  * @history 2008-5-14 龚德伟 完善人物键盘行走的处理
  */
-public class Player extends AbstractWidget {
+public class Player extends AbstractWidget implements EventTarget {
 
 	public static final String STATE_STAND = "stand";
 
@@ -464,7 +467,7 @@ public class Player extends AbstractWidget {
 	 * 
 	 * @param event
 	 */
-	public void processEvent(PlayerEvent event) {
+	public void handleEvent(PlayerEvent event) {
 		final PlayerListener[] listeners = listenerList.getListeners(PlayerListener.class);
 		switch (event.getId()) {
 		case PlayerEvent.STEP_OVER:
@@ -713,8 +716,16 @@ public class Player extends AbstractWidget {
 		return character;
 	}
 
+	public boolean handleEvent(EventObject evt) throws EventException {
+		if (evt instanceof PlayerEvent) {
+			PlayerEvent playerEvt = (PlayerEvent) evt;
+			handleEvent(playerEvt);
+		}
+		return false;
+	}
+
 	public void fireEvent(PlayerEvent e) {
-		EventDispatcher.getInstance().dispatchEvent(this, e);
+		EventDispatcher.getInstance(Player.class, PlayerEvent.class).dispatchEvent(e);
 	}
 
 	public Sprite getPerson() {
@@ -861,4 +872,5 @@ public class Player extends AbstractWidget {
 			this.removePlayerListener(listeners[i]);
 		}
 	}
+
 }

@@ -1,25 +1,38 @@
 package com.javaxyq.graph;
 
+import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.EventObject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
+import javax.swing.event.EventListenerList;
 
 import com.javaxyq.config.ImageConfig;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
+import com.javaxyq.event.ActionEvent;
+import com.javaxyq.event.EventDispatcher;
+import com.javaxyq.event.EventException;
+import com.javaxyq.event.EventTarget;
+import com.javaxyq.event.PanelEvent;
+import com.javaxyq.event.PanelListener;
 import com.javaxyq.widget.SpriteImage;
+import com.javaxyq.ui.*;
 
 //FIXME SpriteImage的处理有问题，Image后跟着Sprite，无法出现
 /**
@@ -28,8 +41,10 @@ import com.javaxyq.widget.SpriteImage;
  * @author Langlauf
  * @date
  */
-public class Panel extends JPanel {
+public class Panel extends JPanel implements EventTarget {
 	private static final long serialVersionUID = 3207034027692111969L;
+
+	private EventListenerList listenerList = new EventListenerList();
 
 	private ArrayList<SpriteImage> sprites = new ArrayList<SpriteImage>();
 
@@ -42,7 +57,10 @@ public class Panel extends JPanel {
 	/** 鼠标左键点击是否允许关闭 */
 	private boolean clickClosabled;
 
-	private MouseListener mouseHandler = new MouseAdapter() {
+	/** actionId绑定表 */
+	private Map<String, String> actionIdBindings = new HashMap<String, String>();
+
+	private MouseAdapter mouseHandler = new MouseAdapter() {
 		public void mousePressed(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON1) {
 				Panel dlg = Panel.this;
@@ -51,7 +69,7 @@ public class Panel extends JPanel {
 				Point p = e.getPoint();
 				if (isValid(p)) {
 					if (clickClosabled) {
-						GameMain.hideDialog(Panel.this);
+						UIHelper.hideDialog(Panel.this);
 					} else {
 						lastPosition = p;
 						parent.setComponentZOrder(dlg, 0);// 移到最上层
@@ -67,17 +85,16 @@ public class Panel extends JPanel {
 				e.consume();
 			} else if (e.getButton() == MouseEvent.BUTTON3) {// 右击关闭
 				if (closable) {
-					GameMain.hideDialog(Panel.this);
+					UIHelper.hideDialog(Panel.this);
 				}
 			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
 			lastPosition = null;
-		}
-	};
 
-	private MouseMotionListener mouseMotionHandler = new MouseMotionAdapter() {
+		}
+
 		public void mouseDragged(MouseEvent e) {// 移动面板
 			if (lastPosition != null && movable) {
 				Point location = Panel.this.getLocation();
@@ -85,6 +102,45 @@ public class Panel extends JPanel {
 				Panel.this.setLocation(location);
 			}
 		}
+
+		public void mouseMoved(MouseEvent e) {
+			Point p = e.getPoint();
+			Panel dlg = Panel.this;
+			Container parent = dlg.getParent();
+			int x = dlg.getX();
+			int y = dlg.getY();
+			// 如果点击的是穿透的区域,把事件传递给父容器
+			if (!isValid(p)) {
+				MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), e
+						.getModifiers(), x + p.x, y + p.y, 1, false);
+				parent.dispatchEvent(event);
+			} else {
+				MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), e
+						.getModifiers(), x + p.x, y + p.y, 1, false);
+
+				parent.dispatchEvent(event);
+			}
+		}
+
+		public void mouseEntered(MouseEvent e) {
+			Point p = e.getPoint();
+			Panel dlg = Panel.this;
+			Container parent = dlg.getParent();
+			int x = dlg.getX();
+			int y = dlg.getY();
+			// 如果点击的是穿透的区域,把事件传递给父容器
+			if (!isValid(p)) {
+				MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(), e
+						.getModifiers(), x + p.x, y + p.y, 1, false);
+				parent.dispatchEvent(event);
+			} else {
+				MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), e
+						.getModifiers(), x + p.x, y + p.y, 1, false);
+
+				parent.dispatchEvent(event);
+			}
+		}
+
 	};
 
 	/** 是否可以拖动 */
@@ -153,7 +209,103 @@ public class Panel extends JPanel {
 		setPreferredSize(new Dimension(width, height));
 		setSize(width, height);
 		addMouseListener(mouseHandler);
-		addMouseMotionListener(mouseMotionHandler);
+		addMouseMotionListener(mouseHandler);
+	}
+
+	public boolean handleEvent(EventObject evt) throws EventException {
+		if (evt instanceof ActionEvent) {
+			handleActionEvent((ActionEvent) evt);
+			return true;
+		} else if (evt instanceof java.awt.event.ActionEvent) {
+			handleActionEvent(new ActionEvent((java.awt.event.ActionEvent) evt));
+			return true;
+		} else if (evt instanceof MouseEvent) {
+			handleMouseEvent((MouseEvent) evt);
+			return true;
+		} else if (evt instanceof PanelEvent) {
+			handlePanelEvent((PanelEvent) evt);
+			return true;
+		}
+		return false;
+	}
+
+	public void fireEvent(PanelEvent e) {
+		EventDispatcher.getInstance(Panel.class, PanelEvent.class).dispatchEvent(e);
+	}
+
+	/**
+	 * 处理鼠标事件
+	 * 
+	 * @param event
+	 */
+	private void handleMouseEvent(MouseEvent evt) {
+		String actionId = getBindingActionId(evt);
+		if (actionId != null) {
+			ActionEvent actionEvent = new ActionEvent(evt.getSource(), actionId, new Object[] { evt });
+			handleActionEvent(actionEvent);
+		}
+	}
+
+	/**
+	 * @param evt
+	 * @return
+	 */
+	private String getBindingActionId(ComponentEvent evt) {
+		// actionKey -> name-eventType, like 'label气血-mousepressed'
+		String paramString = evt.paramString();
+		// 得到事件的类型 'MOUSE_PRESSED'
+		String eventType = paramString.substring(0, paramString.indexOf(','));
+		// 删除分割的下划线 'MOUSE_PRESSED' -> 'mousepressed'
+		eventType = eventType.toLowerCase().replaceAll("_", "");
+		String actionKey = evt.getComponent().getName() + "-" + eventType;
+		// 获得绑定的actionId
+		String actionId = actionIdBindings.get(actionKey);
+		return actionId;
+	}
+
+	private void handleActionEvent(ActionEvent evt) {
+		PanelListener[] listeners = listenerList.getListeners(PanelListener.class);
+		for (int i = 0; i < listeners.length; i++) {
+			listeners[i].actionPerformed(evt);
+		}
+	}
+
+	private void handlePanelEvent(PanelEvent evt) {
+		PanelListener[] listeners = listenerList.getListeners(PanelListener.class);
+		for (int i = 0; i < listeners.length; i++) {
+			listeners[i].actionPerformed(evt);
+		}
+	}
+
+	public void addPanelListener(PanelListener l) {
+		listenerList.add(PanelListener.class, l);
+	}
+
+	public void removePanelListener(PanelListener l) {
+		listenerList.remove(PanelListener.class, l);
+	}
+
+	/**
+	 * 移除所有面板事件监听器
+	 */
+	public void removeAllPanelListeners() {
+		PanelListener[] listeners = listenerList.getListeners(PanelListener.class);
+		for (int i = 0; i < listeners.length; i++) {
+			listenerList.remove(PanelListener.class, listeners[i]);
+		}
+	}
+
+	/**
+	 * 绑定控件的事件
+	 * 
+	 * @param comp
+	 * @param eventType
+	 * @param actionId
+	 */
+	public void bindAction(Component comp, String eventType, String actionId) {
+		// like 'name-mouseclicked'
+		String key = comp.getName() + "-" + eventType.toLowerCase();
+		actionIdBindings.put(key, actionId);
 	}
 
 	/**
@@ -162,7 +314,7 @@ public class Panel extends JPanel {
 	 * @param name
 	 * @return
 	 */
-	public Component getComponentByName(String name) {
+	public Component findCompByName(String name) {
 		if (name != null) {
 			Component[] comps = getComponents();
 			for (Component comp : comps) {
@@ -288,4 +440,5 @@ public class Panel extends JPanel {
 	public void setClickClosabled(boolean clickClosabled) {
 		this.clickClosabled = clickClosabled;
 	}
+
 }

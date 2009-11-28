@@ -28,7 +28,6 @@ class Main {
 	public static void main(String[] args) {
 		
 		ClassUtil.init();
-		DialogFactory.init(new XmlDialogBuilder())
 		UIHelper.init();
 		DataStore.init();
 		ItemManager.init();
@@ -62,6 +61,7 @@ class Main {
 		def p = Helper.createPlayer('0010',[
            name:'åÐÒ£ºùÂ«',
            level : 5,
+           ÃÅÅÉ:'Îå×¯¹Û',
            direction:0,
            state:'stand',
            colorations: [2,4,3]
@@ -165,7 +165,7 @@ class Main {
 			//processUI(file);
 			def dialogs = new XmlParser().parse(new File(file));
 			for(def dlg in dialogs.Dialog) {
-				DialogFactory.registerDialog(dlg.@id, file);
+				DialogFactory.addDialog(dlg.@id, file);
 			}
 		}
 	}

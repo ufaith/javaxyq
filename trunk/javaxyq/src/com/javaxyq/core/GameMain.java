@@ -33,12 +33,11 @@ import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 
-import com.javaxyq.action.ActionEvent;
 import com.javaxyq.action.BaseAction;
 import com.javaxyq.battle.BattleCanvas;
 import com.javaxyq.config.TalkConfig;
+import com.javaxyq.event.ActionEvent;
 import com.javaxyq.event.Listener;
 import com.javaxyq.graph.Canvas;
 import com.javaxyq.graph.LoadingCanvas;
@@ -49,6 +48,7 @@ import com.javaxyq.graph.Window;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.TileMap;
+import com.javaxyq.ui.*;
 
 /**
  * JavaXYQ 游戏入口类
@@ -186,7 +186,7 @@ public final class GameMain {
 	}
 
 	private static void initUI() {
-		String[] uiIds = new String[] {"ui.main.dialog1","ui.main.dialog2","ui.main.dialog3"};
+		String[] uiIds = new String[] {"mainwin"};
    		for(String id : uiIds) {
    			System.out.println("安装UI："+id);
    			Panel dlg = DialogFactory.getDialog(id);
@@ -244,52 +244,6 @@ public final class GameMain {
 			displayMode = new DisplayMode(width, height, 16, DisplayMode.REFRESH_RATE_UNKNOWN);
 		}
 		return displayMode;
-	}
-
-	/**
-	 * 显示或隐藏指定对话框
-	 * 
-	 * @param autoSwap
-	 */
-	public static void showHideDialog(Panel dialog) {
-		if (dialog != null) {
-			if (dialog.getParent() == getGameCanvas()) {
-				hideDialog(dialog);
-			} else {
-				showDialog(dialog);
-			}
-		}
-	}
-
-	public static void showDialog(Panel dialog) {
-		if (dialog != null && dialog.getParent() != getGameCanvas()) {
-			String initialAction = dialog.getInitialAction();
-			if (initialAction != null && initialAction.length()>0) {
-				GameMain.doAction(dialog, initialAction);
-			}
-			getGameCanvas().add(dialog);
-			getGameCanvas().setComponentZOrder(dialog, 0);
-		}
-	}
-
-	public static void hideDialog(Panel dialog) {
-		if (dialog != null) {
-			if (dialog.getParent() == getGameCanvas()) {
-				getGameCanvas().remove(dialog);
-				String action = dialog.getDisposeAction();
-				if (action != null && action.length()>0) {
-					GameMain.doAction(dialog, action);
-				}
-			}
-		}
-	}
-
-	public static TalkPanel getTalkPanel() {
-		Component comp = getGameCanvas().getComponent(0);
-		if (comp instanceof TalkPanel) {
-			return (TalkPanel) comp;
-		}
-		return null;
 	}
 
 	public static InputMap getInputMap() {
@@ -448,7 +402,7 @@ public final class GameMain {
         getGameCanvas().setActionMap(getActionMap());
         
         for (Panel c : uiComponents) {
-        	showDialog(c);
+        	UIHelper.showDialog(c);
         }
         installListener();
 	}
@@ -545,10 +499,10 @@ public final class GameMain {
 	 */
 	public static void doTalk(Player npc, TalkConfig talk) {
 		talker = npc;
-		TalkPanel dlg = (TalkPanel) DialogFactory.getDialog("com.javaxyq.action.dialog.talk");
+		TalkPanel dlg = (TalkPanel) DialogFactory.getDialog("npctalk");
 		Toolkit.getInstance().createTalk(dlg, talk);
 		dlg.setTalker(npc);
-		GameMain.showDialog(dlg);
+		UIHelper.showDialog(dlg);
 	}
 
 	public static Player getTalker() {
@@ -561,6 +515,7 @@ public final class GameMain {
 
 	public static void exit() {
 		System.out.println("terminating JavaXYQ ...");
+        //GameMain.doAction(e.getSource(), "com.javaxyq.action.beforeExit");
 		System.exit(0);
 	}
 
@@ -619,13 +574,12 @@ public final class GameMain {
 		//installUI();
         getGameCanvas().setActionMap(getActionMap());       
         for (Panel c : uiComponents) {
-        	showDialog(c);
+        	UIHelper.showDialog(c);
         }
         //installListener();
 
 		battleCanvas.init();
 		
-		//TODO
 	}
 	/**
 	 * 退出战斗模式

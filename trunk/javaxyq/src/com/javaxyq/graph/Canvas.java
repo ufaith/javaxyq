@@ -296,7 +296,7 @@ public abstract class Canvas extends JPanel {
 		thread.start();
 	}
 
-	private Component findComponentByName(Component parent, String name) {
+	private Component findCompByName(Component parent, String name) {
 		if (!(parent instanceof Container)) {
 			return null;
 		}
@@ -308,7 +308,7 @@ public abstract class Canvas extends JPanel {
 			}
 		}
 		for (Component c : comps) {
-			Component result = this.findComponentByName(c, name);
+			Component result = this.findCompByName(c, name);
 			if (result != null) {
 				return result;
 			}
@@ -316,8 +316,8 @@ public abstract class Canvas extends JPanel {
 		return null;
 	}
 
-	protected Component findComponentByName(String name) {
-		return this.findComponentByName(this, name);
+	protected Component findCompByName(String name) {
+		return this.findCompByName(this, name);
 	}
 
 	/**

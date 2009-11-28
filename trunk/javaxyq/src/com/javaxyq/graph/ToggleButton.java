@@ -1,6 +1,7 @@
 package com.javaxyq.graph;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.Action;
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 import com.javaxyq.core.GameMain;
+import com.javaxyq.event.EventDelegator;
 import com.javaxyq.widget.Frame;
 import com.javaxyq.widget.Sprite;
 
@@ -112,6 +114,11 @@ public class ToggleButton extends JToggleButton {
 	@Override
 	public void paintImmediately(int x, int y, int w, int h) {
 		//super.paintImmediately(x, y, w, h);
+	}
+	@Override
+	protected void fireActionPerformed(ActionEvent event) {
+		super.fireActionPerformed(event);
+		EventDelegator.delegateEvent(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
 	}
 
 //    class CustomButtonUI extends BasicButtonUI {

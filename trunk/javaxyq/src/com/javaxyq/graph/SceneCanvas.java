@@ -148,13 +148,13 @@ public class SceneCanvas extends Canvas {
 		Point pp = this.getPlayerSceneLocation();
 		String strCoordinate = "X:" + pp.x + " Y:" + pp.y;
 		if (coordinateLabel == null) {
-			coordinateLabel = (Label) findComponentByName("人物坐标");
+			coordinateLabel = (Label) findCompByName("人物坐标");
 		}
 		if (coordinateLabel != null) {
 			coordinateLabel.setText(strCoordinate);
 		}
 		if (sceneLabel == null) {
-			sceneLabel = (Label) findComponentByName("地图名称");
+			sceneLabel = (Label) findCompByName("地图名称");
 		}
 		if (sceneLabel != null) {
 			sceneLabel.setText(sceneName);
@@ -164,19 +164,19 @@ public class SceneCanvas extends Canvas {
 		int maxLen = 50;
 		// 人物气血
 		int len = playerVO.getHp() * maxLen / playerVO.getMaxHp();
-		Label hpTrough = (Label) this.findComponentByName("人物气血");
+		Label hpTrough = (Label) this.findCompByName("人物气血");
 		hpTrough.setSize(len, hpTrough.getHeight());
 		// 人物魔法
 		len = playerVO.getMp() * maxLen / playerVO.getMaxMp();
-		Label mpTrough = (Label) this.findComponentByName("人物魔法");
+		Label mpTrough = (Label) this.findCompByName("人物魔法");
 		mpTrough.setSize(len, mpTrough.getHeight());
 		// 人物愤怒
 		len = playerVO.getSp() * maxLen / 150;
-		Label spTrough = (Label) this.findComponentByName("人物愤怒");
+		Label spTrough = (Label) this.findCompByName("人物愤怒");
 		spTrough.setSize(len, spTrough.getHeight());
 		// 人物经验
 		len = (int) (playerVO.getExp() * maxLen / DataStore.getLevelExp(playerVO.getLevel()));
-		Label expTrough = (Label) this.findComponentByName("人物经验");
+		Label expTrough = (Label) this.findCompByName("人物经验");
 		expTrough.setSize(len, expTrough.getHeight());
 
 		// TODO 召唤兽状态
@@ -238,10 +238,9 @@ public class SceneCanvas extends Canvas {
 		Point source = getPlayerSceneLocation();
 		Point target = new Point(x, y);
 		// 计算两点的直线
-		// List<Point> path =
-		// SearchUtils.getLinePath(source.x,source.y,target.x,target.y);
+		path = SearchUtils.getLinePath(source.x,source.y,target.x,target.y);
 		// 计算两点间的二次曲线
-		path = SearchUtils.getBezierPath(source, target);
+		//path = SearchUtils.getBezierPath(source, target);
 		// 修正终点为最近可以到达点
 		for (int i = path.size() - 1; i >= 0; i--) {
 			Point p = path.get(i);

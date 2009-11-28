@@ -123,7 +123,7 @@ class CommonSceneAction implements SceneListener{
 
 /*			//Õ½¶·ÈÎÎñ
 			def battleAction = { evt->
-				GameMain.hideDialog(GameMain.getTalkPanel());
+				UIHelper.hideDialog(UIHelper.getTalkPanel());
 				int level = GameMain.getPlayer().getData().getLevel();
 				def t1 = [],t2 = [];
 				def elfs = ['2036','2037','2009','2010','2011','2012'];
