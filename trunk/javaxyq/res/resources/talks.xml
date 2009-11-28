@@ -15,7 +15,7 @@
 		<NPC id="五庄观.配色师" >
 			<talk id="default">
 				<text>我是这里最好的配色师，只要你有足够的颜料，我就可以帮你变幻成你最喜欢的颜色。#97</text>
-				<link action="open" value="color">太好了，我正想改变一下形象呢</link>
+				<link action="open" value="player_coloring">太好了，我正想改变一下形象呢</link>
 				<link action="open" value="">是吗，我想给我的孩子改变下形象</link>
 				<link action="close" value="">好神奇哦，等我想换换形象的时候一定来找你</link>
 			</talk>

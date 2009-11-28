@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialogs>
+	<Dialog id="tasklist" width="395" height="350" halign="center"
+		valign="center" background="/wzife/dialog/task.tcp"
+		x="147" y="77" />
+</Dialogs>
