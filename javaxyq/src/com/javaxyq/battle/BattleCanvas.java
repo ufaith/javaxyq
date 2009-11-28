@@ -49,6 +49,10 @@ import com.javaxyq.widget.Sprite;
  */
 public class BattleCanvas extends Canvas implements MouseListener, MouseMotionListener, KeyListener {
 
+	private static final String BATTLE_ROLE_CMD = "battle_role_cmd";
+	private static final String BATTLE_WARMAGIC10 = "battle_warmagic10";
+	private static final String BATTLE_USEITEM = "battle_useitem";
+	private static final String BATTLE_MSG = "battle_msg";
 	private EventListenerList listenerList = new EventListenerList();
 	private List<Player> ownsideTeam;
 	private List<Player> adversaryTeam;
@@ -57,7 +61,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	private Label lblMsg;
 	private Player target;
 	private Random random = new Random();
-	private Panel cmddlg;
+
 	private boolean selectingTarget;
 	/**
 	 * 指令管理器
@@ -71,8 +75,6 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 * 当前选择的法术id
 	 */
 	private String selectedMagic;
-	private Panel warmagicDlg;
-	private Panel useitemDlg;
 	private boolean selectingItem;
 	private Item selectedItem;
 	private Command lastCmd;
@@ -137,14 +139,10 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	}
 
 	public void init() {
-		battleMask = SpriteFactory.loadAnimation("/addon/708c11a0");
-		cmddlg = DialogFactory.getDialog("battle.战斗指令");
-		warmagicDlg = DialogFactory.getDialog("battle.warmagic10");
-		useitemDlg = DialogFactory.getDialog("battle.useitem");
-		GameMain.showDialog(cmddlg);
-		Panel lbldlg = DialogFactory.getDialog("battle.战斗提示");
-		GameMain.showDialog(lbldlg);
-		lblMsg = (Label) super.findComponentByName("text战斗消息");
+		battleMask = SpriteFactory.loadAnimation("/addon/battlebg.tcp");
+		UIHelper.showDialog(BATTLE_ROLE_CMD);
+		UIHelper.showDialog(BATTLE_MSG);
+		lblMsg = (Label) super.findCompByName("text战斗消息");
 
 		rank();
 		cmdIndex = 0;
@@ -157,15 +155,15 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 */
 	public void selectTarget() {
 		selectingTarget = true;
-		GameMain.hideDialog(cmddlg);
+		UIHelper.hideDialog(BATTLE_ROLE_CMD);
 	}
 
 	/**
 	 * 选择要施放的法术
 	 */
 	public void selectMagic() {
-		GameMain.hideDialog(cmddlg);
-		GameMain.showDialog(warmagicDlg);
+		UIHelper.hideDialog(BATTLE_ROLE_CMD);
+		UIHelper.showDialog(BATTLE_WARMAGIC10);
 		selectingMagic = true;
 	}
 
@@ -173,8 +171,8 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 * 取消选择法术
 	 */
 	public void cancelSelectMagic() {
-		GameMain.showDialog(cmddlg);
-		GameMain.hideDialog(warmagicDlg);
+		UIHelper.showDialog(BATTLE_ROLE_CMD);
+		UIHelper.hideDialog(BATTLE_WARMAGIC10);
 		selectingTarget = false;
 		selectingMagic = false;
 	}
@@ -188,13 +186,13 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		this.selectedMagic = magicId;
 		this.lastMagic = magicId;
 		selectingMagic = false;
-		GameMain.hideDialog(warmagicDlg);
+		UIHelper.hideDialog(BATTLE_WARMAGIC10);
 		selectTarget();
 	}
 
 	public void selectItem() {
-		GameMain.hideDialog(cmddlg);
-		GameMain.showDialog(useitemDlg);
+		UIHelper.hideDialog(BATTLE_ROLE_CMD);
+		UIHelper.showDialog(BATTLE_USEITEM);
 		initItems();
 		selectingItem = true;
 	}
@@ -202,7 +200,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	public void setSelectedItem(Item item) {
 		this.selectedItem = item;
 		this.selectingItem = false;
-		GameMain.hideDialog(useitemDlg);
+		UIHelper.hideDialog(BATTLE_USEITEM);
 		selectTarget();
 	}
 
@@ -210,8 +208,8 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 * 取消选择道具
 	 */
 	public void cancelSelectItem() {
-		GameMain.showDialog(cmddlg);
-		GameMain.hideDialog(useitemDlg);
+		UIHelper.showDialog(BATTLE_ROLE_CMD);
+		UIHelper.hideDialog(BATTLE_USEITEM);
 		selectingTarget = false;
 		selectingMagic = false;
 		selectingItem = false;
@@ -444,7 +442,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		Item[] items = DataStore.getPlayerItems(canvas.getPlayer());
 		// 设置显示的道具
 		for (int i = 0; i < items.length; i++) {
-			ItemLabel label = (ItemLabel) useitemDlg.getComponentByName("item" + (i + 1));
+			ItemLabel label = (ItemLabel) DialogFactory.getDialog(BATTLE_USEITEM).findCompByName("item" + (i + 1));
 			label.setItem(items[i]);
 			if (!installItemListener) {
 				label.addMouseListener(itemMouseHandler);
@@ -772,7 +770,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		if (cmdIndex >= ownsideTeam.size() - 1) {
 			turnBattle();
 		} else {
-			GameMain.showDialog(cmddlg);
+			UIHelper.showDialog(BATTLE_ROLE_CMD);
 			cmdIndex++;
 			this.setPlayer(ownsideTeam.get(cmdIndex));
 			waitingCmd = true;
@@ -783,7 +781,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	private void turnBattle() {
 		// 全部指令接收到，进行回合战斗
 		waitingCmd = false;
-		GameMain.hideDialog(cmddlg);
+		UIHelper.hideDialog(BATTLE_ROLE_CMD);
 		new Thread("BattleThread") {
 			public void run() {
 				cmdMan.turnBattle();
@@ -795,7 +793,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 * 开始新回合
 	 */
 	public void turnBegin() {
-		GameMain.showDialog(cmddlg);
+		UIHelper.showDialog(BATTLE_ROLE_CMD);
 		cmdIndex = 0;
 		this.setPlayer(ownsideTeam.get(cmdIndex));
 		waitingCmd = true;
@@ -808,19 +806,19 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		int maxLen = 50;
 		// 人物气血
 		int len = playerVO.getHp() * maxLen / playerVO.getMaxHp();
-		Label hpTrough = (Label) this.findComponentByName("人物气血");
+		Label hpTrough = (Label) this.findCompByName("人物气血");
 		hpTrough.setSize(len, hpTrough.getHeight());
 		// 人物魔法
 		len = playerVO.getMp() * maxLen / playerVO.getMaxMp();
-		Label mpTrough = (Label) this.findComponentByName("人物魔法");
+		Label mpTrough = (Label) this.findCompByName("人物魔法");
 		mpTrough.setSize(len, mpTrough.getHeight());
 		// 人物愤怒
 		len = playerVO.getSp() * maxLen / 150;
-		Label spTrough = (Label) this.findComponentByName("人物愤怒");
+		Label spTrough = (Label) this.findCompByName("人物愤怒");
 		spTrough.setSize(len, spTrough.getHeight());
 		// 人物经验
 		len = (int) (playerVO.getExp() * maxLen / DataStore.getLevelExp(playerVO.getLevel()));
-		Label expTrough = (Label) this.findComponentByName("人物经验");
+		Label expTrough = (Label) this.findCompByName("人物经验");
 		expTrough.setSize(len, expTrough.getHeight());
 
 		// TODO 召唤兽状态

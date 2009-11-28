@@ -6,6 +6,7 @@ import groovy.text.Template;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.codehaus.groovy.control.CompilationFailedException;
 
 import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
+import com.javaxyq.event.EventDelegator;
 import com.javaxyq.widget.Frame;
 import com.javaxyq.widget.Sprite;
 
@@ -36,10 +38,10 @@ import com.javaxyq.widget.Sprite;
 public class Button extends JButton {
 
 	private static final String uiClassID = "GameButtonUI";
-	static{
+	static {
 		UIManager.put("GameButtonUI", "com.javaxyq.graph.GameButtonUI");
 	}
-	
+
 	/**
 	 * 按钮按下时是否自动向右下偏移
 	 */
@@ -75,7 +77,7 @@ public class Button extends JButton {
 		return uiClassID;
 	}
 
-	public void init(List<Frame> frames) {
+	private void init(List<Frame> frames) {
 		// changed ui
 		setUI(new CustomButtonUI());
 		setFont(GameMain.TEXT_FONT);
@@ -220,6 +222,12 @@ public class Button extends JButton {
 	@Override
 	public void paintImmediately(int x, int y, int w, int h) {
 		// super.paintImmediately(x, y, w, h);
+	}
+
+	@Override
+	protected void fireActionPerformed(ActionEvent event) {
+		super.fireActionPerformed(event);
+		EventDelegator.delegateEvent(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
 	}
 
 }

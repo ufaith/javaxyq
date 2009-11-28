@@ -1,6 +1,7 @@
 package com.javaxyq.action;
 
 import com.javaxyq.core.GameMain;
+import com.javaxyq.event.ActionEvent;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
 

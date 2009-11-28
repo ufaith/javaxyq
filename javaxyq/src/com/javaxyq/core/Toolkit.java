@@ -125,7 +125,8 @@ public class Toolkit {
                 }
                 is = new FileInputStream(filename);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            	System.out.println("找不到文件: "+filename);
+                //e.printStackTrace();
             }
         }
         return is;

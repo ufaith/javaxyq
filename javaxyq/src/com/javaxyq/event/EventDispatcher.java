@@ -7,76 +7,68 @@
 
 package com.javaxyq.event;
 
-import java.util.Queue;
+import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import com.javaxyq.widget.Player;
 
 /**
  * @author 龚德伟
  * @history 2008-6-18 龚德伟 新建
  */
-public class EventDispatcher {
+public class EventDispatcher<S extends EventTarget, E extends EventObject> {
 
-    private static EventDispatcher instance = new EventDispatcher();
+	/** 事件调度器实例表 */
+	private static final Map<Object, EventDispatcher> instances = new HashMap<Object, EventDispatcher>();
 
-    private BlockingQueue<EventPeer> eventQueue = new LinkedBlockingQueue<EventPeer>();
-    
-    private EventProcessor eventProcessor = new EventProcessor();
+	private BlockingQueue<E> eventQueue = new LinkedBlockingQueue<E>();
 
-    private EventDispatcher() {
-        eventProcessor.start();
-    }
+	private EventProcessor eventProcessor = null;
 
-    public void dispatchEvent(Player source, PlayerEvent e) {
-        eventQueue.offer(new EventPeer(source,e));
-    }
+	private EventDispatcher() {
+		eventProcessor = new EventProcessor();
+		eventProcessor.start();
+	}
 
-    public static EventDispatcher getInstance() {
-        return instance;
-    }
+	public void dispatchEvent(E evt) {
+		eventQueue.offer(evt);
+	}
 
-    private class EventProcessor extends Thread {
-        public EventProcessor() {
-            setName("EventProcessor");
-            setDaemon(true);
-        }
+	public static <T1 extends EventTarget, T2 extends EventObject> EventDispatcher<T1, T2> getInstance(
+			Class<T1> clazz1, Class<T2> clazz2) {
+		EventDispatcher<T1, T2> dispatcher = instances.get(clazz1);
+		if (dispatcher == null) {
+			dispatcher = new EventDispatcher<T1, T2>();
+			instances.put(clazz1, dispatcher);
+		}
+		return dispatcher;
+	}
 
-        @Override
-        public void run() {
-            while (true) {
-            	//System.out.println(this.getId()+" "+this.getName());
-            	try {
-            		//等待下一个事件
-            		EventPeer peer = eventQueue.take();
-            		if (peer != null) {
-            			peer.getPlayer().processEvent(peer.getEvent());
-            		}
-            	} catch (Exception e) {
-            		System.err.println("event process error!");
-            		e.printStackTrace();
-            	}
-            }
-        }
-    }
-    
-    private class EventPeer {
-        private Player player;
-        private PlayerEvent event;
+	private static int processorCount;
 
-        public EventPeer(Player p,PlayerEvent e) {
-            this.player = p;
-            this.event = e;
-        }
+	private class EventProcessor extends Thread {
+		public EventProcessor() {
+			processorCount++;
+			setName("EventProcessor-" + processorCount);
+			setDaemon(true);
+		}
 
-        public Player getPlayer() {
-            return player;
-        }
-
-        public PlayerEvent getEvent() {
-            return event;
-        }
-        
-    }
+		@Override
+		public void run() {
+			while (true) {
+				// System.out.println(this.getId()+" "+this.getName());
+				try {
+					// 等待下一个事件
+					E evt = eventQueue.take();
+					if (evt != null) {
+						((S) evt.getSource()).handleEvent(evt);
+					}
+				} catch (Exception e) {
+					System.err.println("event process error!");
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

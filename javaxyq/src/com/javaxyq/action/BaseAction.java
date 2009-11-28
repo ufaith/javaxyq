@@ -7,6 +7,8 @@
 
 package com.javaxyq.action;
 
+import com.javaxyq.event.ActionEvent;
+
 /**
  * @author 龚德伟
  * @history 2008-6-9 龚德伟 新建

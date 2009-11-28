@@ -3,6 +3,7 @@ package com.javaxyq.action;
 import com.javaxyq.core.*;
 import com.javaxyq.graph.*;
 import com.javaxyq.event.*;
+import com.javaxyq.ui.*;
 
 /**
  * 默认的传送事件处理器
@@ -14,7 +15,7 @@ class DefaultTransportAction extends BaseAction{
 		int x = e.getArgumentAsInt(1);
 		int y = e.getArgumentAsInt(2);
 		Main.setScene(sceneId, x, y);
-		GameMain.hideDialog(GameMain.getTalkPanel());
+		UIHelper.hideDialog(UIHelper.getTalkPanel());
 				
 	}
 }

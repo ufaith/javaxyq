@@ -13,6 +13,7 @@ import java.awt.event.MouseMotionListener;
 
 import com.javaxyq.core.GameMain;
 import com.javaxyq.event.PlayerEvent;
+import com.javaxyq.ui.*;
 
 /**
  * @author 龚德伟
@@ -41,7 +42,8 @@ public class LinkLabel extends RichLabel {
                 if ("close".equals(action)) {
                     dlg.close();
                 } else if ("open".equals(action)) {
-                    GameMain.doAction(LinkLabel.this, "com.javaxyq.action.dialog." + arguments, null);
+                    //GameMain.doAction(LinkLabel.this, "com.javaxyq.action.dialog." + arguments, null);
+                	UIHelper.showDialog(arguments);
                     dlg.close();
                 } else if ("talk".equals(action)) {
                     //FIXME 改进对话事件

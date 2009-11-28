@@ -98,11 +98,16 @@ public class SpriteFactory {
 	}
 
 	public static Sprite loadSprite(String filename, int[] colorations) {
-		if (filename == null)
+		if (filename == null || filename.trim().length()==0)
 			return null;
 		try {
 			WASDecoder decoder = new WASDecoder();
-			decoder.load(Toolkit.getInputStream(filename));
+			InputStream inputStream = Toolkit.getInputStream(filename);
+			if(inputStream == null) {
+				System.err.println("Warning: 找不到精灵的资源文件!"+filename);
+				return null;
+			}
+			decoder.load(inputStream);
 			if(colorations!=null) {
 				String pp = filename.replaceFirst("(\\w)*.tcp", "00.pp");
 				System.out.println("pp: "+pp);//XXX

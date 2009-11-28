@@ -5,7 +5,7 @@ import com.javaxyq.event.ItemListener;
 import com.javaxyq.model.Item;
 import com.javaxyq.util.MP3Player;
 import com.javaxyq.core.*;
-
+//potion  
 class MedicineItemAction implements ItemListener{
 
 	@Override
