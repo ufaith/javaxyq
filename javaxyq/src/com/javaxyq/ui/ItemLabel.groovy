@@ -36,7 +36,7 @@ class ItemLabel extends Label {
 	public void setItem(Item item) {
 		this.item = item;
 		if(item) {
-			def anim = SpriteFactory.loadAnimation("${item.res}/small/${item.name}.tcp"); 
+			def anim = SpriteFactory.loadAnimation("item/item50/${item.id}.tcp"); 
 			setAnim(anim);
 		}else {
 			setAnim(null);

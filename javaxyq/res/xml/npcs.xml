@@ -18,10 +18,10 @@
 			x="59" y="22" movement="walk" period="3000">
 		</NPC>
 		<!-- 
-		 -->
 		<NPC id="东海湾.大海龟" character="2036" name="被吹到岸上的海龟" direction="1" state="stand"
 			x="69" y="17"  movement="walk" period="2000">
 		</NPC>
+		 -->
 	</Scene>
 	<Scene id="hss">
 		<NPC id="化生寺.传送僧" character="3049" name="传送僧" direction="1" state="stand"

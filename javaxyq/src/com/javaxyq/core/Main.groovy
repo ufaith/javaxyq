@@ -44,11 +44,11 @@ class Main {
 		
 		defScenes();
 		
-//		defPlayers();
-		
 		defTalks();
 		
 		preprocessUIs();
+		
+		Helper.loadNPCs();
 		
 		GameMain.registerAction("com.javaxyq.action.transport",new DefaultTransportAction());
 		MovementManager.addMovementAction("random", new RandomMovementAction());
@@ -102,7 +102,7 @@ class Main {
 	}
 
 	public static void defActions() {
-		def xml = new XmlParser().parse(new File("resources/actions.xml"));
+		def xml = new XmlParser().parse(new File("xml/actions.xml"));
 		def rs = ResourceStore.getInstance();
 		for(el in xml.Action) {
 			println "define Action: ${el.@id}"
@@ -117,7 +117,7 @@ class Main {
 		}
 	}
 	public static void defCursors() {
-		def cursors = new XmlParser().parse(new File("resources/cursors.xml"));
+		def cursors = new XmlParser().parse(new File("xml/cursors.xml"));
 		def rs = ResourceStore.getInstance();
 		for(el in cursors.Cursor) {
 			println "define Cursor: ${el.@id}"
@@ -125,7 +125,7 @@ class Main {
 		}
 	}
 	public static void defScenes() {
-		def scenes = new XmlParser().parse(new File("resources/scenes.xml"));
+		def scenes = new XmlParser().parse(new File("xml/scenes.xml"));
 		def rs = ResourceStore.getInstance();
 		for(scene in scenes.scene) {
 			println "define scene: ${scene.@id}"
@@ -141,22 +141,6 @@ class Main {
 		
 	}
 
-	public static void defPlayers() {
-		def players = new XmlParser().parse(new File("resources/players.xml"));
-		def rs = ResourceStore.getInstance();
-		for ( player in players.player) {
-			println "define player: ${player.@character}"
-			def playerDef = new PlayerDefine();
-			playerDef.character = player.@character;
-			playerDef.profile = player.@profile;
-			for(s in player.state) {
-				println "\tstate: ${s.@id}"
-				playerDef.addState(new StateConfig(s.@id, s.@person, s.@weapon))
-			}
-			rs.definePlayer(playerDef);
-		}		
-	}
-	
 	public static void preprocessUIs() {
 		def filelist = new File('ui').list().findAll{ it.endsWith('.xml')};
 		for(def file in filelist) {
@@ -203,7 +187,7 @@ class Main {
 	}
 
 	public static void defTalks() {
-		def talks = new XmlParser().parse(new File("resources/talks.xml"));
+		def talks = new XmlParser().parse(new File("xml/talks.xml"));
 		for (def t : talks.Scene.NPC.talk) {
 			TalkConfig talk;
 			if (t.text()) {

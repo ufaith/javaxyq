@@ -26,7 +26,7 @@
 		<talk id="default">
 			<text>五庄观是地仙发源地，庄内的人参果与天地同寿，乃是三界之珍稀宝贝！#r你找为师何事？</text>
 			<link action="师门任务" value="wz">为师门做贡献</link>
-			<link action="练武" value="">请师傅指点练武</link>
+			<link action="学习技能" value="">学习技能</link>
 			<link action="talk" value="ask_for_leave">徒儿告退</link>
 		</talk>
 		<talk id="ask_for_leave" >嗯，你自己去练习练习吧！</talk>

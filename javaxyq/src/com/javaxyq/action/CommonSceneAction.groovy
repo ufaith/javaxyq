@@ -23,13 +23,6 @@ class CommonSceneAction implements SceneListener{
 	
 	void onInit(SceneEvent e) {
 		String sceneId = e.getScene();
-		Helper.clearNPC(sceneId);
-		def xml =  new XmlParser().parse(new File("resources/npcs.xml"));
-		def npcs = xml.Scene.find {it.@id==sceneId }.NPC;
-		for(def npc in npcs) {
-			Helper.registerNPC(sceneId,npc.attributes());
-		}
-		
 		if(sceneId =='wzg') {
 			println "初始化场景：五庄观.."
 		}else if(sceneId =='wzg_qkd') {
@@ -169,8 +162,8 @@ class CommonSceneAction implements SceneListener{
 	void onUnload(SceneEvent e) {
 		//stop background music
 		//MapConfig cfg = (MapConfig) ResourceStore.getInstance().findConfig(id);
-		String sceneId = e.getScene();
-		Helper.clearNPC(sceneId);
+		//String sceneId = e.getScene();
+		//Helper.clearNPC(sceneId);
 	}
 	
 }

@@ -208,11 +208,11 @@ public class DataStore {
 			if(!it.startsWith('//')){
 				def vals = it.trim().split(' ');
 				MedicineItem item = new  MedicineItem();
-				item.name = vals[0];
-				item.desc = vals[1];
-				item.efficacy = vals[2];
-				item.price = vals[3].toInteger();
-				item.res = 'item';
+				item.id = vals[0];
+				item.name = vals[1];
+				item.desc = vals[2];
+				item.efficacy = vals[3];
+				item.price = vals[4].toInteger();
 				item.type = '一级药品';
 				item.level = 1;
 				medicines[item.name] = item;
@@ -224,10 +224,10 @@ public class DataStore {
 			if(!it.startsWith('//')){
 				def vals = it.trim().split(' ');
 				MedicineItem item = new  MedicineItem();
-				item.name = vals[0];
-				item.desc = vals[1];
-				item.efficacy = vals[2];
-				item.res = 'item';
+				item.id = vals[0];
+				item.name = vals[1];
+				item.desc = vals[2];
+				item.efficacy = vals[3];
 				item.type = '二级药品';
 				item.level = 2;
 				medicines[item.name] = item;
@@ -239,10 +239,10 @@ public class DataStore {
 			if(!it.startsWith('//')){
 				def vals = it.trim().split(' ');
 				MedicineItem item = new  MedicineItem();
-				item.name = vals[0];
-				item.desc = vals[1];
-				item.efficacy = vals[2];
-				item.res = 'item';
+				item.id = vals[0];
+				item.name = vals[1];
+				item.desc = vals[2];
+				item.efficacy = vals[3];
 				item.type = '三级药品';
 				item.level = 3;
 				medicines[item.name] = item;
