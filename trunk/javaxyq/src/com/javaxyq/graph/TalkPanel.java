@@ -38,7 +38,7 @@ public class TalkPanel extends Panel {
 		super.paint(g);
 		try {
 			if (this.getTalker() != null) {
-				Sprite s = ResourceStore.getInstance().findHead(this.getTalker().getCharacter());
+				Sprite s = ResourceStore.getInstance().findPhoto(this.getTalker().getCharacter());
 				Graphics cg = GameMain.getSceneCanvas().getOffscreenGraphics();
 				s.draw(cg, getX() + HEAD_OFFSET, getY() - s.getHeight());
 			}

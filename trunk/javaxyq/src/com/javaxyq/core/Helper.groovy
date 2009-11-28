@@ -101,13 +101,20 @@ public class Helper {
 				playerCfg[attr] = val.asType(clazz);
 			}catch(Exception e) {
 				System.err.println("赋值失败! $attr=$val");
-								e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 		store.registerNPC(sceneId, playerCfg);
 	}
 
-	public static void clearNPC(String sceneId) {
-		store.clearNPC(sceneId);
+	/**
+	 * 加载场景npc数据
+	 */
+	public static void loadNPCs() {
+		def xml =  new XmlParser().parse(new File("xml/npcs.xml"));
+		def npcs = xml.Scene.NPC;
+		for(def npc in npcs) {
+			registerNPC(npc.parent().@id,npc.attributes());
+		}
 	}
 }

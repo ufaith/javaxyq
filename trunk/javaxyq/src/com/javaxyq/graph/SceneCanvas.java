@@ -273,15 +273,14 @@ public class SceneCanvas extends Canvas {
 		setMaxWidth(map.getWidth());
 		setMaxHeight(map.getHeight());
 		sceneWidth = map.getWidth() / GameMain.STEP_DISTANCE;
-		;
 		sceneHeight = map.getHeight() / GameMain.STEP_DISTANCE;
 		this.map = map;
 		clearNPCs();
 		MapConfig cfg = map.getConfig();
 		this.setSceneId(cfg.getId());
 		this.setSceneName(cfg.getName());
-		this.triggerList = ResourceStore.getInstance().findTriggers(cfg.getId());
-		List<Player> _npcs = ResourceStore.getInstance().findNPCs(cfg.getId());
+		this.triggerList = ResourceStore.getInstance().createTriggers(cfg.getId());
+		List<Player> _npcs = ResourceStore.getInstance().createNPCs(cfg.getId());
 		for (Player npc : _npcs) {
 			Point p = sceneToLocal(npc.getSceneLocation());
 			npc.setLocation(p.x, p.y);

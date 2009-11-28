@@ -13,13 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import com.javaxyq.action.DefaultTalkAction;
 import com.javaxyq.config.Config;
 import com.javaxyq.config.CursorConfig;
 import com.javaxyq.config.ImageConfig;
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.config.PlayerConfig;
-import com.javaxyq.config.PlayerDefine;
 import com.javaxyq.trigger.Trigger;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
@@ -41,10 +39,6 @@ public class ResourceStore {
 	private Map<String, List<Trigger>> triggersMap = new HashMap<String, List<Trigger>>();
 
 	private Map<String, List<PlayerConfig>> sceneNpcsMap = new HashMap<String, List<PlayerConfig>>();
-
-	private Map<String, Player> npcMap = new WeakHashMap<String, Player>();
-
-	private Map<String, PlayerDefine> playerDefines = new HashMap<String, PlayerDefine>();
 
 	private Map<String, Cursor> cursorMap = new HashMap<String, Cursor>();
 	
@@ -81,29 +75,20 @@ public class ResourceStore {
 		return widgetMap.get(id);
 	}
 
-	public List<Trigger> findTriggers(String sceneId) {
+	public List<Trigger> createTriggers(String sceneId) {
 		return triggersMap.get(sceneId);
 	}
 
-	public List<Player> findNPCs(String sceneId) {
+	public List<Player> createNPCs(String sceneId) {
 		List<Player> listPlayer = new ArrayList<Player>();
 		List<PlayerConfig> listPlayerCfg = this.sceneNpcsMap.get(sceneId);
 		if (listPlayerCfg == null) {
 			listPlayerCfg = new ArrayList<PlayerConfig>();
 		}
 		for (PlayerConfig cfg : listPlayerCfg) {
-			listPlayer.add(this.findNPC(cfg));
+			listPlayer.add(this.createNPC(cfg));
 		}
 		return listPlayer;
-	}
-
-	private Player findNPC(PlayerConfig cfg) {
-		Player npc = this.npcMap.get(cfg.getId());
-		if (npc == null) {
-			npc = this.createNPC(cfg);
-			this.npcMap.put(cfg.getId(), npc);
-		}
-		return npc;
 	}
 
 	//FIXME 重复创建同一个角色时，动画更新有问题（共享了同一个Sprite！）
@@ -142,13 +127,6 @@ public class ResourceStore {
 		return player;
 	}
 
-	public void definePlayer(PlayerDefine def) {
-		this.playerDefines.put(def.getCharacter(), def);
-	}
-
-	public PlayerDefine getPlayerDefine(String character) {
-		return playerDefines.get(character);
-	}
 
 	/**
 	 * 注册NPC
@@ -181,7 +159,6 @@ public class ResourceStore {
 	public Player createNPC(PlayerConfig cfg) {
 		Player p = this.createPlayer(cfg);
 		p.setNameForeground(GameMain.TEXT_NAME_NPC_COLOR);
-		//p.addPlayerListener(defaultTalkAction);
 		return p;
 	}
 
@@ -213,11 +190,16 @@ public class ResourceStore {
 		this.cursorMap.put(cfg.getId(), this.loadCursor(cfg));
 	}
 
-	public Sprite findHead(String character) {
-		if(character.compareTo("0012")<=0) {			
-			return SpriteFactory.loadSprite("/wzife/photo/hero/" + character + ".tcp");
+	/**
+	 * 读取角色的照片（对话时使用）
+	 * @param characterId
+	 * @return
+	 */
+	public Sprite findPhoto(String characterId) {
+		if(characterId.compareTo("0012")<=0) {			
+			return SpriteFactory.loadSprite("/wzife/photo/hero/" + characterId + ".tcp");
 		}
-		return SpriteFactory.loadSprite("/wzife/photo/npc/" + character + ".tcp");
+		return SpriteFactory.loadSprite("/wzife/photo/npc/" + characterId + ".tcp");
 	}
 
 	/**

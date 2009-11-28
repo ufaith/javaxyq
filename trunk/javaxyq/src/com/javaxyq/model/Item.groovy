@@ -17,7 +17,7 @@ class Item {
 	public static final String TYPE_WEAPON = 'ÎäÆ÷';
 	public static final String TYPE_EQUIPMENT = '×°±¸';
 	
-	long id;
+	String id;
 	String name;
 	String type;
 	String res;

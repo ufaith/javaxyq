@@ -150,7 +150,7 @@ class SchoolTaskCoolie extends TaskCoolie {
 		task.subtype='lookfor';
 		task.sender = sender;
 		task.receiver = sender;
-		task.set('item','四叶花');
+		task.set('item',randomItem());
 		this.times %=ROUND;
 		this.times ++;
 		int level = GameMain.getPlayer().getData().level;
@@ -210,5 +210,15 @@ class SchoolTaskCoolie extends TaskCoolie {
 		def npcs = ResourceStore.getInstance().getAllNpcs();
 		def index = rand.nextInt(npcs.size());
 		return npcs.get(index).name;
+	}
+	
+	def items = ['四叶花','七叶莲','天青地白','草果',' 九香虫','水黄莲','紫丹罗','佛手','旋复花','百色花',
+	             '香叶','龙须草','灵脂','白玉骨头','鬼切草','曼佗罗花','山药','八角莲叶','人参','月见草'];
+	/**
+	 * 随机一个物品
+	 * @return
+	 */
+	private String randomItem() {
+		return items[rand.nextInt(items.size())];
 	}
 }
