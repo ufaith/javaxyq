@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dialogs>
+  <Dialog id="player_status" x="383" y="0" width="257" height="451" background="/wzife/dialog/status.tcp">
+    <Button actionId="close" x="235" y="4" was="/wzife/button/closebtn.tcp"/>
+    <Button actionId="help" x="218" y="4" was="/wzife/button/question.tcp"/>
+    <Button actionId="更改称谓" x="7" y="53" text="称谓" was="/wzife/button/smallbtn.tcp"/>
+    <Button name="+体质" actionId="add_point 体质" x="205" y="253" was="/wzife/button/add.tcp"/>
+    <Button name="-体质" actionId="subtract_point 体质" x="225" y="253" enable="false" was="/wzife/button/sub.tcp"/>
+    <Button name="+魔力" actionId="add_point 魔力" x="205" y="276" was="/wzife/button/add.tcp"/>
+    <Button name="-魔力" actionId="subtract_point 魔力" x="225" y="276" enable="false" was="/wzife/button/sub.tcp"/>
+    <Button name="+力量" actionId="add_point 力量" x="205" y="299" was="/wzife/button/add.tcp"/>
+    <Button name="-力量" actionId="subtract_point 力量" x="225" y="299" enable="false" was="/wzife/button/sub.tcp"/>
+    <Button name="+耐力" actionId="add_point 耐力" x="205" y="322" was="/wzife/button/add.tcp"/>
+    <Button name="-耐力" actionId="subtract_point 耐力" x="225" y="322" enable="false" was="/wzife/button/sub.tcp"/>
+    <Button name="+敏捷" actionId="add_point 敏捷" x="205" y="345" was="/wzife/button/add.tcp"/>
+    <Button name="-敏捷" actionId="subtract_point 敏捷" x="225" y="345" enable="false" was="/wzife/button/sub.tcp"/>
+    <Button name="更改属性" actionId="更改属性" x="172" y="369" text="更改属性" was="/wzife/button/longbtn.tcp"/>
+    <Button name="升级" actionId="level_up" x="172" y="395" text="升级" was="/wzife/button/longbtn.tcp"/>
+    <Button text="技能"  actionId="技能" x="172" y="421" was="/wzife/button/longbtn.tcp"/>
+    <Text name="text级别" text="${level}" x="55" y="33" width="25" height="16"/>
+    <Text name="text名称" text="${name}" x="138" y="33" width="100" height="16"/>
+    <Text name="text称谓" text="${title}" x="55" y="56" width="100" height="16"/>
+    <Text name="text人气" text="${popularity}" x="210" y="56" width="30" height="16"/>
+    <Text name="text帮派" text="${帮派}" x="55" y="79" width="100" height="16"/>
+    <Text name="text帮派贡献" text="${帮派贡献}" x="210" y="79" width="40" height="16"/>
+    <Text name="text门派" text="${门派}" x="55" y="103" width="100" height="16"/>
+    <Text name="text门派贡献" text="${门派贡献}" x="210" y="103" width="40" height="16"/>
+    <Text name="text气血" text="${hp}/${maxHp}/${tmpMaxHp}" x="55" y="133" width="184" height="16"/>
+    <Text name="text魔法" text="${mp}/${maxMp}" x="55" y="155" width="184" height="16"/>
+    <Text name="text愤怒" text="${sp}/150" x="55" y="178" width="184" height="16"/>
+    <Text name="text活力" text="${活力}/${max活力}" x="55" y="201" width="184" height="16"/>
+    <Text name="text体力" text="${体力}/${max体力}" x="55" y="224" width="184" height="16"/>
+    <Text name="text命中" text="${命中}" x="55" y="255" width="30" height="16"/>
+    <Text name="text伤害" text="${伤害}" x="55" y="277" width="30" height="16"/>
+    <Text name="text防御" text="${防御}" x="55" y="300" width="30" height="16"/>
+    <Text name="text速度" text="${速度}" x="55" y="322" width="30" height="16"/>
+    <Text name="text躲避" text="${躲避}" x="55" y="346" width="30" height="16"/>
+    <Text name="text灵力" text="${灵力}" x="55" y="368" width="30" height="16"/>
+    <Text name="text体质" text="${体质+assignPoints.体质}" x="149" y="255" width="30" height="16"/>
+    <Text name="text魔力" text="${魔力+assignPoints.魔力}" x="149" y="277" width="30" height="16"/>
+    <Text name="text力量" text="${力量+assignPoints.力量}" x="149" y="300" width="30" height="16"/>
+    <Text name="text耐力" text="${耐力+assignPoints.耐力}" x="149" y="322" width="30" height="16"/>
+    <Text name="text敏捷" text="${敏捷+assignPoints.敏捷}" x="149" y="346" width="30" height="16"/>
+    <Text name="text潜能" text="${potentiality}" x="140" y="368" width="30" height="16"/>
+    <Text name="textLevelExp" text="${levelExp}" x="85" y="400" width="80" height="16"/>
+    <Text name="text获得经验" text="${exp}" x="85" y="424" width="80" height="16"/>
+  </Dialog>
+</Dialogs>
