@@ -504,6 +504,12 @@ public final class GameMain {
 		dlg.setTalker(npc);
 		UIHelper.showDialog(dlg);
 	}
+	
+	public static void doTalk(Player p,String chat) {
+		if(p==null)p = talker;
+		TalkConfig cfg = new TalkConfig(chat);
+		doTalk(p, cfg);
+	}
 
 	public static Player getTalker() {
 		return talker;

@@ -492,7 +492,6 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		}
 		try {
 			g.setColor(Color.BLACK);
-			updatePlayerState();
 			g.setColor(Color.WHITE);
 			g.clearRect(0, 0, getWidth(), getHeight());
 			if (battleBackground != null) {
@@ -797,34 +796,6 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		cmdIndex = 0;
 		this.setPlayer(ownsideTeam.get(cmdIndex));
 		waitingCmd = true;
-	}
-
-	protected void updatePlayerState() {
-		if (this.getPlayer() == null)
-			return;
-		PlayerVO playerVO = this.getPlayer().getData();
-		int maxLen = 50;
-		// 人物气血
-		int len = playerVO.getHp() * maxLen / playerVO.getMaxHp();
-		Label hpTrough = (Label) this.findCompByName("人物气血");
-		hpTrough.setSize(len, hpTrough.getHeight());
-		// 人物魔法
-		len = playerVO.getMp() * maxLen / playerVO.getMaxMp();
-		Label mpTrough = (Label) this.findCompByName("人物魔法");
-		mpTrough.setSize(len, mpTrough.getHeight());
-		// 人物愤怒
-		len = playerVO.getSp() * maxLen / 150;
-		Label spTrough = (Label) this.findCompByName("人物愤怒");
-		spTrough.setSize(len, spTrough.getHeight());
-		// 人物经验
-		len = (int) (playerVO.getExp() * maxLen / DataStore.getLevelExp(playerVO.getLevel()));
-		Label expTrough = (Label) this.findCompByName("人物经验");
-		expTrough.setSize(len, expTrough.getHeight());
-
-		// TODO 召唤兽状态
-		// 召唤兽气血
-		// 召唤兽魔法
-		// 召唤兽经验
 	}
 
 	public void setPlayer(Player player) {

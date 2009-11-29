@@ -1,11 +1,15 @@
 package com.javaxyq.model;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  * 任务实体类
  * @author dewitt
  * @date 2009-11-23 create
  */
-public class Task {
+public class Task implements Serializable{
 	private String sender;
 	private String receiver;
 	private Date createDate;
@@ -90,6 +94,44 @@ public class Task {
 	public String toString() {
 		return """Task [type=$type, subtype=$subtype, receiver=$receiver, sender=$sender, finished=$finished, autoSpark=$autoSpark,   
 		createDate=$createDate , exp=$exp ,id=$id , money=$money, params=$params ]""";
+	}
+	
+	protected void writeObject(ObjectOutputStream s)
+	throws IOException
+	{
+		s.writeBoolean(autoSpark);
+		s.writeObject(createDate);
+		s.writeInt(exp);
+		s.writeBoolean(finished);
+		s.writeUTF(id);
+		s.writeInt(money);
+		//params
+		s.writeObject(params);
+		s.writeUTF(receiver);
+		s.writeUTF(sender);
+		s.writeUTF(subtype);
+		s.writeUTF(type);
+	}
+	
+	/**
+	 * Reconstitute this object from a stream (i.e., deserialize it).
+	 */
+	protected void readObject(ObjectInputStream s)
+	throws IOException, ClassNotFoundException
+	{
+		autoSpark=s.readBoolean();
+		createDate=s.readObject();
+		exp=s.readInt();
+		finished=s.readBoolean();
+		id=s.readUTF();
+		money=s.readInt();
+		//params
+		params=s.readObject();
+		receiver=s.readUTF();
+		sender=s.readUTF();
+		subtype=s.readUTF();
+		type=s.readUTF();
+				
 	}
 	
 }

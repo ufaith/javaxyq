@@ -23,8 +23,6 @@ import com.javaxyq.util.ClassUtil;
  */
 class Main {
 	
-	private static Map<String,Object> sceneActions = new HashMap<String,Object>();
-	
 	public static void main(String[] args) {
 		
 		ClassUtil.init();
@@ -35,7 +33,7 @@ class Main {
 		GameMain.setDebug(true);
 		GameMain.showCopyright = false;
 		GameMain.setApplicationName("JavaXYQ ");
-		GameMain.setVersion('1.4');
+		GameMain.setVersion('1.4 M1');
 		GameMain.setHomeURL('http://javaxyq.googlecode.com/');
 		
 		defActions();
@@ -57,29 +55,10 @@ class Main {
 		TaskManager.instance.register('school', 'com.javaxyq.task.SchoolTaskCoolie');
 		
 		GameMain.init(args);
-//		installUI();
-		def p = Helper.createPlayer('0010',[
-           name:'逍遥葫芦',
-           level : 5,
-           门派:'五庄观',
-           direction:0,
-           state:'stand',
-           colorations: [2,4,3]
-           ]);
-		p.setSceneLocation(52,32);
-		GameMain.setPlayer(p);
-		setScene("wzg",p.sceneX,p.sceneY);//五庄观	
+		DataStore.loadData();
 		GameMain.stopLoading();
-		
 		println("游戏加载完毕！");
 
-		def item = DataStore.createItem('四叶花');
-		item.amount = 99;
-		DataStore.addItemToPlayer(p,item);
-		item = DataStore.createItem('佛手');
-		item.amount = 99;
-		DataStore.addItemToPlayer(p,item);
-		
 	}
 
 
@@ -135,7 +114,6 @@ class Main {
 						new Transport(scene.@id,t.@x.toInteger(),t.@y.toInteger(),
 								t.@toSence,t.@toX.toInteger(),t.@toY.toInteger())));
 			}
-			sceneActions[scene.@id] = scene.@listener;
 		}
 		
 		
@@ -154,16 +132,6 @@ class Main {
 		}
 	}
 	
-//	public static void installUI(){
-//		def uiIds=['ui.main.dialog1','ui.main.dialog2','ui.main.dialog3']
-//		for(id in uiIds) {
-//			println("安装UI："+id);
-//			def dlg = DialogFactory.getDialog(id);
-//			GameMain.addUIComponent(dlg);
-//		}
-//		//GameMain.initUI();
-//	}	
-
 	public static void setScene(id,x,y){
 		String currentScene = GameMain.getCurrentScene();
 		SceneListener action = findSceneAction(currentScene);
@@ -176,13 +144,7 @@ class Main {
 	}
 
 	public static Object findSceneAction(String id) {
-		def action = sceneActions[id];
-		if(action) {
-			if (action instanceof String) {
-				action = Class.forName(action).newInstance();
-				sceneActions[id] = action;
-			}
-		}
+		def action = GroovyScript.loadClass("scripts/scene/${id}.groovy");
 		return action;
 	}
 

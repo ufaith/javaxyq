@@ -7,6 +7,7 @@ import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
@@ -213,6 +214,15 @@ public class Label extends JLabel {
 		}
 		return true;
 	}
+	
+	/**
+	 * 代理鼠标事件
+	 * FIXME 改进
+	 */
+	public void delegateMouseEvent() {
+		this.addMouseListener(new MouseAdapter() {
+		});
+	}
 
 	/**
 	 * 转发事件到代理器
@@ -222,6 +232,9 @@ public class Label extends JLabel {
 		EventDelegator.delegateEvent(e);
 	}
 
+	/**
+	 * 转发事件到代理器
+	 */
 	@Override
 	protected void processMouseMotionEvent(MouseEvent e) {
 		super.processMouseMotionEvent(e);

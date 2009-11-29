@@ -101,6 +101,9 @@ class XmlDialogBuilder implements DialogBuilder{
 						def actionId = node.@"$type"; 
 						if(actionId) {
 							dialog.bindAction(comp,type,actionId)
+							if(type.startsWith('mouse')) {
+								comp.delegateMouseEvent();
+							}
 						}
 					}
 				}
@@ -253,6 +256,7 @@ class XmlDialogBuilder implements DialogBuilder{
 	
 	TextField processEditor(Panel dialog,el) {
 		TextField editor = new TextField();
+		editor.setName(el.@name);
 		String actionId = el.@actionId;
 		try {
 			editor.setLocation(el.@x.toInteger(),el.@y.toInteger());
@@ -266,6 +270,9 @@ class XmlDialogBuilder implements DialogBuilder{
 //			Action action = dialog.actionMap.get(actionId);
 //			editor.addActionListener(action);
 			editor.setActionCommand(actionId);
+		}
+		if(el.@foreground) {
+			editor.setForeground(Color[el.@foreground]);
 		}
 		editor.setToolTipText(el.@tooltip);
 		

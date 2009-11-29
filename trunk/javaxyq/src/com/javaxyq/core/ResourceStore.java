@@ -113,14 +113,19 @@ public class ResourceStore {
 		return player;
 	}
 
-	public Player createPlayer(String character, List<Integer> colorations) {
+//	public Player createPlayer(String character, List<Integer> colorations) {
+//		if(colorations!=null) {
+//			int[] colors = new int[colorations.size()];
+//			for (int i = 0; i < colors.length; i++) {
+//				colors[i] = colorations.get(i);
+//			}
+//			return createPlayer(character,)
+//		}
+//	}
+	public Player createPlayer(String character, int[] colorations) {
 		Player player = new Player(null, "Î´ÃüÃû", character);
 		if(colorations!=null) {
-			int[] colors = new int[colorations.size()];
-			for (int i = 0; i < colors.length; i++) {
-				colors[i] = colorations.get(i);
-			}
-			player.setColorations(colors, false);
+			player.setColorations(colorations, false);
 		}
 		player.setState(Player.STATE_STAND);
 		player.setDirection(0);

@@ -8,6 +8,9 @@
  */
 package com.javaxyq.model;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  * @author dewitt
  *
@@ -28,7 +31,6 @@ class MedicineItem extends Item {
 		item.id= this.id;
 		item.name= this.name;
 		item.type= this.type;
-		item.res= this.res;
 		item.desc= this.desc;
 		item.level= this.level;
 		item.price= this.price;
@@ -51,4 +53,21 @@ class MedicineItem extends Item {
 		}
 		return eff;
 	}
+	protected void writeObject(ObjectOutputStream s)
+	throws IOException
+	{
+		super.writeObject(s);
+		s.writeUTF(efficacy);
+	}
+	
+	/**
+	 * Reconstitute this object from a stream (i.e., deserialize it).
+	 */
+	protected void readObject(ObjectInputStream s)
+	throws IOException, ClassNotFoundException
+	{
+		super.readObject(s);
+		efficacy= s.readUTF();
+	}
+	
 }

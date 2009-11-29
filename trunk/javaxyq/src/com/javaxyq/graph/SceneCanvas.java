@@ -63,15 +63,12 @@ public class SceneCanvas extends Canvas {
 
 	private List<Trigger> triggerList;
 
-	private Label sceneLabel;
-
 	/** 当前场景名称 */
 	private String sceneName;
 
 	/** 当前场景id */
 	private String sceneId;
 
-	private Label coordinateLabel;
 
 	private byte[] maskdata;
 
@@ -122,7 +119,11 @@ public class SceneCanvas extends Canvas {
 			s.update(elapsedTime);
 			Point p = t.getLocation();
 			p = sceneToView(p);
-			s.draw(g, p.x - s.getWidth() / 2 + s.getCenterX(), p.y - s.getHeight() / 2 + s.getCenterY());
+			s.draw(g, p.x, p.y - s.getHeight() / 2 + s.getCenterY());
+			if(GameMain.isDebug()) {
+				g.drawLine(p.x-10, p.y, p.x+10, p.y);
+				g.drawLine(p.x, p.y-10, p.x, p.y+10);
+			}
 		}
 	}
 
@@ -138,52 +139,6 @@ public class SceneCanvas extends Canvas {
 		return this.getPlayer().getSceneLocation();
 	}
 
-	/**
-	 * 更新人物等状态
-	 */
-	private void updateStatus() {
-		if (this.getPlayer() == null)
-			return;
-		// 人物坐标
-		Point pp = this.getPlayerSceneLocation();
-		String strCoordinate = "X:" + pp.x + " Y:" + pp.y;
-		if (coordinateLabel == null) {
-			coordinateLabel = (Label) findCompByName("人物坐标");
-		}
-		if (coordinateLabel != null) {
-			coordinateLabel.setText(strCoordinate);
-		}
-		if (sceneLabel == null) {
-			sceneLabel = (Label) findCompByName("地图名称");
-		}
-		if (sceneLabel != null) {
-			sceneLabel.setText(sceneName);
-		}
-
-		PlayerVO playerVO = this.getPlayer().getData();
-		int maxLen = 50;
-		// 人物气血
-		int len = playerVO.getHp() * maxLen / playerVO.getMaxHp();
-		Label hpTrough = (Label) this.findCompByName("人物气血");
-		hpTrough.setSize(len, hpTrough.getHeight());
-		// 人物魔法
-		len = playerVO.getMp() * maxLen / playerVO.getMaxMp();
-		Label mpTrough = (Label) this.findCompByName("人物魔法");
-		mpTrough.setSize(len, mpTrough.getHeight());
-		// 人物愤怒
-		len = playerVO.getSp() * maxLen / 150;
-		Label spTrough = (Label) this.findCompByName("人物愤怒");
-		spTrough.setSize(len, spTrough.getHeight());
-		// 人物经验
-		len = (int) (playerVO.getExp() * maxLen / DataStore.getLevelExp(playerVO.getLevel()));
-		Label expTrough = (Label) this.findCompByName("人物经验");
-		expTrough.setSize(len, expTrough.getHeight());
-
-		// TODO 召唤兽状态
-		// 召唤兽气血
-		// 召唤兽魔法
-		// 召唤兽经验
-	}
 
 	public Point localToScene(Point p) {
 		return new Point(p.x / GameMain.STEP_DISTANCE, (map.getHeight() - p.y) / GameMain.STEP_DISTANCE);
@@ -667,7 +622,6 @@ public class SceneCanvas extends Canvas {
 			this.drawClick(g, elapsedTime);
 
 			// 游戏UI控件
-			updateStatus();
 			drawComponents(g, elapsedTime);
 
 			// 过渡效果：谈出淡入

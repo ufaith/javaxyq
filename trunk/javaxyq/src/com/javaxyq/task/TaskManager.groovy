@@ -69,6 +69,14 @@ public class TaskManager {
 	public Task getTaskOfType(String type, String subtype) {
 		return tasklist.find{task-> task.type==type && task.subtype == subtype};;
 	}
+	
+	/**
+	 * 返回任务列表
+	 * @return
+	 */
+	public List getTaskList() {
+		return tasklist;
+	}
 		
 	/**
 	 * 删除任务
