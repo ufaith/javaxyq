@@ -602,6 +602,11 @@ public class Player extends AbstractWidget implements EventTarget {
 		}
 		if (this.onceEffect != null)
 			onceEffect.draw(g, x, y);
+		if(GameMain.isDebug()) {
+			g.drawLine(x-10, y, x+10, y);
+			g.drawLine(x, y-10, x, y+10);
+		}
+		
 	}
 
 	private boolean shouldDisplay(FloatPanel chatPanel) {
@@ -694,6 +699,10 @@ public class Player extends AbstractWidget implements EventTarget {
 	public void setSceneLocation(int x, int y) {
 		this.sceneX = x;
 		this.sceneY = y;
+	}
+
+	public void setSceneLocation(Point p) {
+		setSceneLocation(p.x, p.y);
 	}
 
 	public void moveOn() {

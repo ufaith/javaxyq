@@ -26,17 +26,20 @@ class SchoolTaskCoolie extends TaskCoolie {
 	def rand = new Random();
 	/** 任务次数 */
 	int times;
+	int rounds = 1;
 	/**
 	 * 送信
 	 * @param task
 	 * @return
 	 */
 	private boolean deliver(Task task) {
-		println "deliver $task"
+		//println "deliver $task"
 		if(!task.finished) {
 			Player player =GameMain.getPlayer();
 			Player target = task.get("target");
 			task.finished = true;
+			rounds = task.get('rounds').toInteger();
+			times = task.get('times').toInteger();
 			GameMain.doTalk(target,new TalkConfig("我已收到你师傅的来信，赶快回去禀报吧。"));
 			return true;
 		}else {
@@ -50,18 +53,21 @@ class SchoolTaskCoolie extends TaskCoolie {
 	 * @return
 	 */
 	private boolean lookfor(Task task) {
-		println "lookfor $task"
+		//println "lookfor $task"
 		if(!task.finished) {
 			Player player =GameMain.getPlayer();
 			Player target = task.get("target");
+			def required = task.get('item');
 			def items = DataStore.getPlayerItems(player);
-			def item = items.find{item -> item.name==task.get('item')};
+			def item = items.find{item -> item && item.name==required};
 			if(item) {
 				item.amount --;
 				if(item.amount == 0) {
 					DataStore.removePlayerItem(player,item);
 				}
 				task.finished = true;
+				rounds = task.get('rounds').toInteger();
+				times = task.get('times').toInteger();
 				return true;
 			}
 		}
@@ -74,7 +80,7 @@ class SchoolTaskCoolie extends TaskCoolie {
 	 * @return
 	 */
 	private boolean patrol(Task task) {
-		println "patrol $task"
+		//println "patrol $task"
 		Player player = GameMain.getPlayer();
 		player.stop(true);
 		//初始化小怪队伍
@@ -97,8 +103,13 @@ class SchoolTaskCoolie extends TaskCoolie {
 		GameMain.battleCanvas.battleWin = { event ->
 			println "战斗胜利"
 			task.add('battle',1);
+			int exp = player.data.level*(150 + rand.nextInt(20))*elfCount/10;
+			player.data.exp += exp;
+			UIHelper.prompt("获得${exp}点经验。",3000);
 			if(task.get('battle')==2) {
 				task.finished = true;
+				rounds = task.get('rounds').toInteger();
+				times = task.get('times').toInteger();
 				UIHelper.prompt("师门巡逻任务完成，快去禀报师傅吧。",3000);
 			}else {
 				UIHelper.prompt("小贼们趁你不注意，又不知道溜到哪里。",3000);
@@ -130,9 +141,14 @@ class SchoolTaskCoolie extends TaskCoolie {
 		task.subtype='deliver';
 		task.sender = sender;
 		task.receiver = randomNpc();
-		task.autoSpark = true;  
-		this.times %=ROUND;
+		task.autoSpark = true;
 		this.times ++;
+		if(this.times >ROUND) {
+			this.rounds ++;
+			this.times %= ROUND;
+		}
+		task.set('times',times);
+		task.set('rounds',rounds);
 		int level = GameMain.getPlayer().getData().level;
 		task.exp = this.times*780*level;
 		task.money = this.times * 1150*level;
@@ -151,8 +167,13 @@ class SchoolTaskCoolie extends TaskCoolie {
 		task.sender = sender;
 		task.receiver = sender;
 		task.set('item',randomItem());
-		this.times %=ROUND;
 		this.times ++;
+		if(this.times >ROUND) {
+			this.rounds ++;
+			this.times %= ROUND;
+		}
+		task.set('times',times);
+		task.set('rounds',rounds);
 		int level = GameMain.getPlayer().getData().level;
 		task.exp = this.times*980*level;
 		task.money = this.times * 2150*level;
@@ -176,8 +197,13 @@ class SchoolTaskCoolie extends TaskCoolie {
 		task.set('sceneId','wzg');
 		task.set('battle',0);
 		
-		this.times %=ROUND;
 		this.times ++;
+		if(this.times >ROUND) {
+			this.rounds ++;
+			this.times %= ROUND;
+		}
+		task.set('times',times);
+		task.set('rounds',rounds);
 		int level = GameMain.getPlayer().getData().level;
 		task.exp = this.times*1080*level;
 		task.money = this.times * 1550*level;
@@ -190,11 +216,11 @@ class SchoolTaskCoolie extends TaskCoolie {
 	 * @return
 	 */
 	private String desc_deliver(Task task) {
-		return "师傅有事与#R${task.receiver}#W商议，你将信件送过去。";
+		return "师傅有事与#R${task.receiver}#n商议，你将信件送过去。";
 	}
 	
 	private String desc_lookfor(Task task) {
-		return "门派建设需要#R${task.get('item')}#W，你下山去寻找一个回来。";
+		return "门派建设需要#R${task.get('item')}#n，你下山去寻找一个回来。";
 	}
 	
 	private String desc_patrol(Task task) {

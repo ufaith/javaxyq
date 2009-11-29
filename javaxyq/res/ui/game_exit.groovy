@@ -11,7 +11,7 @@ package ui_script;
 import java.awt.Desktop;
 import java.net.URI;
 
-import com.javaxyq.core.GameMain;
+import com.javaxyq.core.*;
 import com.javaxyq.event.*;
 import com.javaxyq.ui.*;
 
@@ -25,6 +25,7 @@ class game_exit extends PanelHandler {
 	private static final String blogURL = "http://blog.csdn.net/Kylixs";
 
 	public void exit_game(ActionEvent evt) {
+		saveData();
 		GameMain.exit();
 	}
 	public void visit_homepage(ActionEvent evt) {
@@ -37,4 +38,7 @@ class game_exit extends PanelHandler {
 		UIHelper.showDialog("contributors");
 	}
 	
+	private void saveData() {
+		DataStore.saveData();
+	}
 }

@@ -5,20 +5,12 @@
 			<talk id="default">
 				<text > 从这里可以传送到下面的地方，师兄走好。#56</text>
 				<link action="talk" value="changan">长安城</link>
-				<link action="transport" value="hss 9 9">化生寺</link>
+				<link action="transport" value="olg 163 8">傲来国</link>
 				<link action="transport" value="dhw 62 21">东海湾</link>
 				<link action="close">哪也不去</link>
 			</talk>
  			<talk id="changan">师傅说这段时间天下不稳,不适宜去花花都市！#32</talk>
 			<talk id="non-member">你不是五庄观的吧?#55师傅说不要跟陌生人说话。#76</talk>
-		</NPC>
-		<NPC id="五庄观.配色师" >
-			<talk id="default">
-				<text>我是这里最好的配色师，只要你有足够的颜料，我就可以帮你变幻成你最喜欢的颜色。#97</text>
-				<link action="open" value="player_coloring">太好了，我正想改变一下形象呢</link>
-				<link action="open" value="">是吗，我想给我的孩子改变下形象</link>
-				<link action="close" value="">好神奇哦，等我想换换形象的时候一定来找你</link>
-			</talk>
 		</NPC>
 	</Scene>
 	<Scene id="wzg_qkd">
@@ -37,7 +29,7 @@
 		<talk id="default">
 		<text>客官,你要到哪里去呢?</text>
 		<link action="transport" value="wzg 12 11">五庄观</link>
-		<link action="transport" value="hss 9 9">化生寺</link>
+		<link action="transport" value="olg 163 8">傲来国</link>
 		<link action="close" value="">一会要去再找你啦</link>
 		</talk>
 		</NPC>
@@ -48,6 +40,35 @@
 		<link action="guide" value="">将它带到东海畔</link>
 		<link action="close" value="">不理它</link>
 		</talk>
+		</NPC>
+	</Scene>
+	<Scene id="olg">
+		<NPC id="傲来国.配色师" >
+			<talk id="default">
+				<text>我是这里最好的配色师，只要你有足够的颜料，我就可以帮你变幻成你最喜欢的颜色。#97</text>
+				<link action="open" value="player_coloring">太好了，我正想改变一下形象呢</link>
+				<!-- 
+				<link action="open" value="">是吗，我想给我的孩子改变下形象</link>
+				 -->
+				<link action="close" value="">好神奇哦，等我想换换形象的时候一定来找你</link>
+			</talk>
+		</NPC>
+		<NPC id="傲来国.船夫">
+			<talk id="default">
+			<text>客官,你要到哪里去呢?</text>
+			<link action="transport" value="wzg 12 11">五庄观</link>
+			<link action="transport" value="dhw 62 21">东海湾</link>
+			<link action="close" value="">我还想周围看看</link>
+			</talk>
+		</NPC>
+	</Scene>
+	<Scene id="olg_drugstore">
+			<NPC id="傲来国.药店老板" >
+			<talk id="default">
+				<text>我这里有各种草药，价廉物美，请随便挑选。</text>
+				<link action="open" value="buy">购买</link>
+				<link action="close" value="">什么都不想做</link>
+			</talk>
 		</NPC>
 	</Scene>
 	<Scene id="hss">

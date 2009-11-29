@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.javaxyq.config.TalkConfig;
+import com.javaxyq.task.TaskManager;
 import com.javaxyq.util.ClassUtil;
 import com.javaxyq.core.PlayerPropertyCalculator;
 import com.javaxyq.widget.Player;
@@ -251,6 +252,8 @@ public class DataStore {
 		
 	}
 	public static Item createItem(String name) {
+		if(!name) return null;
+		name = name.trim();
 		if(!medicines) {
 			loadMedicines();
 		}
@@ -379,5 +382,125 @@ public class DataStore {
 	public static void main(String[] args) {
 		def item = DataStore.createItem('四叶花');
 		println "$item"
+	}
+
+	/**
+	 * 初始化数据
+	 */
+	public static void initData() {
+		
+		def colorations = new int[3];
+		colorations[0] = 2;
+		colorations[1] = 4;
+		colorations[2] = 3;
+		def p = Helper.createPlayer('0010',[
+				name:'逍遥葫芦',
+		  		level : 5,
+				门派:'五庄观',
+		   		direction:0,
+				state:'stand',
+				colorations: colorations,
+				sceneLocation :[52,32]
+		]);
+//		p.setSceneLocation(52,32);
+		GameMain.setPlayer(p);
+		Main.setScene("wzg",p.sceneX,p.sceneY);//五庄观	
+		
+		def item = DataStore.createItem('四叶花');
+		item.amount = 99;
+		DataStore.addItemToPlayer(p,item);
+		item = DataStore.createItem('佛手');
+		item.amount = 99;
+		DataStore.addItemToPlayer(p,item);
+				
+	}
+	
+	/**
+	 * 加载默认存档
+	 */
+	public static void loadData() {
+		def file = new File("save/0.jxd");
+		if(!file.exists()) {
+			initData();
+			return ;
+		}
+		def ois = new ObjectInputStream(file.newInputStream());
+		println "读取游戏存档（创建于${ois.readObject()}）..."
+		//场景ID
+		def sceneId = ois.readUTF();
+		//人物数据
+		def playerData = ois.readObject();
+		//物品数据
+		def items = new Item[ois.readInt()];
+		for(int i=0;i<items.length;i++) {
+			items[i] = ois.readObject();
+		}
+		//任务数据
+		def tasks = new Task[ois.readInt()]; 
+		for(int i=0;i<tasks.length;i++) {
+			tasks[i] = ois.readObject();
+		}
+		ois.close();
+		
+		//初始化
+		def player = Helper.createPlayer(playerData.character,[
+			name: playerData.name,
+	  		level : playerData.level,
+			门派: playerData.门派,
+	   		direction: playerData.direction,
+			state: playerData.state,
+			colorations: playerData.colorations,
+			sceneLocation :playerData.sceneLocation
+			]);
+		player.setData(playerData);
+		GameMain.setPlayer(player);
+		Main.setScene(sceneId,player.sceneX,player.sceneY);
+		for(int i=0;i<items.size();i++) {
+			DataStore.setPlayerItem(player,i,items[i]);
+		}
+		tasks.each{
+			TaskManager.instance.add(it);
+		}
+	}
+	
+	/**
+	 * 保存游戏数据到存档
+	 */
+	public static void saveData() {
+		def file = new File("save/0.jxd");
+		if(!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+		def out = file.newOutputStream()
+		def oos = new ObjectOutputStream(out)
+		//创建时间
+		oos.writeObject(new java.util.Date());
+		//场景
+		oos.writeUTF(GameMain.getSceneCanvas().getSceneId());
+		
+		//人物数据
+		def player = GameMain.getPlayer();
+		def playerData = player.getData();
+		playerData.state = 'stand';
+		playerData.direction = player.direction;
+		playerData.colorations = player.colorations;
+		playerData.sceneLocation = player.sceneLocation;
+		oos.writeObject(playerData);
+		
+		//物品数据
+		def items = getPlayerItems(player);
+		oos.writeInt(items.size());
+		items.each{
+			oos.writeObject(it);
+		}
+
+		//任务数据
+		def tasks = TaskManager.instance.getTaskList();
+		oos.writeInt(tasks.size());
+		tasks.each{
+			oos.writeObject(it);
+		}
+		oos.close();
+		println "游戏存档完毕"
 	}
 }

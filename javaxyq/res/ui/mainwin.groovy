@@ -1,10 +1,16 @@
 package ui_script;
+import com.javaxyq.util.ClosureTask;
 
 
+import java.awt.Point;
+import java.util.Timer;
+
+import com.javaxyq.core.DataStore;
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.event.*;
 import com.javaxyq.graph.*;
+import com.javaxyq.model.PlayerVO;
 import com.javaxyq.ui.*;
 /**
  * 游戏主窗口
@@ -13,6 +19,15 @@ import com.javaxyq.ui.*;
  */
 class mainwin extends PanelHandler{
 	
+	private Timer timer;
+	
+	private Label sceneLabel;
+	private Label coordinateLabel;
+	private Label hpTrough ;
+	private Label mpTrough ;
+	private Label spTrough ;
+	private Label expTrough ;
+
 	public void initial(PanelEvent evt) {
 		super.initial(evt);
 		println "initial：system.mainwin "
@@ -20,11 +35,60 @@ class mainwin extends PanelHandler{
 		def playerId = GameMain.getPlayer().getCharacter();
 		def sprite = SpriteFactory.loadSprite("wzife/photo/facesmall/${playerId}.tcp");
 		btnHeader.init(sprite);
+		coordinateLabel = (Label) panel.findCompByName("人物坐标");
+		sceneLabel = (Label) panel.findCompByName("地图名称");
+		hpTrough = (Label) panel.findCompByName("人物气血");
+		mpTrough = (Label) panel.findCompByName("人物魔法");
+		spTrough = (Label) panel.findCompByName("人物愤怒");
+		expTrough = (Label) panel.findCompByName("人物经验");
 		
+		updateCoords();
+		timer = new Timer();
+		timer.schedule(new ClosureTask({this.update(null)}), 500, 500);
 	}
 
 	public void dispose(PanelEvent evt) {
 		println "dispose: system.mainwin "
+	}
+	
+	public void update(PanelEvent evt) {
+		if (GameMain.getPlayer() == null)
+			return;
+		updateCoords();
+		Canvas canvas = GameMain.getGameCanvas();
+		def player = canvas.getPlayer();
+		if(!player)return;
+		PlayerVO playerVO = player.getData();
+		int maxLen = 50;
+		// 人物气血
+		int len = playerVO.getHp() * maxLen / playerVO.getMaxHp();
+		hpTrough.setSize(len, hpTrough.getHeight());
+		// 人物魔法
+		len = playerVO.getMp() * maxLen / playerVO.getMaxMp();
+		mpTrough.setSize(len, mpTrough.getHeight());
+		// 人物愤怒
+		len = playerVO.getSp() * maxLen / 150;
+		spTrough.setSize(len, spTrough.getHeight());
+		// 人物经验
+		len = (int) (playerVO.getExp() * maxLen / DataStore.getLevelExp(playerVO.getLevel()));
+		expTrough.setSize(len, expTrough.getHeight());
+
+		// TODO 召唤兽状态
+		// 召唤兽气血
+		// 召唤兽魔法
+		// 召唤兽经验
+	}
+
+	private void updateCoords() {
+		Canvas canvas = GameMain.getGameCanvas();
+		if(canvas == GameMain.getSceneCanvas()) {
+			// 人物坐标
+			Point pp = canvas.getPlayerSceneLocation();
+			String strCoordinate = "X:" + pp.@x + " Y:" + pp.@y;
+			coordinateLabel.setText(strCoordinate);
+			sceneLabel.setText(canvas.getSceneName());
+		}
+		
 	}
 	
 	/**
