@@ -10,6 +10,7 @@ import java.io.Serializable;
  * @date 2009-11-23 create
  */
 public class Task implements Serializable{
+	private static final long serialVersionUID = 2745458583606730756L;
 	private String sender;
 	private String receiver;
 	private Date createDate;

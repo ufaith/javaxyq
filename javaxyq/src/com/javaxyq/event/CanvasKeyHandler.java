@@ -17,18 +17,21 @@ public class CanvasKeyHandler implements KeyListener {
         int keycode = e.getKeyCode();
         String actionId = null;
         switch (keycode) {
-        case 37:
+        case KeyEvent.VK_LEFT:
             actionId = "com.javaxyq.action.MoveLeft";
             break;
-        case 38:
+        case KeyEvent.VK_UP:
             actionId = "com.javaxyq.action.MoveUp";
             break;
-        case 39:
+        case KeyEvent.VK_RIGHT:
             actionId = "com.javaxyq.action.MoveRight";
             break;
-        case 40:
+        case KeyEvent.VK_DOWN:
             actionId = "com.javaxyq.action.MoveDown";
             break;
+//        case KeyEvent.VK_TAB://打开小地图
+//        	actionId = "com.javaxyq.action.dialog.scene_map";
+//        	break;
         default:
             //actionId = (String) GameMain.getInputMap().get(KeyStroke.getKeyStroke(keycode, e.getModifiers()));
         }
@@ -45,8 +48,6 @@ public class CanvasKeyHandler implements KeyListener {
     }
 
     public void keyTyped(KeyEvent e) {
-        // TODO CanvasKeyEventHandler: keyTyped
-
     }
 
 }

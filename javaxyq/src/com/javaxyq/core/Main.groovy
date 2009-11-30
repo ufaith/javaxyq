@@ -30,7 +30,7 @@ class Main {
 		DataStore.init();
 		ItemManager.init();
 		
-		GameMain.setDebug(true);
+		GameMain.setDebug(false);
 		GameMain.showCopyright = false;
 		GameMain.setApplicationName("JavaXYQ ");
 		GameMain.setVersion('1.4 M1');

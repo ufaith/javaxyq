@@ -44,7 +44,7 @@ public class GroovyScript {
 	public static Object loadClass(String filename) {
 		try {
 			//不缓存动态加载的脚本类
-			Class groovyClass = groovyCl.parseClass(new GroovyCodeSource(new File(filename)),false);
+			Class groovyClass = groovyCl.parseClass(new GroovyCodeSource(new File(filename)),!GameMain.isDebug());
 			return groovyClass.newInstance();
 		} catch (CompilationFailedException e) {
 			System.err.println("Error: 脚本编译失败！"+filename);

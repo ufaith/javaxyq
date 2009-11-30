@@ -38,6 +38,15 @@ class game_exit extends PanelHandler {
 		UIHelper.showDialog("contributors");
 	}
 	
+	private void debug(ActionEvent evt) {
+		GameMain.setDebug(!GameMain.isDebug());
+		if(GameMain.isDebug()) {
+			println '打开游戏调试'
+		}else {
+			println '关闭游戏调试'
+		}
+	}
+	
 	private void saveData() {
 		DataStore.saveData();
 	}

@@ -8,7 +8,9 @@
 	<Action id="com.javaxyq.action.dialog.summon_status" class="com.javaxyq.action.SystemActions" shortcut="alt P"></Action>
 	<Action id="com.javaxyq.action.dialog.tasklist" class="com.javaxyq.action.SystemActions" shortcut="alt Q"></Action>
 	<Action id="com.javaxyq.action.dialog.setting" class="com.javaxyq.action.SystemActions" shortcut="alt S"></Action>
-	<Action id="com.javaxyq.action.dialog.main_skill" class="" shortcut="alt L"></Action>
+	<Action id="com.javaxyq.action.dialog.main_skill" class="com.javaxyq.action.SystemActions" shortcut="alt L"></Action>
+	<Action id="com.javaxyq.action.dialog.scene_map" class="com.javaxyq.action.SystemActions" shortcut="pressed TAB"></Action>
+	<Action id="com.javaxyq.action.dialog.world_map" class="com.javaxyq.action.SystemActions" shortcut="alt M"></Action>
 	<Action id="com.javaxyq.action.攻击" class="com.javaxyq.action.SystemActions" shortcut="alt A"></Action>
 	<Action id="com.javaxyq.action.防御" class="com.javaxyq.action.SystemActions" shortcut="alt D"></Action>
 	<Action id="com.javaxyq.action.给予" class="com.javaxyq.action.SystemActions" shortcut="alt G"></Action>

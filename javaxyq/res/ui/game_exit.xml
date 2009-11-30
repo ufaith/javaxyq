@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Dialogs>
-	<Dialog id="game_exit" align="center" x="159" y="170" width="321"
-		height="139" background="/wzife/dialog/confirm.tcp">
-		<Button text="退出游戏" actionId="exit_game" x="25"
-			y="50" was="/resources/button/空白7222.was" />
-		<Button text="访问主页" actionId="visit_homepage" x="135"
-			y="55" was="/resources/button/空白7222.was" />
-		<Button text="继续游戏" actionId="close"
-			x="230" y="50" was="/resources/button/空白7222.was" />
-		<Text text="你确定要退出游戏吗?" x="10" y="24" width="300" height="21"
-			font="" size="" color="white" align="center" actionId="" />
-		<Text text="欢迎留言或者qq群讨论(35896251)" x="10" y="102" width="300"
-			height="16" font="" size="" color="white" align="center" actionId="" />
-		<Text name="version" text="最后更新：2009-11-22" x="9" y="120" width="300"
-			height="16" font="" size="" color="white" align="center" actionId="" />
-		<Button text="贡献者" actionId="contributors" x="25"
-			y="77" was="/resources/button/空白7222.was" />
-		<Button text="访问博客" actionId="visit_blog" x="135"
-			y="79" was="/resources/button/空白7222.was" />
-	</Dialog>
+  <Dialog id="game_exit" align="center" x="159" y="170" width="321" height="139" background="/wzife/dialog/confirm.tcp">
+    <Button text="退出游戏" actionId="exit_game" x="25" y="50" was="/wzife/button/longbtn.tcp"/>
+    <Button text="访问主页" actionId="visit_homepage" x="125" y="50" was="/wzife/button/longbtn.tcp"/>
+    <Button text="继续游戏" actionId="close" x="235" y="55" was="/wzife/button/longbtn.tcp"/>
+    <Text text="你确定要退出游戏吗?" x="10" y="24" width="300" height="21" font="" size="" color="white" align="center" actionId=""/>
+    <Text text="欢迎留言或者qq群讨论(35896251)" x="10" y="103" width="300" height="16" font="" size="" color="white" align="center" actionId=""/>
+    <Text name="version" text="JavaXYQ 1.4 M1 @ 2009-11-30" x="9" y="120" width="300" height="16" font="" size="" color="white" align="center" actionId=""/>
+    <Button text="贡献者" actionId="contributors" x="25" y="80" was="/wzife/button/longbtn.tcp"/>
+    <Button text="访问博客" actionId="visit_blog" x="125" y="80" was="/wzife/button/longbtn.tcp"/>
+    <Button text="调试开关" actionId="debug" x="231" y="80" was="/wzife/button/longbtn.tcp"/>
+  </Dialog>
 </Dialogs>

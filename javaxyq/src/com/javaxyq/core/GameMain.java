@@ -189,7 +189,7 @@ public final class GameMain {
 		String[] uiIds = new String[] {"mainwin"};
    		for(String id : uiIds) {
    			System.out.println("安装UI："+id);
-   			Panel dlg = DialogFactory.getDialog(id);
+   			Panel dlg = DialogFactory.getDialog(id, true);
    			GameMain.addUIComponent(dlg);
    		}
 	}
@@ -305,6 +305,8 @@ public final class GameMain {
 	public static long CHAT_REMAIND_TIME = 15000;
 
 	private static Player hoverPlayer;
+
+	private static String lastMagic;
 
 	public static void setPlayer(Player p) {
 		player = p;
@@ -499,7 +501,7 @@ public final class GameMain {
 	 */
 	public static void doTalk(Player npc, TalkConfig talk) {
 		talker = npc;
-		TalkPanel dlg = (TalkPanel) DialogFactory.getDialog("npctalk");
+		TalkPanel dlg = (TalkPanel) DialogFactory.getDialog("npctalk", true);
 		Toolkit.getInstance().createTalk(dlg, talk);
 		dlg.setTalker(npc);
 		UIHelper.showDialog(dlg);
@@ -585,7 +587,7 @@ public final class GameMain {
         //installListener();
 
 		battleCanvas.init();
-		
+		battleCanvas.setLastMagic(lastMagic);
 	}
 	/**
 	 * 退出战斗模式
@@ -594,6 +596,7 @@ public final class GameMain {
 		getSceneCanvas().setPlayerSceneLocation(player.getSceneLocation());
 		getSceneCanvas().fadeIn(500);
 		gameWindow.setCanvas(getSceneCanvas());
+		lastMagic = battleCanvas.getLastMagic();
 		battleCanvas.dispose();
 		battleCanvas = null;
 		installUI();

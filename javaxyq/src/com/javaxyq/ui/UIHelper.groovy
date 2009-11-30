@@ -178,6 +178,7 @@ public class UIHelper {
 			if (dialog.getParent() == GameMain.getGameCanvas()) {
 				GameMain.getGameCanvas().remove(dialog);
 				dialog.fireEvent(new PanelEvent(dialog,"dispose"));
+				DialogFactory.dispose(dialog.getName(),dialog);
 			}
 		}
 	}
@@ -187,7 +188,7 @@ public class UIHelper {
 	 * @param id
 	 */
 	public static void showDialog(String id) {
-		Panel dlg = null;//DialogFactory.getDialog(id);
+		Panel dlg = null;
 		if(GameMain.isDebug()) {//如果是调试状态，每次动态加载
 			dlg = DialogFactory.createDialog(id);
 			def listener = GroovyScript.loadUIScript(id);
@@ -196,19 +197,18 @@ public class UIHelper {
 				dlg.addPanelListener(listener);
 			}
 		}else {
-			dlg = DialogFactory.getDialog(id);
+			dlg = DialogFactory.getDialog(id,true);
 		}
 		if(dlg)showDialog(dlg);
 	}
 	
 	public static void showHideDialog(String id) {
-		Panel dlg = DialogFactory.getDialog(id);
-		if(dlg) {
-			if (dlg.getParent() == GameMain.getGameCanvas()) {
-				hideDialog(dlg);
-			}else {
-				showDialog(id);
-			}
+		Panel dlg = DialogFactory.getDialog(id,false);
+		println "showHideDialog: $id, $dlg"
+		if(dlg && dlg.isShowing()) {
+			hideDialog(dlg);
+		}else {
+			showDialog(id);
 		}
 	}
 	
@@ -217,6 +217,7 @@ public class UIHelper {
 	 * @param id
 	 */
 	public static void hideDialog(String id) {
+		if(!id) return;
 		Panel dlg = DialogFactory.getDialog(id);
 		if(dlg)hideDialog(dlg);
 	}

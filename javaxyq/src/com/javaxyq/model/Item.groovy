@@ -21,6 +21,7 @@ class Item implements Serializable{
 	public static final String TYPE_MEDICINE = 'Ò©Æ·';
 	public static final String TYPE_WEAPON = 'ÎäÆ÷';
 	public static final String TYPE_EQUIPMENT = '×°±¸';
+	private static final long serialVersionUID = -4027503236184637259L;
 	
 	String id;
 	String name;
