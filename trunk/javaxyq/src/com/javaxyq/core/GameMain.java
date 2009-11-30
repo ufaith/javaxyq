@@ -101,6 +101,8 @@ public final class GameMain {
 	private static Player talker;
 
 	private static boolean showCopyright = true;
+	
+	private static boolean playingMusic = true;
 
 	/**
 	 * 执行指定ActionCommand的Action
@@ -365,6 +367,7 @@ public final class GameMain {
 		Image img = SpriteFactory.loadImage("/resources/loading/cover.jpg");
 		loadingCanvas.setLoading("loading ...");
 		loadingCanvas.setContent(img);
+		loadingCanvas.playMusic();
 		loadingCanvas.fadeIn(200);
 	}
 
@@ -375,6 +378,7 @@ public final class GameMain {
 		initUI();
         gameWindow.setCanvas(sceneCanvas);
         loadingCanvas.dispose();
+        //loadingCanvas.stopMusic();
         installUI();
 	}
 
@@ -585,9 +589,10 @@ public final class GameMain {
         	UIHelper.showDialog(c);
         }
         //installListener();
-
+        
 		battleCanvas.init();
 		battleCanvas.setLastMagic(lastMagic);
+		battleCanvas.playMusic();
 	}
 	/**
 	 * 退出战斗模式
@@ -596,6 +601,7 @@ public final class GameMain {
 		getSceneCanvas().setPlayerSceneLocation(player.getSceneLocation());
 		getSceneCanvas().fadeIn(500);
 		gameWindow.setCanvas(getSceneCanvas());
+		getSceneCanvas().playMusic();
 		lastMagic = battleCanvas.getLastMagic();
 		battleCanvas.dispose();
 		battleCanvas = null;
@@ -605,5 +611,18 @@ public final class GameMain {
 	
 	public static BattleCanvas getBattleCanvas() {
 		return battleCanvas;
+	}
+
+	public static boolean isPlayingMusic() {
+		return playingMusic;
+	}
+
+	public static void setPlayingMusic(boolean playingMusic) {
+		GameMain.playingMusic = playingMusic;
+		if(playingMusic) {
+			GameMain.getGameCanvas().playMusic();
+		}else {
+			GameMain.getGameCanvas().stopMusic();
+		}
 	}
 }

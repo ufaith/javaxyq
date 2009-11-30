@@ -53,7 +53,7 @@ public class HashUtil {
                 while ((strPath = br.readLine()) != null) {
                 	strPath = strPath.trim();
                 	if(strPath.length()>0) {
-                		System.out.println("stringToId: "+strPath);
+                		//System.out.println("stringToId: "+strPath);
                 		map.put(stringToId(strPath), strPath);
                 	}
                 }

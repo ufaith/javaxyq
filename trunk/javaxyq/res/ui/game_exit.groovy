@@ -38,12 +38,27 @@ class game_exit extends PanelHandler {
 		UIHelper.showDialog("contributors");
 	}
 	
-	private void debug(ActionEvent evt) {
+	private void toggle_debug(ActionEvent evt) {
 		GameMain.setDebug(!GameMain.isDebug());
+		def btn = panel.findCompByName("debugbtn");
 		if(GameMain.isDebug()) {
+			btn.setText("关闭调试");
 			println '打开游戏调试'
 		}else {
+			btn.setText("打开调试");
 			println '关闭游戏调试'
+		}
+	}
+	
+	private void toggle_music(ActionEvent evt) {
+		GameMain.setPlayingMusic(!GameMain.isPlayingMusic());
+		def btn = panel.findCompByName("musicbtn");
+		if(GameMain.isPlayingMusic()) {
+			btn.setText("关闭音乐");
+			println '打开游戏背景音乐'
+		}else {
+			btn.setText("打开音乐");
+			println '关闭游戏背景音乐'
 		}
 	}
 	

@@ -34,6 +34,9 @@ import javazoom.jl.player.Player;
 public class MP3Player {
 
 	private static Map<String, Player> playersMap = new HashMap<String, Player>();
+	private static Player loopplayer;
+	private static Thread loopThread;
+	private static String loopfile;
 
 	public static void stopAll() {
 		Collection<Player> players = playersMap.values();
@@ -73,6 +76,46 @@ public class MP3Player {
 
 	}
 
+	/**
+	 * —≠ª∑≤•∑≈“Ù¿÷
+	 * 
+	 * @param filename
+	 */
+	public static void loop(String filename) {
+		try {
+			FileInputStream fis = new FileInputStream(filename);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+
+			if (loopplayer != null)
+				loopplayer.close();
+			loopplayer = new Player(bis);
+			loopfile = filename;
+			// run in new thread to play in background
+			if (loopThread == null) {
+				loopThread = new Thread() {
+					public void run() {
+						try {
+							while (true) {
+								loopplayer.play();
+								if (loopplayer.isComplete()) {
+									loopplayer = new Player(new BufferedInputStream(new FileInputStream(loopfile)));
+								}
+								Thread.sleep(500);
+							}
+						} catch (Exception e) {
+							System.out.println(e);
+						}
+					}
+				};
+				loopThread.start();
+			}
+		} catch (Exception e) {
+			System.out.println("Problem playing file " + filename);
+			System.out.println(e);
+		}
+
+	}
+
 	// test client
 	public static void main(String[] args) {
 		String filename = "resources/music/wzg.mp3";
@@ -95,6 +138,14 @@ public class MP3Player {
 		// play from the beginning
 		mp3.play(filename);
 
+	}
+
+	/**
+	 * 
+	 */
+	public static void stopLoop() {
+		if (loopplayer != null)
+			loopplayer.close();
 	}
 
 }

@@ -26,10 +26,32 @@ public class WdfCracker {
 	 * @throws FileNotFoundException 
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		crackSound();
+		//crackSound();
 		//crackWzife();
+		crackScene();
 	}
 	
+	
+	private static void crackScene() throws FileNotFoundException {
+		WdfFile wdf = new WdfFile("E:/Game/梦幻西游/Scene.wdf");
+		PrintWriter pw = new PrintWriter("resources/names/scene1.lst");
+		String[] formats = new String[] { "%04d.nav", "%04d.spr","%04d.cell"};
+		int max = 9999,iCount = 0;
+		for(int i=0;i<max;i++) {
+			for (int f = 0; f < formats.length; f++) {
+				String res = String.format(formats[f], i);
+				long id = HashUtil.stringToId(res);
+				if (wdf.findNode(id) != null) {
+					System.out.println(res);
+					pw.println(res);
+					iCount ++;
+				}
+			}
+		}
+		pw.close();
+		System.out.println();
+		System.out.printf("共%d个，匹配%d个",wdf.getFileNodeCount(),iCount);
+	}
 	
 	private static void crackWzife() throws FileNotFoundException {
 		WdfFile wdf = new WdfFile("E:/Game/梦幻西游/wzife.wd1");
