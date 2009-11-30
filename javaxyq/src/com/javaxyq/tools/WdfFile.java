@@ -1,5 +1,6 @@
 package com.javaxyq.tools;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -9,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.util.Collection;
@@ -122,10 +124,37 @@ public class WdfFile implements FileSystem {
         }
         System.out.printf("nodeCount=%s, total find:%s\n", fileNodeCount, fileNodes().size());
     }
+    
+    private Map<Long, String> buildPaths(String filename) {
+    	String cmtfile ="resources/names/"+ filename.replaceAll("\\.wd.*", ".cmt");
+    	Map<Long, String> map = new HashMap<Long, String>();
+        InputStream is = Utils.getResourceAsStream(cmtfile);
+        if (is != null) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String strPath = null;
+            try {
+                while ((strPath = br.readLine()) != null) {
+                	strPath = strPath.trim();
+                	if(strPath.length()>0) {
+                		String[] strs = strPath.split("=");
+                		map.put(Long.parseLong(strs[0],16), strs[1]);
+                	}
+                }
+            } catch (Throwable e) {
+            	System.err.println("还原文件名列表失败: " + cmtfile);
+            	e.printStackTrace();
+            }
+        } else {
+            System.err.println("读取资源失败: " + cmtfile);
+        }
+    	
+		return map;
+    }
 
     private void restorePaths(String name) {
-        Map<Long, String> id2PathMap = HashUtil.createId2PathMap("resources/names/"
-                + name.replaceAll("\\.wd.*", ".lst"));
+    	Map<Long, String> id2PathMap = buildPaths(name);
+//        Map<Long, String> id2PathMap = HashUtil.createId2PathMap("resources/names/"
+//                + name.replaceAll("\\.wd.*", ".lst"));
         Set<Entry<Long, WdfFileNode>> entryset = fileNodeMap.entrySet();
         int iCount =0;
         for (Entry<Long, WdfFileNode> entry : entryset) {

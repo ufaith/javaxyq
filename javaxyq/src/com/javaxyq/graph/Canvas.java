@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.swing.JLayeredPane;
@@ -22,6 +23,7 @@ import javax.swing.KeyStroke;
 
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
+import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
@@ -42,7 +44,7 @@ public abstract class Canvas extends JPanel {
 		private long interval;
 
 		private long passTime;
-		
+
 		/**
 		 * @param duration
 		 * @param interval
@@ -60,7 +62,7 @@ public abstract class Canvas extends JPanel {
 		public void run() {
 			synchronized (FADE_LOCK) {
 				while (passTime < duration) {
-	            	//System.out.println(this.getId()+" "+this.getName());
+					// System.out.println(this.getId()+" "+this.getName());
 					synchronized (UPDATE_LOCK) {
 						passTime += interval;
 						alpha = (int) (255.0 * passTime / duration);
@@ -93,9 +95,9 @@ public abstract class Canvas extends JPanel {
 
 		public void run() {
 			while (canvasValid) {
-				//System.out.println(this.getId()+" "+this.getName());
+				// System.out.println(this.getId()+" "+this.getName());
 				synchronized (Canvas.UPDATE_LOCK) {
-					if(isShowing() && isVisible()) {
+					if (isShowing() && isVisible()) {
 						drawCanvas();
 					}
 				}
@@ -111,7 +113,7 @@ public abstract class Canvas extends JPanel {
 	public static final Object FADE_LOCK = new Object();
 
 	public static final Object UPDATE_LOCK = new Object();
-	
+
 	public static final Object MOVEMENT_LOCK = new Object();
 	private boolean canvasValid = true;
 
@@ -159,9 +161,10 @@ public abstract class Canvas extends JPanel {
 		setFocusable(true);
 		requestFocus(true);
 		setLayout(null);
-		//½ûÖ¹tab¼üÇÐ»»½¹µã
-		Set<AWTKeyStroke> keystrokes = new HashSet<AWTKeyStroke>(getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
-		keystrokes.remove(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,0));
+		// ½ûÖ¹tab¼üÇÐ»»½¹µã
+		Set<AWTKeyStroke> keystrokes = new HashSet<AWTKeyStroke>(
+				getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+		keystrokes.remove(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0));
 		setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keystrokes);
 		drawThread.start();
 	}
@@ -192,7 +195,7 @@ public abstract class Canvas extends JPanel {
 			return;
 		}
 		try {
-			g.setColor(Color.BLACK);		
+			g.setColor(Color.BLACK);
 			// npcs
 			drawNPC(g, elapsedTime);
 			// update comps on the canvas
@@ -260,7 +263,7 @@ public abstract class Canvas extends JPanel {
 			npc.draw(g, p.x, p.y);
 		}
 	}
-	
+
 	protected void drawPlayer(Graphics g, long elapsedTime) {
 		Player player = getPlayer();
 		if (player != null) {
@@ -437,23 +440,36 @@ public abstract class Canvas extends JPanel {
 	protected void setPlayer(Player player) {
 		this.player = player;
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void dispose() {
 		canvasValid = false;
 	}
-	
+
 	protected void drawMemory(Graphics g) {
-		if(g!=null) {
-			double mb = 1024*1024; 
-			double maxMem = Runtime.getRuntime().maxMemory()/mb;
-			double freeMem = Runtime.getRuntime().freeMemory()/mb;
-			int x = 100,y = 20;
+		if (g != null) {
+			double mb = 1024 * 1024;
+			double maxMem = Runtime.getRuntime().maxMemory() / mb;
+			double freeMem = Runtime.getRuntime().freeMemory() / mb;
+			int x = 100, y = 20;
 			g.setColor(Color.GREEN);
-			g.drawString(String.format("ÄÚ´æ£º%.2f/%.2f MB", freeMem,maxMem), x, y);
+			g.drawString(String.format("ÄÚ´æ£º%.2f/%.2f MB", freeMem, maxMem), x, y);
 		}
 	}
 
+	abstract protected String getMusic();
+
+	public void playMusic() {
+		if(GameMain.isPlayingMusic()) {
+			String filename = getMusic();
+			if (filename != null)
+				MP3Player.loop(filename);
+		}
+	}
+
+	public void stopMusic() {
+		MP3Player.stopLoop();
+	}
 }

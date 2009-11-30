@@ -218,7 +218,7 @@ public class UIHelper {
 	 */
 	public static void hideDialog(String id) {
 		if(!id) return;
-		Panel dlg = DialogFactory.getDialog(id);
+		Panel dlg = DialogFactory.getDialog(id,false);
 		if(dlg)hideDialog(dlg);
 	}
 	

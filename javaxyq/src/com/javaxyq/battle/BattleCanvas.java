@@ -37,6 +37,7 @@ import com.javaxyq.model.PlayerVO;
 import com.javaxyq.ui.ItemDetailLabel;
 import com.javaxyq.ui.ItemLabel;
 import com.javaxyq.ui.UIHelper;
+import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
@@ -859,5 +860,9 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 */
 	public void setLastMagic(String lastMagic) {
 		this.lastMagic = lastMagic;
+	}
+
+	protected String getMusic() {
+		return "music/2003.mp3";
 	}
 }

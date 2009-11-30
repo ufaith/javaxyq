@@ -503,4 +503,12 @@ public class DataStore {
 		oos.close();
 		println "”Œœ∑¥ÊµµÕÍ±œ"
 	}
+
+	public boolean existItem(String name,int amount) {
+		
+	}
+	
+	public boolean removeItem(String name,int amount) {
+		
+	}
 }

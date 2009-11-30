@@ -8,6 +8,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.File;
+import java.util.Random;
+
+import com.javaxyq.util.MP3Player;
 
 /**
  * @author dewitt
@@ -59,6 +63,12 @@ public class LoadingCanvas extends Canvas {
 		drawCursor(g,elapsedTime);
 		drawMemory(g);
 		g.dispose();
+	}
+
+	protected String getMusic() {
+		Random rand = new Random();
+		String[] files = new String[] {"1091","1514","1070","1193"};
+		return ("music/"+files[rand.nextInt(files.length)]+".mp3");
 	}
 
 }

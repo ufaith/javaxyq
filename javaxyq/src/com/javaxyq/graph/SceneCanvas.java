@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +35,7 @@ import com.javaxyq.task.TaskManager;
 import com.javaxyq.trigger.JumpTrigger;
 import com.javaxyq.trigger.Trigger;
 import com.javaxyq.ui.UIHelper;
+import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
@@ -77,6 +79,8 @@ public class SceneCanvas extends Canvas {
 	private int sceneHeight;
 
 	private List<Point> path;
+
+	private String musicfile;
 
 	/**
 	 * 创建场景画布实例
@@ -225,17 +229,18 @@ public class SceneCanvas extends Canvas {
 		if (map == null) {
 			return;
 		}
+		
 		setMaxWidth(map.getWidth());
 		setMaxHeight(map.getHeight());
 		sceneWidth = map.getWidth() / GameMain.STEP_DISTANCE;
 		sceneHeight = map.getHeight() / GameMain.STEP_DISTANCE;
 		this.map = map;
-		clearNPCs();
 		MapConfig cfg = map.getConfig();
 		this.setSceneId(cfg.getId());
 		this.setSceneName(cfg.getName());
 		this.triggerList = ResourceStore.getInstance().createTriggers(cfg.getId());
 		List<Player> _npcs = ResourceStore.getInstance().createNPCs(cfg.getId());
+		clearNPCs();
 		for (Player npc : _npcs) {
 			Point p = sceneToLocal(npc.getSceneLocation());
 			npc.setLocation(p.x, p.y);
@@ -245,7 +250,12 @@ public class SceneCanvas extends Canvas {
 		this.mapMask = new ImageIcon(cfg.getPath().replace(".map", "_bar.png")).getImage();
 		maskdata = loadMask(cfg.getPath().replace(".map", ".msk"));
 		searcher.init(sceneWidth, sceneHeight, maskdata);
-
+		//play music
+		String musicfile = cfg.getPath().replaceAll("\\.map", ".mp3").replaceAll("scene","music");
+		if(new File(musicfile).exists() && !musicfile.equals(this.musicfile)) {
+			this.musicfile = musicfile;
+			playMusic();
+		}
 	}
 
 	/**
@@ -672,6 +682,10 @@ public class SceneCanvas extends Canvas {
 
 	public int getSceneHeight() {
 		return sceneHeight;
+	}
+
+	protected String getMusic() {
+		return musicfile;		
 	}
 
 }

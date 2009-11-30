@@ -147,8 +147,8 @@ class player_coloring extends PanelHandler {
 		Animation shadow = player.getShadow().getAnimation(0);
 		preview(currCharacter, currWeapon, shadow);
 		
-		costs[selectionPart] = (1 + (coloration + 1) / 3) * 10;
-				
+		costs[selectionPart] = (1 + (coloration + 1) .intdiv(3)) * 10;
+		textCost.setText("" + costs[selectionPart]);				
 	}
 	/**
 	 * 人物转向
@@ -182,9 +182,15 @@ class player_coloring extends PanelHandler {
 		Button btnSave = (Button) evt.getSource();
 		UIHelper.hideDialog((Panel) btnSave.getParent());
 		int[] colorations = character.getColorations();
-		player.setColorations(colorations,true);
-		System.out.println("coloring: {" + colorations[0] + "," + colorations[1]+ "," + colorations[2] + "}");
-				
+		int cost = costs[0]*50000 + costs[1]*10000 + costs[2]*100000;
+		if(player.getData().money < cost) {
+			GameMain.doTalk(null,"这个染色方案需要${cost}两，你身上银两不够呀？！#83");
+		}else {
+			player.getData().money -= cost;
+			GameMain.doTalk(null,"共花费了${cost}两，欢迎下次光临！#32");
+			player.setColorations(colorations,true);
+			System.out.println("coloring: {" + colorations[0] + "," + colorations[1]+ "," + colorations[2] + "}");
+		}		
 	}
 
     private void preview(Animation currCharacter, Animation currWeapon, Animation shadow) {
