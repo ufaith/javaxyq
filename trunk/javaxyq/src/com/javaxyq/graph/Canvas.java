@@ -1,18 +1,24 @@
 package com.javaxyq.graph;
 
+import java.awt.AWTKeyStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
@@ -153,7 +159,10 @@ public abstract class Canvas extends JPanel {
 		setFocusable(true);
 		requestFocus(true);
 		setLayout(null);
-
+		//½ûÖ¹tab¼üÇÐ»»½¹µã
+		Set<AWTKeyStroke> keystrokes = new HashSet<AWTKeyStroke>(getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+		keystrokes.remove(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,0));
+		setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keystrokes);
 		drawThread.start();
 	}
 

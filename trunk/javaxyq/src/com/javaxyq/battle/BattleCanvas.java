@@ -442,7 +442,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		Item[] items = DataStore.getPlayerItems(canvas.getPlayer());
 		// 设置显示的道具
 		for (int i = 0; i < items.length; i++) {
-			ItemLabel label = (ItemLabel) DialogFactory.getDialog(BATTLE_USEITEM).findCompByName("item" + (i + 1));
+			ItemLabel label = (ItemLabel) DialogFactory.getDialog(BATTLE_USEITEM, true).findCompByName("item" + (i + 1));
 			label.setItem(items[i]);
 			if (!installItemListener) {
 				label.addMouseListener(itemMouseHandler);
@@ -846,5 +846,18 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	public void setBattleBackground(Image battleBackground) {
 		this.battleBackground = battleBackground;
 	}
-
+	/**
+	 * 最近一次施放的法术
+	 * @return the lastMagic
+	 */
+	public String getLastMagic() {
+		return lastMagic;
+	}
+	/**
+	 * set value of lastMagic
+	 * @param lastMagic 
+	 */
+	public void setLastMagic(String lastMagic) {
+		this.lastMagic = lastMagic;
+	}
 }

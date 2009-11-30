@@ -5,7 +5,7 @@
 			<talk id="default">
 				<text > 从这里可以传送到下面的地方，师兄走好。#56</text>
 				<link action="talk" value="changan">长安城</link>
-				<link action="transport" value="olg 163 8">傲来国</link>
+				<link action="transport" value="olg 123 95">傲来国</link>
 				<link action="transport" value="dhw 62 21">东海湾</link>
 				<link action="close">哪也不去</link>
 			</talk>

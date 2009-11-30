@@ -193,7 +193,7 @@ public class SceneCanvas extends Canvas {
 		Point source = getPlayerSceneLocation();
 		Point target = new Point(x, y);
 		// 计算两点的直线
-		path = SearchUtils.getLinePath(source.x,source.y,target.x,target.y);
+		List<Point> path = SearchUtils.getLinePath(source.x,source.y,target.x,target.y);
 		// 计算两点间的二次曲线
 		//path = SearchUtils.getBezierPath(source, target);
 		// 修正终点为最近可以到达点
@@ -390,9 +390,10 @@ public class SceneCanvas extends Canvas {
 	 * @param y
 	 */
 	public void walkTo(int x, int y) {
+		if(x<=0 || y<=0 || x> sceneWidth || y>sceneHeight)return;
 		Point p = this.getPlayerSceneLocation();
 		System.out.printf("walk to:(%s,%s) -> (%s,%s)\n", p.x, p.y, x, y);
-		List<Point> path = this.findPath(x, y);
+		this.path = this.findPath(x, y);
 		if (path != null) {
 			getPlayer().setPath(path);
 			getPlayer().move();
@@ -659,6 +660,18 @@ public class SceneCanvas extends Canvas {
 
 	public long getPatrolInterval() {
 		return patrolInterval;
+	}
+
+	public List<Point> getPath() {
+		return path;
+	}
+
+	public int getSceneWidth() {
+		return sceneWidth;
+	}
+
+	public int getSceneHeight() {
+		return sceneHeight;
 	}
 
 }

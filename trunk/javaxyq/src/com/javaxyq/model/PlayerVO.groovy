@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 class PlayerVO  implements Serializable{
+	
+	private static final long serialVersionUID = 986420253388692309L;
 	public PlayerVO() {
 		
 	}

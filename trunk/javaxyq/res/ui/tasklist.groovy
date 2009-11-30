@@ -8,6 +8,7 @@
 
 package ui_script;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.net.URI;
 
@@ -23,17 +24,25 @@ import com.javaxyq.ui.*;
  */
 class tasklist extends PanelHandler {
 	
+	private String taskItem;
+	
 	@Override
 	public void initial(PanelEvent evt) {
 		super.initial(evt);
-		
+		taskItem ='school';
+		setAutoUpdate(true);
 	}
-	public void showStoryTask(ActionEvent evt) {
-		def lblDetail = panel.findCompByName('lblTaskDetail');		lblDetail.setText("#B当前没有剧情任务。");
-		
+	public void show_storyTask(ActionEvent evt) {
+		this.taskItem = 'story';		def lblDetail = panel.findCompByName('lblTaskDetail');
+		lblDetail.setText("#B当前没有剧情任务。");
+		def lblSchoolTask = panel.findCompByName('lblSchoolTask');
+		def lblStoryTask = panel.findCompByName('lblStoryTask');
+		lblSchoolTask.setForeground(Color.BLACK);
+		lblStoryTask.setForeground(Color.BLUE);
 	}
-	public void showSchoolTask(ActionEvent evt) {
-		def tasks = TaskManager.instance.getTasksOfType('school');
+	public void show_schoolTask(ActionEvent evt) {
+		this.taskItem = 'school';
+		def tasks = TaskManager.instance.getTasksOfType(this.taskItem);
 		def lblDetail = panel.findCompByName('lblTaskDetail');
 		if(tasks && tasks.size()>0) {
 			int times = tasks[0].get('times').toInteger();
@@ -43,7 +52,12 @@ class tasklist extends PanelHandler {
 			lblDetail.setText("#B${taskdesc}#r(当前#R${rounds}#B轮#R${times}#B次${status})");
 		}else {
 			lblDetail.setText("#B当前没有师门任务，请找师傅领取。");
-		}	}
+		}
+		def lblSchoolTask = panel.findCompByName('lblSchoolTask');
+		def lblStoryTask = panel.findCompByName('lblStoryTask');		lblSchoolTask.setForeground(Color.BLUE);
+		lblStoryTask.setForeground(Color.BLACK);	}
 
-	
+	public void update(PanelEvent evt) {
+		this.invokeMethod("show_${taskItem}Task", null);
+	}
 }

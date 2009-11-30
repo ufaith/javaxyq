@@ -7,6 +7,9 @@
  */
 package com.javaxyq.event;
 
+import com.javaxyq.util.ClosureTask;
+import java.util.Timer;
+
 import com.javaxyq.graph.Panel;
 import com.javaxyq.ui.*;
 
@@ -18,6 +21,8 @@ import com.javaxyq.ui.*;
 abstract class PanelHandler implements PanelListener{
 	
 	protected Panel panel;
+	private boolean autoUpdate; 
+	private Timer timer;
 	
 	final public void actionPerformed(ActionEvent evt) {
 		String cmd =evt.getCommand();
@@ -44,4 +49,23 @@ abstract class PanelHandler implements PanelListener{
 	public void help(ActionEvent evt) {
 		println "help: ${this.getClass().getName()}"
 	}
+
+	public void setAutoUpdate(boolean b) {
+		if(b) {
+			if(!timer) {
+				timer = new Timer("update-${this.getClass().getName()}", true) ;
+				timer.schedule(new ClosureTask({this.update(null)}), 100, 500);
+			}
+		}else {
+			if(timer) {
+				timer.cancel();
+				timer = null;
+			}
+		}
+		this.autoUpdate = b;
+	}
+	
+	public boolean isAutoUpdate() {
+		return autoUpdate;
+	}	
 }
