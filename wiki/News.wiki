@@ -7,11 +7,13 @@ JavaXYQ更新说明、进展情况等。
 
 
 = Doing =
+
+
+= Updates =
+ _20091130_ JavaXYQ 1.4 M1
  # 嵌入脚本
  # 改进UI事件框架
  # 完善系统UI
-
-= Updates =
  _20091125_ JavaXYQ1.4
  # 改进地图8方向寻路算法
  # 增加部分地图掩码
