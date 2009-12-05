@@ -641,7 +641,7 @@ public class SceneCanvas extends Canvas {
 				g.fillRect(0, 0, getWidth(), getHeight());
 			}
 			// 内存使用量
-			drawMemory(g);
+			drawDebug(g);
 		} catch (Exception e) {
 			System.out.printf("更新Canvas时失败！\n");
 			e.printStackTrace();
