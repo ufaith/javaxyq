@@ -61,7 +61,7 @@ public class LoadingCanvas extends Canvas {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
 		drawCursor(g,elapsedTime);
-		drawMemory(g);
+		drawDebug(g);
 		g.dispose();
 	}
 

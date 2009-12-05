@@ -87,6 +87,7 @@ public abstract class Canvas extends JPanel {
 		}
 	}
 
+	private int drawCount = 0;
 	private final class DrawThread extends Thread {
 		{
 			this.setName("DrawThread");
@@ -99,10 +100,11 @@ public abstract class Canvas extends JPanel {
 				synchronized (Canvas.UPDATE_LOCK) {
 					if (isShowing() && isVisible()) {
 						drawCanvas();
+						drawCount ++;
 					}
 				}
 				try {
-					Thread.sleep(40);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -203,7 +205,7 @@ public abstract class Canvas extends JPanel {
 			// draw fade
 			g.setColor(new Color(0, 0, 0, alpha));
 			g.fillRect(0, 0, getWidth(), getHeight());
-			drawMemory(g);
+			drawDebug(g);
 		} catch (Exception e) {
 			System.out.printf("更新Canvas时失败！\n");
 			e.printStackTrace();
@@ -448,7 +450,10 @@ public abstract class Canvas extends JPanel {
 		canvasValid = false;
 	}
 
-	protected void drawMemory(Graphics g) {
+	private long lastFPSTime;
+	private int lastDrawCount;
+	private double fps;
+	protected void drawDebug(Graphics g) {
 		if (g != null) {
 			double mb = 1024 * 1024;
 			double maxMem = Runtime.getRuntime().maxMemory() / mb;
@@ -456,6 +461,18 @@ public abstract class Canvas extends JPanel {
 			int x = 100, y = 20;
 			g.setColor(Color.GREEN);
 			g.drawString(String.format("内存：%.2f/%.2f MB", freeMem, maxMem), x, y);
+			long nowtime = System.currentTimeMillis();
+			if(lastFPSTime !=0 ) {
+				if(nowtime >= lastFPSTime+1000) {
+					fps = (drawCount-lastDrawCount)*1000.0/(nowtime-lastFPSTime);
+					lastFPSTime = nowtime;
+					lastDrawCount = drawCount; 
+				}
+			}else {
+				lastFPSTime = nowtime;
+				lastDrawCount = drawCount; 
+			}
+			g.drawString(String.format("FPS: %.2f",fps), x+200, y);
 		}
 	}
 

@@ -3,7 +3,6 @@ package com.javaxyq.graph;
 import groovy.text.SimpleTemplateEngine;
 import groovy.text.Template;
 
-import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -17,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.plaf.LabelUI;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 
@@ -87,8 +85,6 @@ public class Label extends JLabel {
 
 	@Override
 	public void paint(Graphics g) {
-		if (System.currentTimeMillis() - lastUpdateTime < 40)
-			return;
 		if (anim != null) {
 			anim.update(System.currentTimeMillis() - lastUpdateTime);
 			lastUpdateTime = System.currentTimeMillis();
