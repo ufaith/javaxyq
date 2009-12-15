@@ -506,7 +506,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			drawHpSlot(g, elapsedTime);
 			drawCurrentArrow(g, elapsedTime);
 			drawPoints(g);
-			drawMemory(g);
+			drawDebug(g);
 			// update comps on the canvas
 			drawComponents(g, elapsedTime);
 			// draw fade
