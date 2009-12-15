@@ -189,7 +189,7 @@ public class WASImage {
 	public void parse(WASFrame frame) throws IOException {
 		int frameWidth = frame.getWidth();
 		int frameHeight = frame.getHeight();
-		int[][] pixels = new int[frameHeight][frameWidth];
+		int[] pixels = new int[frameHeight *frameWidth];
 		frame.setPixels(pixels);
 		int b;
 		int x;
@@ -204,13 +204,13 @@ public class WASImage {
 				case TYPE_ALPHA:
 					if ((b & TYPE_ALPHA_PIXEL) > 0) {
 						c = palette[in.read()];
-						pixels[y][x++] = c + ((b & 0x1F) << 16);
+						pixels[y*width +x++] = c + ((b & 0x1F) << 16);
 					} else if (b != 0) {// ???
 						count = b & 0x1F;// count
 						b = in.read();// alpha
 						c = palette[in.read()];
 						for (int i = 0; i < count; i++) {
-							pixels[y][x++] = c + ((b & 0x1F) << 16);
+							pixels[y*width +x++] = c + ((b & 0x1F) << 16);
 						}
 					} else {// block end
 						if (x > frameWidth) {
@@ -226,14 +226,14 @@ public class WASImage {
 				case TYPE_PIXELS:
 					count = b & 0x3F;
 					for (int i = 0; i < count; i++) {
-						pixels[y][x++] = palette[in.read()] + (0x1F << 16);
+						pixels[y*width +x++] = palette[in.read()] + (0x1F << 16);
 					}
 					break;
 				case TYPE_REPEAT:
 					count = b & 0x3F;
 					c = palette[in.read()];
 					for (int i = 0; i < count; i++) {
-						pixels[y][x++] = c + (0x1F << 16);
+						pixels[y*width +x++] = c + (0x1F << 16);
 					}
 					break;
 				case TYPE_SKIP:

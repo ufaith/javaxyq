@@ -38,13 +38,10 @@ public class JMap extends JComponent {
 	private MapImage[][] visibleImages;
 
 	public JMap(File file) {
-		if(!loadMap(file)) {
-		    System.err.println("load map failed!");
-		}
+		loadMap(file);
 	}
 
 	public JMap() {
-		this(null);
 	}
 
 	@Override
