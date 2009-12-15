@@ -41,8 +41,8 @@ public class CommandInterpreter {
 		Point p0 = source.getLocation();
 		setMsg(source.getName() + " ½øÐÐ¹¥»÷ ");
 		Sprite s = SpriteFactory.loadSprite("shape/char/"+source.getCharacter()+"/attack.tcp");
-		int dx = s.getWidth()-s.getCenterX();
-		int dy = s.getHeight()-s.getCenterY();
+		int dx = s.getWidth()-s.getRefPixelX();
+		int dy = s.getHeight()-s.getRefPixelY();
 		if(target.x > source.x) {
 			dx = -dx;
 			dy = -dy;

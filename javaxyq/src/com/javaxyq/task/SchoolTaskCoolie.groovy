@@ -59,7 +59,7 @@ class SchoolTaskCoolie extends TaskCoolie {
 			Player target = task.get("target");
 			def required = task.get('item');
 			def items = DataStore.getPlayerItems(player);
-			def item = items.find{item -> item && item.name==required};
+			def item = items.find{item -> item && item.name.trim()==required};
 			if(item) {
 				item.amount --;
 				if(item.amount == 0) {
@@ -238,7 +238,7 @@ class SchoolTaskCoolie extends TaskCoolie {
 		return npcs.get(index).name;
 	}
 	
-	def items = ['四叶花','七叶莲','天青地白','草果',' 九香虫','水黄莲','紫丹罗','佛手','旋复花','百色花',
+	def items = ['四叶花','七叶莲','天青地白','草果','九香虫','水黄莲','紫丹罗','佛手','旋复花','百色花',
 	             '香叶','龙须草','灵脂','白玉骨头','鬼切草','曼佗罗花','山药','八角莲叶','人参','月见草'];
 	/**
 	 * 随机一个物品

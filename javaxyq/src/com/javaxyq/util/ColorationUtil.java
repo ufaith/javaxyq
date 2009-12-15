@@ -40,9 +40,9 @@ public class ColorationUtil {
             }
 
             int centerX, centerY;
-            centerX = decoder.getCenterX();
-            centerY = decoder.getCenterY();
-            int s = decoder.getSpriteCount();
+            centerX = decoder.getRefPixelX();
+            centerY = decoder.getRefPixelY();
+            int s = decoder.getAnimCount();
             int f = decoder.getFrameCount();
             sprite.clearAnimations();
             for (int i = 0; i < s; i++) {

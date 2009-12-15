@@ -472,28 +472,28 @@ public class ResourceManager extends SingleFrameApplication {
 				{
 					newButton = new JideButton();
 					toolBar.add(newButton);
-					newButton.setAction(getAppActionMap().get("newFile"));
+					newButton.setAction(getAction("newFile"));
 					newButton.setName("newButton");
 					newButton.setFocusable(false);
 				}
 				{
 					openButton = new JideButton();
 					toolBar.add(openButton);
-					openButton.setAction(getAppActionMap().get("open"));
+					openButton.setAction(getAction("open"));
 					openButton.setName("openButton");
 					openButton.setFocusable(false);
 				}
 				{
 					openFolderButton = new JideButton();
 					toolBar.add(openFolderButton);
-					openFolderButton.setAction(getAppActionMap().get("openFolder"));
+					openFolderButton.setAction(getAction("openFolder"));
 					openFolderButton.setName("openFolderButton");
 					openFolderButton.setFocusable(false);
 				}
 				{
 					saveButton = new JideButton();
 					toolBar.add(saveButton);
-					saveButton.setAction(getAppActionMap().get("save"));
+					saveButton.setAction(getAction("save"));
 					saveButton.setName("saveButton");
 					saveButton.setFocusable(false);
 				}
@@ -503,7 +503,7 @@ public class ResourceManager extends SingleFrameApplication {
 				{
 					JButton button = new JideButton();
 					toolBar.add(button);
-					button.setAction(getAppActionMap().get("exitApp"));
+					button.setAction(getAction("exitApp"));
 					button.setName("exitButton");
 					button.setFocusable(false);
 				}
@@ -540,27 +540,27 @@ public class ResourceManager extends SingleFrameApplication {
 			{
 				JMenuItem menuItem = new JMenuItem();
 				fileMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("newFile"));
+				menuItem.setAction(getAction("newFile"));
 			}
 			{
 				JMenuItem menuItem = new JMenuItem();
 				fileMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("open"));
+				menuItem.setAction(getAction("open"));
 			}
 			{
 				JMenuItem menuItem = new JMenuItem();
 				fileMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("openFolder"));
+				menuItem.setAction(getAction("openFolder"));
 			}
 			{
 				JMenuItem menuItem = new JMenuItem();
 				fileMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("save"));
+				menuItem.setAction(getAction("save"));
 			}
 			{
 				JMenuItem menuItem = new JMenuItem();
 				fileMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("exitApp"));
+				menuItem.setAction(getAction("exitApp"));
 			}
 		}
 		{
@@ -570,22 +570,22 @@ public class ResourceManager extends SingleFrameApplication {
 			{
 				JMenuItem menuItem = new JMenuItem();
 				editMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("copy"));
+				menuItem.setAction(getAction("copy"));
 			}
 			{
 				JMenuItem menuItem = new JMenuItem();
 				editMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("cut"));
+				menuItem.setAction(getAction("cut"));
 			}
 			{
 				JMenuItem menuItem = new JMenuItem();
 				editMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("paste"));
+				menuItem.setAction(getAction("paste"));
 			}
 			{
 				JMenuItem menuItem = new JMenuItem();
 				editMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("delete"));
+				menuItem.setAction(getAction("delete"));
 			}
 		}
 		{
@@ -595,7 +595,7 @@ public class ResourceManager extends SingleFrameApplication {
 			{
 				JMenuItem menuItem = new JMenuItem();
 				helpMenu.add(menuItem);
-				menuItem.setAction(getAppActionMap().get("showAbout"));
+				menuItem.setAction(getAction("showAbout"));
 			}
 		}
 

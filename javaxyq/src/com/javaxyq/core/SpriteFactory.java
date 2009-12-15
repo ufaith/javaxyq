@@ -38,10 +38,10 @@ public class SpriteFactory {
 
 	private static Sprite createSprite(WASDecoder decoder) {
 		int centerX, centerY;
-		centerX = decoder.getCenterX();
-		centerY = decoder.getCenterY();
+		centerX = decoder.getRefPixelX();
+		centerY = decoder.getRefPixelY();
 		Sprite sprite = new Sprite(decoder.getWidth(), decoder.getHeight(), centerX, centerY);
-		int spriteCount = decoder.getSpriteCount();
+		int spriteCount = decoder.getAnimCount();
 		int frameCount = decoder.getFrameCount();
 		for (int i = 0; i < spriteCount; i++) {
 			Animation anim = new Animation();
@@ -81,7 +81,7 @@ public class SpriteFactory {
 	}
 
 	public static Image loadImage(String filename) {
-		if (filename.endsWith(".was")) {
+		if (filename.endsWith(".was")||filename.endsWith(".tcp")) {
 			Sprite s = loadSprite(filename);
 			return (s == null) ? null : s.getImage();
 		}
