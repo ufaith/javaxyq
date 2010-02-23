@@ -75,13 +75,13 @@ class scene_map extends PanelHandler implements MouseListener{
 	}
 
 	@Override
-	public void update(PanelEvent evt) {
+	synchronized void update(PanelEvent evt) {
 		def canvas = GameMain.getSceneCanvas();
 		def player = canvas.getPlayer();
 		def playerLoc = player.getSceneLocation();
 		def p0 = sceneToLocal(playerLoc);
 		//FIXME 修复单帧偏移位置问题
-		p0.translate(-animPoint.getCenterX(),-animPoint.getCenterY());
+		p0.translate(-animPoint.getRefPixelX(),-animPoint.getRefPixelY());
 		lblPoint.setLocation(p0);
 		panel.add(lblPoint);
 		//移除路线的点
@@ -94,7 +94,7 @@ class scene_map extends PanelHandler implements MouseListener{
 		if(path && path.size()>1) {
 			def targetPoint = path[path.size()-1];
 			def p = sceneToLocal(targetPoint);
-			p.translate(-animTarget.getCenterX(),-animTarget.getCenterY());
+			p.translate(-animTarget.getRefPixelX(),-animTarget.getRefPixelY());
 			lblTarget.setLocation(p);
 			panel.add(lblTarget);
 			

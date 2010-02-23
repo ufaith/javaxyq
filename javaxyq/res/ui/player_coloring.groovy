@@ -207,13 +207,13 @@ class player_coloring extends PanelHandler {
         lblShadow = new Label(shadow);
         if(currWeapon!=null) {       	
         	lblWeapon = new Label(currWeapon);
-        	lblWeapon.setLocation(lblCharacter.getX() + currCharacter.getCenterX() - currWeapon.getCenterX(),
-        			lblCharacter.getY() + currCharacter.getCenterY() - currWeapon.getCenterY());
+        	lblWeapon.setLocation(lblCharacter.getX() + currCharacter.getRefPixelX() - currWeapon.getRefPixelX(),
+        			lblCharacter.getY() + currCharacter.getRefPixelY() - currWeapon.getRefPixelY());
         	colorDialog.add(lblWeapon);
         }
         lblCharacter.setLocation((colorDialog.getWidth() - lblCharacter.getWidth()).intdiv(2), 80);
-        lblShadow.setLocation(lblCharacter.getX() + currCharacter.getCenterX() - shadow.getCenterX(),
-            lblCharacter.getY() + currCharacter.getCenterY() - shadow.getCenterY());
+        lblShadow.setLocation(lblCharacter.getX() + currCharacter.getRefPixelX() - shadow.getRefPixelX(),
+            lblCharacter.getY() + currCharacter.getRefPixelY() - shadow.getRefPixelY());
         colorDialog.add(lblCharacter);
         colorDialog.add(lblShadow);
     }
