@@ -134,8 +134,8 @@ public class SpriteDialog extends JDialog {
         infoPanel.add(new JLabel("total: \t" + sprite.getAnimationCount()));
         infoPanel.add(new JLabel("width: \t" + sprite.getWidth()));
         infoPanel.add(new JLabel("height: \t" + sprite.getHeight()));
-        infoPanel.add(new JLabel("centerX: \t" + sprite.getCenterX()));
-        infoPanel.add(new JLabel("centerY: \t" + sprite.getCenterY()));
+        infoPanel.add(new JLabel("centerX: \t" + sprite.getRefPixelX()));
+        infoPanel.add(new JLabel("centerY: \t" + sprite.getRefPixelY()));
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(previewPanel, BorderLayout.CENTER);

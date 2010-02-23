@@ -582,7 +582,7 @@ public class Player extends AbstractWidget implements EventTarget {
 		g2d.dispose();
 
 		// 人物冒泡对话内容
-		int chatY = y - person.getCenterY() - 10;
+		int chatY = y - person.getRefPixelY() - 10;
 		for (int i = chatPanels.size() - 1; i >= 0; i--) {
 			FloatPanel chatPanel = chatPanels.get(i);
 			if (shouldDisplay(chatPanel)) {
@@ -857,11 +857,11 @@ public class Player extends AbstractWidget implements EventTarget {
 	}
 
 	public int getTop() {
-		return y - this.person.getCenterY();
+		return y - this.person.getRefPixelY();
 	}
 
 	public int getLeft() {
-		return x - this.person.getCenterX();
+		return x - this.person.getRefPixelX();
 	}
 
 	public PlayerVO getData() {

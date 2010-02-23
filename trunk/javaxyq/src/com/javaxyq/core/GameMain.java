@@ -211,7 +211,7 @@ public final class GameMain {
 
 	public static void main(String[] args) throws InterruptedException {
 		// System.getProperties().list(System.out);
-		init(args);
+		//init(args);
 	}
 
 	public static void init(String[] args) {

@@ -89,9 +89,9 @@ public class Sprite extends AbstractWidget {
     private boolean autoPlay = true;
 
     // 中心点
-    private int centerX;
+    private int refPixelX;
 
-    private int centerY;
+    private int refPixelY;
 
     /** 精灵着色 */
     private List<Integer> colorations;
@@ -115,12 +115,12 @@ public class Sprite extends AbstractWidget {
         this.animations = new Vector<Animation>();
         setWidth(width);
         setHeight(height);
-        this.centerX = centerX;
-        this.centerY = centerY;
+        this.refPixelX = centerX;
+        this.refPixelY = centerY;
     }
 
     public Sprite(Sprite s) {
-        this(s.getWidth(), s.getHeight(), s.getCenterX(), s.getCenterY());
+        this(s.getWidth(), s.getHeight(), s.getRefPixelX(), s.getRefPixelY());
         this.animations = (Vector<Animation>) s.animations.clone();
         this.colorations = new ArrayList<Integer>(s.colorations);
         this.autoPlay = s.autoPlay;
@@ -140,7 +140,7 @@ public class Sprite extends AbstractWidget {
         try {
             BufferedImage bi = (BufferedImage) this.currAnimation.getImage();
             if(this.animations.size()>1) {
-            	return bi.getRGB(x + centerX, y + centerY) != 0;
+            	return bi.getRGB(x + refPixelX, y + refPixelY) != 0;
             }
             return bi.getRGB(x, y)!= 0;
         } catch (Exception e) {
@@ -158,8 +158,8 @@ public class Sprite extends AbstractWidget {
 
     @Override
     protected void doDraw(Graphics2D g, int x, int y, int width, int height) {
-        x -= currAnimation.getCenterX();
-        y -= currAnimation.getCenterY();
+        x -= currAnimation.getRefPixelX();
+        y -= currAnimation.getRefPixelY();
         g.drawImage(currAnimation.getImage(), x, y, (x + width), (y + height), 0, 0, width, height, null);
     }
 
@@ -171,12 +171,12 @@ public class Sprite extends AbstractWidget {
         return animations.size();
     }
 
-    public int getCenterX() {
-        return centerX;
+    public int getRefPixelX() {
+        return refPixelX;
     }
 
-    public int getCenterY() {
-        return centerY;
+    public int getRefPixelY() {
+        return refPixelY;
     }
 
     public int getColoration(int part) {
@@ -225,12 +225,12 @@ public class Sprite extends AbstractWidget {
         this.setRepeat(autoPlay ? -1 : 1);
     }
 
-    public void setCenterX(int centerX) {
-        this.centerX = centerX;
+    public void setRefPixelX(int centerX) {
+        this.refPixelX = centerX;
     }
 
-    public void setCenterY(int centerY) {
-        this.centerY = centerY;
+    public void setRefPixelY(int centerY) {
+        this.refPixelY = centerY;
     }
 
     public void setColoration(int part, int coloration) {
