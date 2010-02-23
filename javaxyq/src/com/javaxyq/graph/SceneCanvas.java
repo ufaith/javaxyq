@@ -123,7 +123,7 @@ public class SceneCanvas extends Canvas {
 			s.update(elapsedTime);
 			Point p = t.getLocation();
 			p = sceneToView(p);
-			s.draw(g, p.x, p.y - s.getHeight() / 2 + s.getCenterY());
+			s.draw(g, p.x, p.y - s.getHeight() / 2 + s.getRefPixelY());
 			if(GameMain.isDebug()) {
 				g.drawLine(p.x-10, p.y, p.x+10, p.y);
 				g.drawLine(p.x, p.y-10, p.x, p.y+10);

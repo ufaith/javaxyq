@@ -240,7 +240,7 @@ public class SceneEditor extends JPanel implements MouseListener {
 		JLabel label = new JLabel(icon);
 		label.setSize(icon.getIconWidth(), icon.getIconHeight());
 		Point pos = sceneToLocal(cell.x,cell.y);
-		pos.translate(-anim.getCenterX(), -anim.getCenterY());
+		pos.translate(-anim.getRefPixelX(), -anim.getRefPixelY());
 		label.setLocation(pos);
 		eventLayer.add(label);
 	}

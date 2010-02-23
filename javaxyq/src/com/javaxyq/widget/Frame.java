@@ -11,15 +11,15 @@ public class Frame extends AbstractWidget {
     /** 帧的结束时间 */
     private long endTime;
 
-    private int centerX;
+    private int refPixelX;
 
-    private int centerY;
+    private int refPixelY;
 
     public Frame(BufferedImage image, long endTime, int centerX, int centerY) {
         this.image = image;
         this.endTime = endTime;
-        this.centerX = centerX;
-        this.centerY = centerY;
+        this.refPixelX = centerX;
+        this.refPixelY = centerY;
         setWidth(image.getWidth(null));
         setHeight(image.getHeight(null));
     }
@@ -36,7 +36,7 @@ public class Frame extends AbstractWidget {
     public Image newImage() {
         BufferedImage buf = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics g = buf.getGraphics();
-        g.drawImage(image, -centerX, -centerY, null);
+        g.drawImage(image, -refPixelX, -refPixelY, null);
         g.dispose();
         return buf;
     }
@@ -48,8 +48,8 @@ public class Frame extends AbstractWidget {
 
     @Override
     protected void doDraw(Graphics2D g2, int x, int y, int width, int height) {
-        int x1 = x - this.centerX;
-        int y1 = y - this.centerY;
+        int x1 = x - this.refPixelX;
+        int y1 = y - this.refPixelY;
         g2.drawImage(this.image, x1, y1, x1 + width, y1 + height, 0, 0, width, height, null);
     }
 
@@ -61,20 +61,20 @@ public class Frame extends AbstractWidget {
         this.endTime = endTime;
     }
 
-    public int getCenterX() {
-        return centerX;
+    public int getRefPixelX() {
+        return refPixelX;
     }
 
-    public void setCenterX(int centerX) {
-        this.centerX = centerX;
+    public void setRefPixelX(int centerX) {
+        this.refPixelX = centerX;
     }
 
-    public int getCenterY() {
-        return centerY;
+    public int getRefPixelY() {
+        return refPixelY;
     }
 
-    public void setCenterY(int centerY) {
-        this.centerY = centerY;
+    public void setRefPixelY(int centerY) {
+        this.refPixelY = centerY;
     }
 
     public void setImage(BufferedImage image) {

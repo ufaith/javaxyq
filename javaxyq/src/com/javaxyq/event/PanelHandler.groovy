@@ -38,7 +38,7 @@ abstract class PanelHandler implements PanelListener{
 		panel = evt.getSource();
 		println "initial: ${this.getClass().getName()}"
 	}	
-	public void update(PanelEvent evt) {
+	synchronized public void update(PanelEvent evt) {
 		
 	}
 	

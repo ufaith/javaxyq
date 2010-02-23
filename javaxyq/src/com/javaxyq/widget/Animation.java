@@ -122,12 +122,12 @@ public class Animation extends AbstractWidget {
 		return (currFrame == null) ? 0 : currFrame.getHeight();
 	}
 
-	public synchronized int getCenterX() {
-		return (currFrame == null) ? 0 : currFrame.getCenterX();
+	public synchronized int getRefPixelX() {
+		return (currFrame == null) ? 0 : currFrame.getRefPixelX();
 	}
 
-	public synchronized int getCenterY() {
-		return (currFrame == null) ? 0 : currFrame.getCenterY();
+	public synchronized int getRefPixelY() {
+		return (currFrame == null) ? 0 : currFrame.getRefPixelY();
 	}
 
 	public int getRepeat() {
