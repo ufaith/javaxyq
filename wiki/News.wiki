@@ -10,6 +10,11 @@ JavaXYQ更新说明、进展情况等。
 
 
 = Updates =
+ _20100306_ JavaXYQ 1.4 M1
+ # Applet版本
+ # 在线下载资源
+ # 在线运行主页：http://javaxyq.appspot.com
+
  _20091130_ JavaXYQ 1.4 M1
  # 嵌入脚本
  # 改进UI事件框架
