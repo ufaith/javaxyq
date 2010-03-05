@@ -24,7 +24,8 @@ public class ItemManager {
 	}
 	
 	private static void loadItems() {
-		def xml = new XmlParser().parse(new File('xml/items.xml'));
+		try {
+		def xml = new XmlParser().parse(GameMain.getFile('xml/items.xml'));
 		for(Node item in xml.Item) {
 			if(item.@type && item.@class) {
 				try {
@@ -34,6 +35,10 @@ public class ItemManager {
 					e.printStackTrace();
 				}
 			}
+		}
+		}catch(e) {
+			println "load items failed!";
+			e.printStackTrace();
 		}
 	}
 	

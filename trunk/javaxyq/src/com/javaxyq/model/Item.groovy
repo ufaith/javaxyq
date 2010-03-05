@@ -23,13 +23,13 @@ class Item implements Serializable{
 	public static final String TYPE_EQUIPMENT = '×°±¸';
 	private static final long serialVersionUID = -4027503236184637259L;
 	
-	String id;
-	String name;
-	String type;
-	String desc;
-	int level;
-	int price;
-	int amount = 1;
+	public String id;
+	public String name;
+	public String type;
+	public String desc;
+	public int level;
+	public int price;
+	public int amount = 1;
 	
 	public String toString() {
 		def props = this.getProperties();

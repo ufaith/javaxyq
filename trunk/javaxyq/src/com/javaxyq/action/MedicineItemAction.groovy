@@ -10,7 +10,7 @@ class MedicineItemAction implements ItemListener{
 
 	@Override
 	public void itemUsed(ItemEvent evt) {
-		MP3Player.play("resources/sound/ π”√“©∆∑.mp3");
+		MP3Player.play("resources/sound/use_item.mp3");
 		Item item = evt.getItem();
 		def player = evt.getPlayer();
 		def eff = item.getEfficacyParams();

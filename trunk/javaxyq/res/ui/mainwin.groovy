@@ -73,10 +73,10 @@ class mainwin extends PanelHandler{
 		len = (int) (playerVO.getExp() * maxLen / DataStore.getLevelExp(playerVO.getLevel()));
 		expTrough.setSize(len, expTrough.getHeight());
 
-		// TODO ÕÙ»½ÊŞ×´Ì¬
-		// ÕÙ»½ÊŞÆøÑª
-		// ÕÙ»½ÊŞÄ§·¨
-		// ÕÙ»½ÊŞ¾­Ñé
+		// TODO summon×´Ì¬
+		// summonÆøÑª
+		// summonÄ§·¨
+		// summon¾­Ñé
 	}
 
 	private void updateCoords() {
@@ -107,18 +107,18 @@ class mainwin extends PanelHandler{
 	}
 	
 	/**
-	 * ²¹³äÕÙ»½ÊŞÆøÑª
+	 * ²¹³äsummonÆøÑª
 	 */
 	public void eke_summon_hp(ActionEvent evt) {
-		println "²¹³äÕÙ»½ÊŞÆøÑª"
+		println "²¹³äsummonÆøÑª"
 	}
 	
 	/**
-	 * ²¹³äÕÙ»½ÊŞÄ§·¨Öµ
+	 * ²¹³äsummonÄ§·¨Öµ
 	 * @param evt
 	 */
 	public void eke_summoned_mp(ActionEvent evt) {
-		println "²¹³äÕÙ»½ÊŞÄ§·¨"
+		println "²¹³äsummonÄ§·¨"
 	}
 
 	/**

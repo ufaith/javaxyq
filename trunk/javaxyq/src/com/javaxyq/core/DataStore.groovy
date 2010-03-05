@@ -8,8 +8,8 @@ import java.util.Map;
 import com.javaxyq.config.TalkConfig;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.util.ClassUtil;
-import com.javaxyq.core.PlayerPropertyCalculator;
 import com.javaxyq.widget.Player;
+import com.javaxyq.core.*;
 import com.javaxyq.model.*;
 
 /**
@@ -204,7 +204,7 @@ public class DataStore {
 	private static void loadMedicines() {
 		medicines = [:];
 		//一级药品
-		File file = new File('data/一级药品');
+		File file = GameMain.getFile('data/medicine1.txt');
 		file.eachLine{
 			if(!it.startsWith('//')){
 				def vals = it.trim().split(' ');
@@ -214,13 +214,14 @@ public class DataStore {
 				item.desc = vals[2];
 				item.efficacy = vals[3];
 				item.price = vals[4].toInteger();
-				item.type = '一级药品';
+				item.type = 'medicine1';
 				item.level = 1;
 				medicines[item.name] = item;
 			}
 		}
+		
 		//二级药品
-		file = new File('data/二级药品');
+		file = GameMain.getFile('data/medicine2.txt');
 		file.eachLine{
 			if(!it.startsWith('//')){
 				def vals = it.trim().split(' ');
@@ -229,13 +230,13 @@ public class DataStore {
 				item.name = vals[1];
 				item.desc = vals[2];
 				item.efficacy = vals[3];
-				item.type = '二级药品';
+				item.type = 'medicine2';
 				item.level = 2;
 				medicines[item.name] = item;
 			}
 		}
 		//三级药品
-		file = new File('data/三级药品');
+		file = GameMain.getFile('data/medicine3.txt');
 		file.eachLine{
 			if(!it.startsWith('//')){
 				def vals = it.trim().split(' ');
@@ -244,7 +245,7 @@ public class DataStore {
 				item.name = vals[1];
 				item.desc = vals[2];
 				item.efficacy = vals[3];
-				item.type = '三级药品';
+				item.type = 'medicine3';
 				item.level = 3;
 				medicines[item.name] = item;
 			}
@@ -342,9 +343,9 @@ public class DataStore {
 	
 	private static Map itemsOverlayAmount = [:];
 	private static void initItems() {
-		itemsOverlayAmount['一级药品'] = 99;
-		itemsOverlayAmount['二级药品'] = 30;
-		itemsOverlayAmount['烹饪'] = 30;
+		itemsOverlayAmount['medicine1'] = 99;
+		itemsOverlayAmount['medicine2'] = 30;
+		itemsOverlayAmount['medicine3'] = 30;
 
 		
 	}
@@ -419,8 +420,8 @@ public class DataStore {
 	 * 加载默认存档
 	 */
 	public static void loadData() {
-		def file = new File("save/0.jxd");
-		if(!file.exists()) {
+		def file = GameMain.getFile("save/0.jxd");
+		if(!file || !file.exists() || file.length()==0) {
 			initData();
 			return ;
 		}
@@ -467,41 +468,47 @@ public class DataStore {
 	 * 保存游戏数据到存档
 	 */
 	public static void saveData() {
-		def file = new File("save/0.jxd");
-		if(!file.getParentFile().exists()) {
-			file.getParentFile().mkdirs();
+		try {
+			def file = GameMain.getFile("save/0.jxd");
+			if(!file)file = GameMain.createFile("save/0.jxd");
+			if(!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+			def out = file.newOutputStream()
+			def oos = new ObjectOutputStream(out)
+			//创建时间
+			oos.writeObject(new java.util.Date());
+			//场景
+			oos.writeUTF(GameMain.getSceneCanvas().getSceneId());
+			
+			//人物数据
+			def player = GameMain.getPlayer();
+			def playerData = player.getData();
+			playerData.state = 'stand';
+			playerData.direction = player.direction;
+			playerData.colorations = player.colorations;
+			playerData.sceneLocation = player.sceneLocation;
+			oos.writeObject(playerData);
+			
+			//物品数据
+			def items = getPlayerItems(player);
+			oos.writeInt(items.size());
+			items.each{
+				oos.writeObject(it);
+			}
+	
+			//任务数据
+			def tasks = TaskManager.instance.getTaskList();
+			oos.writeInt(tasks.size());
+			tasks.each{
+				oos.writeObject(it);
+			}
+			oos.close();
+			println "游戏存档完毕"
+		}catch(e) {
+			println "游戏存档失败！"+e.getMessage();
+			e.printStackTrace();
 		}
-		def out = file.newOutputStream()
-		def oos = new ObjectOutputStream(out)
-		//创建时间
-		oos.writeObject(new java.util.Date());
-		//场景
-		oos.writeUTF(GameMain.getSceneCanvas().getSceneId());
-		
-		//人物数据
-		def player = GameMain.getPlayer();
-		def playerData = player.getData();
-		playerData.state = 'stand';
-		playerData.direction = player.direction;
-		playerData.colorations = player.colorations;
-		playerData.sceneLocation = player.sceneLocation;
-		oos.writeObject(playerData);
-		
-		//物品数据
-		def items = getPlayerItems(player);
-		oos.writeInt(items.size());
-		items.each{
-			oos.writeObject(it);
-		}
-
-		//任务数据
-		def tasks = TaskManager.instance.getTaskList();
-		oos.writeInt(tasks.size());
-		tasks.each{
-			oos.writeObject(it);
-		}
-		oos.close();
-		println "游戏存档完毕"
 	}
 
 	public boolean existItem(String name,int amount) {

@@ -81,7 +81,7 @@ class Main {
 	}
 
 	public static void defActions() {
-		def xml = new XmlParser().parse(new File("xml/actions.xml"));
+		def xml = new XmlParser().parse(GameMain.getFile("xml/actions.xml"));
 		def rs = ResourceStore.getInstance();
 		for(el in xml.Action) {
 			println "define Action: ${el.@id}"
@@ -96,7 +96,7 @@ class Main {
 		}
 	}
 	public static void defCursors() {
-		def cursors = new XmlParser().parse(new File("xml/cursors.xml"));
+		def cursors = new XmlParser().parse(GameMain.getFile("xml/cursors.xml"));
 		def rs = ResourceStore.getInstance();
 		for(el in cursors.Cursor) {
 			println "define Cursor: ${el.@id}"
@@ -104,7 +104,7 @@ class Main {
 		}
 	}
 	public static void defScenes() {
-		def scenes = new XmlParser().parse(new File("xml/scenes.xml"));
+		def scenes = new XmlParser().parse(GameMain.getFile("xml/scenes.xml"));
 		def rs = ResourceStore.getInstance();
 		for(scene in scenes.scene) {
 			println "define scene: ${scene.@id}"
@@ -120,27 +120,53 @@ class Main {
 	}
 
 	public static void preprocessUIs() {
-		def filelist = new File('ui').list().findAll{ it.endsWith('.xml')};
-		for(def file in filelist) {
-			file = 'ui/'+file;
-			println("find ui: $file")
-			//processUI(file);
-			def dialogs = new XmlParser().parse(new File(file));
-			for(def dlg in dialogs.Dialog) {
-				DialogFactory.addDialog(dlg.@id, file);
+		//def filelist = GameMain.getFile('ui').list().findAll{ it.endsWith('.xml')};
+//		for(def file in filelist) {
+//			file = 'ui/'+file;
+//			println("find ui: $file")
+//			//processUI(file);
+//			def dialogs = new XmlParser().parse(GameMain.getFile(file));
+//			for(def dlg in dialogs.Dialog) {
+//				DialogFactory.addDialog(dlg.@id, file);
+//			}
+//		}
+		
+		GameMain.getFile('ui/list.txt').eachLine{
+			try {
+				String file = 'ui/'+it;
+				println("find ui: $file")
+				//processUI(file);
+				def dialogs = new XmlParser().parse(GameMain.getFile(file));
+				for(def dlg in dialogs.Dialog) {
+					DialogFactory.addDialog(dlg.@id, file);
+				}
+			}catch(e) {
+				e.printStackTrace();
 			}
 		}
 	}
 	
 	public static void setScene(id,x,y){
+		if(!id || id=="null")id="wzg";
+		SceneListener action = null;
+		try {
 		String currentScene = GameMain.getCurrentScene();
-		SceneListener action = findSceneAction(currentScene);
-		if(action)action.onUnload(new SceneEvent(currentScene,-1,-1));
+		if(currentScene) {
+			action = findSceneAction(currentScene);
+			if(action)action.onUnload(new SceneEvent(currentScene,-1,-1));
+		}
+		}catch(e) {e.printStackTrace();}
 		println("ÇÐ»»³¡¾°£º"+id+" ("+x+","+y+")");
-		action = findSceneAction(id);
-		if(action)action.onInit(new SceneEvent(id,x,y));
+		try {
+			action = findSceneAction(id);
+			if(action)action.onInit(new SceneEvent(id,x,y));
+		}catch(e) {e.printStackTrace();};
+	
 		GameMain.fadeToMap(id,x,y);
-		if(action)action.onLoad(new SceneEvent(id,x,y));
+		
+		try {
+			if(action)action.onLoad(new SceneEvent(id,x,y));
+		}catch(e) {e.printStackTrace();};
 	}
 
 	public static Object findSceneAction(String id) {
@@ -149,7 +175,7 @@ class Main {
 	}
 
 	public static void defTalks() {
-		def talks = new XmlParser().parse(new File("xml/talks.xml"));
+		def talks = new XmlParser().parse(GameMain.getFile("xml/talks.xml"));
 		for (def t : talks.Scene.NPC.talk) {
 			TalkConfig talk;
 			if (t.text()) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Items>
-	<Item type="一级药品" class="com.javaxyq.action.MedicineItemAction" ></Item>
-	<Item type="二级药品" class="com.javaxyq.action.MedicineItemAction" ></Item>
-	<Item type="三级药品" class="com.javaxyq.action.MedicineItemAction" ></Item>
+	<Item type="medicine1" class="com.javaxyq.action.MedicineItemAction" ></Item>
+	<Item type="medicine2" class="com.javaxyq.action.MedicineItemAction" ></Item>
+	<Item type="medicine3" class="com.javaxyq.action.MedicineItemAction" ></Item>
 </Items>

@@ -19,7 +19,7 @@ class MedicineItem extends Item {
 	/**
 	 * ¹¦Ð§
 	 */
-	String efficacy;
+	public String efficacy;
 	private static final long serialVersionUID = -5332286396631443691L;
 	
 	public MedicineItem() {

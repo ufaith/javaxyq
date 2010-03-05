@@ -465,7 +465,7 @@ public class WASDecoder {
 	public void load(File file) throws IllegalStateException, FileNotFoundException, IOException {
 		load(new FileInputStream(file));
 	}
-
+	
 	private int[] parse(RandomAcessInputStream in, int frameOffset, int[] lineOffsets, int frameWidth, int frameHeight)
 			throws IOException {
 		int[] pixels = new int[frameHeight*frameWidth];

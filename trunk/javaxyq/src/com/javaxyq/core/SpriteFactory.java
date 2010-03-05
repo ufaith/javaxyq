@@ -2,10 +2,12 @@ package com.javaxyq.core;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import com.javaxyq.io.CacheManager;
 import com.javaxyq.util.WASDecoder;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Sprite;
@@ -102,12 +104,12 @@ public class SpriteFactory {
 			return null;
 		try {
 			WASDecoder decoder = new WASDecoder();
-			InputStream inputStream = Toolkit.getInputStream(filename);
-			if(inputStream == null) {
+			File file = CacheManager.getInstance().getFile(filename);
+			if(file == null || !file.exists()) {
 				System.err.println("Warning: 找不到精灵的资源文件!"+filename);
 				return null;
 			}
-			decoder.load(inputStream);
+			decoder.load(file);
 			if(colorations!=null) {
 				String pp = filename.replaceFirst("(\\w)*.tcp", "00.pp");
 				System.out.println("pp: "+pp);//XXX

@@ -10,6 +10,7 @@ package com.javaxyq.core;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -123,11 +124,19 @@ public class Toolkit {
                 if (filename.charAt(0) == '/') {
                     filename = filename.substring(1);
                 }
-                is = new FileInputStream(filename);
+                File file = new File(filename); 
+                if(file.exists()) {
+                	is = new FileInputStream(filename);
+                }else {
+                	is = GameMain.getResourceAsStream(filename);
+                }
             } catch (FileNotFoundException e) {
             	System.out.println("找不到文件: "+filename);
                 //e.printStackTrace();
-            }
+            } catch (IOException e) {
+            	System.out.println("找不到文件: "+filename);
+				e.printStackTrace();
+			}
         }
         return is;
     }

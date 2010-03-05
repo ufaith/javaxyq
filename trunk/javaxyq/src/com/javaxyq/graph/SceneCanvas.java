@@ -27,6 +27,7 @@ import com.javaxyq.core.ResourceStore;
 import com.javaxyq.event.PlayerAdapter;
 import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.event.PlayerListener;
+import com.javaxyq.io.CacheManager;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.model.Task;
 import com.javaxyq.search.SearchUtils;
@@ -252,9 +253,15 @@ public class SceneCanvas extends Canvas {
 		searcher.init(sceneWidth, sceneHeight, maskdata);
 		//play music
 		String musicfile = cfg.getPath().replaceAll("\\.map", ".mp3").replaceAll("scene","music");
-		if(new File(musicfile).exists() && !musicfile.equals(this.musicfile)) {
-			this.musicfile = musicfile;
-			playMusic();
+		try {
+			File file = CacheManager.getInstance().getFile(musicfile);
+			if(file!=null && file.exists() && !musicfile.equals(this.musicfile)) {
+				this.musicfile = file.getAbsolutePath();
+				playMusic();
+			}
+		} catch (Exception e) {
+			System.out.println("«–ªª≥°æ∞“Ù¿÷ ß∞‹£∫"+musicfile+", error="+e.getMessage());
+			//e.printStackTrace();
 		}
 	}
 
@@ -269,7 +276,7 @@ public class SceneCanvas extends Canvas {
 				+ sceneHeight + ", msk: " + filename);
 		byte[] maskdata = new byte[sceneWidth * sceneHeight];
 		try {
-			InputStream in = new FileInputStream(filename);
+			InputStream in = GameMain.getResourceAsStream(filename);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			String str;
 			int pos = 0;
@@ -279,10 +286,7 @@ public class SceneCanvas extends Canvas {
 					maskdata[pos++] = (byte) (str.charAt(i) - '0');
 				}
 			}
-		} catch (UnsupportedEncodingException e) {
-			System.out.println("º”‘ÿµÿÕº—⁄¬Î ß∞‹£°filename=" + filename);
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("º”‘ÿµÿÕº—⁄¬Î ß∞‹£°filename=" + filename);
 			e.printStackTrace();
 		}
@@ -642,6 +646,7 @@ public class SceneCanvas extends Canvas {
 			}
 			// ƒ⁄¥Ê π”√¡ø
 			drawDebug(g);
+			drawDownloading(g);
 		} catch (Exception e) {
 			System.out.printf("∏¸–¬Canvas ± ß∞‹£°\n");
 			e.printStackTrace();
