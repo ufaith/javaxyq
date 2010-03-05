@@ -3,6 +3,7 @@ package com.javaxyq.graph;
 import groovy.text.SimpleTemplateEngine;
 import groovy.text.Template;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -165,7 +166,7 @@ public class Label extends JLabel {
 
 	public Point getToolTipLocation(MouseEvent evt) {
 		try {
-			Window win = GameMain.getWindow();
+			Component win = (Component) GameMain.getWindow();
 			Point winLoc = win.getLocationOnScreen();
 			// Point mouseLoc = evt.getLocationOnScreen();
 			Dimension tipSize = this.getTooltip().getPreferredSize();

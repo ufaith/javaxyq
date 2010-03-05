@@ -111,7 +111,7 @@ public class Helper {
 	 * 加载场景npc数据
 	 */
 	public static void loadNPCs() {
-		def xml =  new XmlParser().parse(new File("xml/npcs.xml"));
+		def xml =  new XmlParser().parse(GameMain.getFile("xml/npcs.xml"));
 		def npcs = xml.Scene.NPC;
 		for(def npc in npcs) {
 			registerNPC(npc.parent().@id,npc.attributes());

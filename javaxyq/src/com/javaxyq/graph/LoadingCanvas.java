@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.io.File;
 import java.util.Random;
 
+import com.javaxyq.core.GameMain;
 import com.javaxyq.util.MP3Player;
 
 /**
@@ -49,20 +50,27 @@ public class LoadingCanvas extends Canvas {
 
 	}
 	
-	public void draw(Graphics gr, long elapsedTime) {
-		Graphics g = gr.create();
-		g.drawImage(contentImage, 0, 0, null);
-		g = g.create(150, 340, 300, 150);
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("华文新魏", Font.PLAIN, 20));
-		g.drawString(loadingText, 100, 120);
+	public void draw(Graphics g, long elapsedTime) {
+		if(contentImage!=null) {
+			g.drawImage(contentImage, 0, 0, null);
+		}else {
+			//g.setColor(Color.LIGHT_GRAY);
+			//g.fillRect(0, 0, getWidth(), getHeight());
+			g.clearRect(0, 0, getWidth(), getHeight());
+		}
 		// draw fade
 		g.setColor(new Color(0, 0, 0, alpha));
 		g.fillRect(0, 0, getWidth(), getHeight());
-		
+
+		g.setFont(GameMain.TEXT_FONT);
 		drawCursor(g,elapsedTime);
 		drawDebug(g);
-		g.dispose();
+		drawDownloading(g);
+
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("华文新魏", Font.PLAIN, 20));
+		g.drawString(loadingText, 250, 420);
+		//System.out.println("draw loading ...");
 	}
 
 	protected String getMusic() {

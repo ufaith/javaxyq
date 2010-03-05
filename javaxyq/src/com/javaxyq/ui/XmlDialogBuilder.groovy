@@ -21,7 +21,7 @@ class XmlDialogBuilder implements DialogBuilder{
 		if(!id)throw new IllegalArgumentException('Dialog的id不能为空');
 		if(!res)throw new IllegalArgumentException("Dialog[$id]的界面描述文件路径不能为空") ;
 		println("createDialog $id in $res");
-		def input = new File(res)
+		def input = GameMain.getFile(res)
 		def xml = new XmlParser().parse(input)
 		def dlgEl = xml.find {it.@id ==id };
 		if(dlgEl) {

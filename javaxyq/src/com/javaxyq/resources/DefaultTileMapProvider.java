@@ -20,6 +20,7 @@ import java.io.RandomAccessFile;
 
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.core.ResourceStore;
+import com.javaxyq.io.CacheManager;
 import com.javaxyq.widget.TileMap;
 
 /**
@@ -307,7 +308,7 @@ public class DefaultTileMapProvider implements MapProvider {
         MapConfig cfg = (MapConfig) ResourceStore.getInstance().findConfig(id);
         if (cfg != null) {
             try {
-                File file = new File(cfg.getPath());
+                File file = CacheManager.getInstance().getFile(cfg.getPath());
                 mapFile = new MyRandomAccessFile(file, "r");
                 loadHeader();
                 return new TileMap(this, cfg);

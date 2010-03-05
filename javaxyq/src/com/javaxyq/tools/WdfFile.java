@@ -134,11 +134,18 @@ public class WdfFile implements FileSystem {
             String strPath = null;
             try {
                 while ((strPath = br.readLine()) != null) {
-                	strPath = strPath.trim();
-                	if(strPath.length()>0) {
-                		String[] strs = strPath.split("=");
-                		map.put(Long.parseLong(strs[0],16), strs[1]);
-                	}
+                	try {
+						strPath = strPath.trim();
+						if(strPath.length()>0) {
+							String[] strs = strPath.split("=");
+							if(strs!=null && strs.length>1) {
+								map.put(Long.parseLong(strs[0],16), strs[1]);
+							}
+						}
+					} catch (Exception e) {
+						System.out.println("解析资源映射失败："+strPath);
+						//e.printStackTrace();
+					}
                 }
             } catch (Throwable e) {
             	System.err.println("还原文件名列表失败: " + cmtfile);

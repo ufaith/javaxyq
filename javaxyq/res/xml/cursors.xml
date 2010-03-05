@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Cursors>
-		<Cursor id="default" cursor="/resources/cursor/默认.was"
-			effect="/resources/cursor/水波.was" />
-		<Cursor id="attack" cursor="/resources/cursor/攻击.was" />
-		<Cursor id="give" cursor="/resources/cursor/给予.was" />
-		<Cursor id="friend" cursor="/resources/cursor/好友.was" />
-		<Cursor id="pickup" cursor="/resources/cursor/拾取.was" />
-		<Cursor id="select" cursor="/resources/cursor/选择.was" />
-		<Cursor id="team" cursor="/resources/cursor/组队.was" />
-		<Cursor id="exchange" cursor="/resources/cursor/交易.was" />
-		<Cursor id="forbid" cursor="/resources/cursor/禁止.was" />
-		<Cursor id="text" cursor="/resources/cursor/文本.was" />
-<!--
-		<Cursor id="talk" cursor="/resources/cursor/对话.was" />
--->
+		<Cursor id="default" cursor="/wzife/cursor/01.tcp"
+			effect="/addon/wave.tcp" />
+		<Cursor id="attack" cursor="/wzife/cursor/15.tcp" />
+		<Cursor id="give" cursor="/wzife/cursor/13.tcp" />
+		<Cursor id="select" cursor="/wzife/cursor/11.tcp" />
+		<Cursor id="forbid" cursor="/wzife/cursor/04.tcp" />
+		<Cursor id="text" cursor="/wzife/cursor/02.tcp" />
+		<Cursor id="talk" cursor="/wzife/cursor/22.tcp" />
 
 </Cursors>

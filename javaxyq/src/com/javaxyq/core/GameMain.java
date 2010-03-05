@@ -8,7 +8,6 @@
 package com.javaxyq.core;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.Font;
@@ -23,6 +22,11 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +36,14 @@ import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.BorderUIResource;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
 
 import com.javaxyq.action.BaseAction;
 import com.javaxyq.battle.BattleCanvas;
@@ -40,15 +51,18 @@ import com.javaxyq.config.TalkConfig;
 import com.javaxyq.event.ActionEvent;
 import com.javaxyq.event.Listener;
 import com.javaxyq.graph.Canvas;
+import com.javaxyq.graph.DesktopWindow;
+import com.javaxyq.graph.GameWindow;
+import com.javaxyq.graph.LightweightToolTipManager;
 import com.javaxyq.graph.LoadingCanvas;
 import com.javaxyq.graph.Panel;
 import com.javaxyq.graph.SceneCanvas;
 import com.javaxyq.graph.TalkPanel;
-import com.javaxyq.graph.Window;
+import com.javaxyq.io.CacheManager;
+import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.TileMap;
-import com.javaxyq.ui.*;
 
 /**
  * JavaXYQ 游戏入口类
@@ -78,7 +92,7 @@ public final class GameMain {
 
 	private static FontMetrics fontMetrics;
 
-	private static Window gameWindow;
+	private static GameWindow gameWindow;
 
 	private static String homeURL;
 
@@ -92,6 +106,9 @@ public final class GameMain {
 
 	public static final Color TEXT_NAME_NPC_COLOR = new Color(219, 197, 63);
 
+	public static final int APP_APPLET = 1;
+	private static final int APP_DESKTOP = 0;
+
 	private static String version;
 
 	private static DisplayMode displayMode;
@@ -100,9 +117,13 @@ public final class GameMain {
 
 	private static Player talker;
 
-	private static boolean showCopyright = true;
+	private static boolean showCopyright = false;
 	
-	private static boolean playingMusic = true;
+	private static boolean playingMusic = false;
+
+	public static int appType = APP_DESKTOP;
+
+	public static URL base;
 
 	/**
 	 * 执行指定ActionCommand的Action
@@ -161,14 +182,14 @@ public final class GameMain {
 
 	}
 
-	public static Window getWindow() {
+	public static GameWindow getWindow() {
 		return gameWindow;
 	}
 
 	public static void loadGame() {
 		startLoading();
 		// load scripts
-		updateLoading("loading resources ...");
+		//updateLoading("loading resources ...");
 		// loadResources();
 
 		// copyright
@@ -187,7 +208,7 @@ public final class GameMain {
 		}
 	}
 
-	private static void initUI() {
+	private static void installUI() {
 		String[] uiIds = new String[] {"mainwin"};
    		for(String id : uiIds) {
    			System.out.println("安装UI："+id);
@@ -215,6 +236,7 @@ public final class GameMain {
 	}
 
 	public static void init(String[] args) {
+		System.getProperties().list(System.out);
 		initDisplay(args);
 		// loading canvas
 		Dimension preferredSize = new Dimension(displayMode.getWidth(), displayMode.getHeight());
@@ -225,19 +247,60 @@ public final class GameMain {
         sceneCanvas.setPreferredSize(preferredSize);
         sceneCanvas.setSize(preferredSize);
         
-		gameWindow = new Window(displayMode);
-		gameWindow.setTitle(applicationName +" "+ version);
-		gameWindow.setCanvas(loadingCanvas);
-		fontMetrics = gameWindow.getFontMetrics(TEXT_NAME_FONT);
-
-		gameWindow.setLocationRelativeTo(null);
-		gameWindow.setVisible(true);
+		DesktopWindow win = new DesktopWindow(displayMode);
+		win.setTitle(applicationName +" "+ version);
+		win.setCanvas(loadingCanvas);
+		win.setLocationRelativeTo(null);
+		win.setVisible(true);
+		fontMetrics = win.getFontMetrics(TEXT_NAME_FONT);
+		gameWindow = win;
 		loadGame();
 	}
-
+	
+	public static void initApplet(AppletWindow applet, String[] args) {
+		System.getProperties().list(System.out);
+		System.out.println();
+		System.out.println("-------------------------");
+		System.out.println("cache dir: "+cacheBase);
+		
+		gameWindow = applet;
+		initDisplay(args);
+		Dimension preferredSize = new Dimension(displayMode.getWidth(), displayMode.getHeight());
+		// loading canvas
+		loadingCanvas = new LoadingCanvas();
+		loadingCanvas.setPreferredSize(preferredSize);
+		applet.setCanvas(loadingCanvas);
+		applet.setSize(preferredSize);
+		applet.invalidate();
+		//CacheManager.getInstance().addDownloadListener(loadingCanvas);
+		
+		//scene canvas
+		sceneCanvas = new SceneCanvas();
+		sceneCanvas.setPreferredSize(preferredSize);
+		sceneCanvas.setSize(preferredSize);
+		
+		fontMetrics =applet.getFontMetrics(TEXT_NAME_FONT);
+		
+		appType = APP_APPLET;
+		base = applet.getDocumentBase();
+		
+		//Desktop.getDesktop().
+		//applet.setLocation();
+		//applet.setVisible(true);
+		
+//		gameWindow = new Window(displayMode);
+//		gameWindow.setTitle(applicationName +" "+ version);
+//		gameWindow.setCanvas(loadingCanvas);
+//		fontMetrics = gameWindow.getFontMetrics(TEXT_NAME_FONT);
+		
+//		gameWindow.setLocationRelativeTo(null);
+//		gameWindow.setVisible(true);
+		//loadGame();
+	}
+	
 	private static DisplayMode initDisplay(String[] args) {
 		int width = 640, height = 480;
-		if (args.length == 3) {
+		if (args!=null && args.length == 3) {
 			width = Integer.valueOf(args[0]);
 			height = Integer.valueOf(args[1]);
 			displayMode = new DisplayMode(width, height, Integer.valueOf(args[2]),
@@ -310,6 +373,8 @@ public final class GameMain {
 
 	private static String lastMagic;
 
+	public static String cacheBase = System.getProperty("user.home")+"/javaxyq";
+
 	public static void setPlayer(Player p) {
 		player = p;
 		sceneCanvas.setPlayer(p);
@@ -363,9 +428,10 @@ public final class GameMain {
 	}
 
 	private static void startLoading() {
+		CacheManager.getInstance().addDownloadListener(loadingCanvas);
 		startTime = System.currentTimeMillis();
+		loadingCanvas.setLoading("start loading ...");
 		Image img = SpriteFactory.loadImage("/resources/loading/cover.jpg");
-		loadingCanvas.setLoading("loading ...");
 		loadingCanvas.setContent(img);
 		loadingCanvas.playMusic();
 		loadingCanvas.fadeIn(200);
@@ -375,18 +441,20 @@ public final class GameMain {
 		loaded = true;
 		endTime = System.currentTimeMillis();
 		System.out.printf("total cost: %ss\n", (endTime - startTime) / 1000.0);
-		initUI();
+		installUI();
         gameWindow.setCanvas(sceneCanvas);
+        CacheManager.getInstance().removeDownloadListener(loadingCanvas);
+		CacheManager.getInstance().addDownloadListener(sceneCanvas);
         loadingCanvas.dispose();
         //loadingCanvas.stopMusic();
-        installUI();
+        updateUI();
 	}
 
 	public static boolean isLoaded() {
 		return loaded;
 	}
 
-	private static void updateLoading(String msg) {
+	public static void updateLoading(String msg) {
 		System.out.println(msg);
 		loadingCanvas.setLoading(msg);
 	}
@@ -399,7 +467,7 @@ public final class GameMain {
 		}
 	}
 
-	public static void installUI() {
+	public static void updateUI() {
         ComponentInputMap canvasInputMap = new ComponentInputMap(getGameCanvas());
         for (KeyStroke k : inputMap.keys()) {
         	canvasInputMap.put(k, inputMap.get(k));
@@ -407,7 +475,8 @@ public final class GameMain {
         getGameCanvas().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, canvasInputMap);
         getGameCanvas().setActionMap(getActionMap());
         
-        for (Panel c : uiComponents) {
+        for (int i = 0; i < uiComponents.size(); i++) {
+        	Panel c = uiComponents.get(i);
         	UIHelper.showDialog(c);
         }
         installListener();
@@ -553,12 +622,18 @@ public final class GameMain {
 	}
 
 	public static Point getMousePosition() {
-		Point p = gameWindow.getMousePosition();
-		if(p!=null) {
-			//SwingUtilities.convertPoint(gameWindow, p, canvas);
-			p.y -= 20;
+		try {
+			Point p = gameWindow.getMousePosition();
+			if(p!=null && gameWindow instanceof JFrame) {
+				//SwingUtilities.convertPoint(gameWindow, p, canvas);
+				p.y -= 20;
+			}
+			return p;
+		} catch (Exception e) {
+			System.out.println("获取鼠标位置失败！"+e.getMessage());
+			//e.printStackTrace();
 		}
-		return p;
+		return null;
 	}
 	
 	public static Canvas getGameCanvas() {
@@ -585,7 +660,8 @@ public final class GameMain {
 		gameWindow.setCanvas(battleCanvas);
 		//installUI();
         getGameCanvas().setActionMap(getActionMap());       
-        for (Panel c : uiComponents) {
+        for (int i = 0; i < uiComponents.size(); i++) {
+        	Panel c = uiComponents.get(i);
         	UIHelper.showDialog(c);
         }
         //installListener();
@@ -605,7 +681,7 @@ public final class GameMain {
 		lastMagic = battleCanvas.getLastMagic();
 		battleCanvas.dispose();
 		battleCanvas = null;
-		installUI();
+		updateUI();
 		//TODO
 	}
 	
@@ -624,5 +700,39 @@ public final class GameMain {
 		}else {
 			GameMain.getGameCanvas().stopMusic();
 		}
+	}
+
+	public static boolean isShowCopyright() {
+		return showCopyright;
+	}
+
+	public static void setShowCopyright(boolean showCopyright) {
+		GameMain.showCopyright = showCopyright;
+	}
+
+	public static InputStream getResourceAsStream(String path) throws IOException {
+		File file = CacheManager.getInstance().getFile(path);
+		if(file!=null ) {
+			return new FileInputStream(file);
+		}
+		return null;
+	}
+
+	/**
+	 * @deprecated Use {@link CacheManager#getFile(String)} instead
+	 */
+	public static File getFile(String filename) {
+		return CacheManager.getInstance().getFile(filename);
+	}
+	
+	/**
+	 * 创建文件
+	 * @param filename
+	 * @return
+	 * @throws IOException 
+	 * @deprecated Use {@link CacheManager#createFile(String)} instead
+	 */
+	public static File createFile(String filename) throws IOException {
+		return CacheManager.getInstance().createFile(filename);
 	}
 }

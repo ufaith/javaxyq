@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.KeyboardFocusManager;
@@ -23,6 +24,8 @@ import javax.swing.KeyStroke;
 
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
+import com.javaxyq.event.DownloadEvent;
+import com.javaxyq.event.DownloadListener;
 import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Cursor;
@@ -30,7 +33,7 @@ import com.javaxyq.widget.Player;
 
 //DONE 添加动画的播放次数，如使用技能动画（只播放１次），鼠标点击地面效果
 
-public abstract class Canvas extends JPanel {
+public abstract class Canvas extends JPanel implements DownloadListener{
 
 	private class AnimatorThread extends Thread {
 		/** 动画总时间 */
@@ -102,11 +105,11 @@ public abstract class Canvas extends JPanel {
 						drawCanvas();
 						drawCount ++;
 					}
-				}
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					try {
+						UPDATE_LOCK.wait(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -192,6 +195,11 @@ public abstract class Canvas extends JPanel {
 
 	}
 
+	/**
+	 * 绘制游戏画面
+	 * @param g
+	 * @param elapsedTime
+	 */
 	public synchronized void draw(Graphics g, long elapsedTime) {
 		if (g == null) {
 			return;
@@ -206,6 +214,7 @@ public abstract class Canvas extends JPanel {
 			g.setColor(new Color(0, 0, 0, alpha));
 			g.fillRect(0, 0, getWidth(), getHeight());
 			drawDebug(g);
+			drawDownloading(g);
 		} catch (Exception e) {
 			System.out.printf("更新Canvas时失败！\n");
 			e.printStackTrace();
@@ -289,7 +298,11 @@ public abstract class Canvas extends JPanel {
 		Component[] comps = GameMain.getWindow().getLayeredPane().getComponentsInLayer(JLayeredPane.POPUP_LAYER);
 		for (Component comp : comps) {
 			Graphics g1 = g.create(comp.getX(), comp.getY(), comp.getWidth(), comp.getHeight());
-			comp.paint(g1);
+			try {
+				comp.paint(g1);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			g1.dispose();
 		}
 	}
@@ -365,8 +378,12 @@ public abstract class Canvas extends JPanel {
 		this.movingObject = null;
 	}
 
-	public void setGameCursor(String cursor) {
-		this.gameCursor = ResourceStore.getInstance().getCursor(cursor);
+	public void setGameCursor(String type) {
+		Cursor cursor = ResourceStore.getInstance().getCursor(type);
+		if(cursor!=null) {
+			GameMain.getWindow().hideCursor();
+			this.gameCursor = cursor;
+		}
 	}
 
 	public void setMovingObject(Animation anim, Point offset) {
@@ -453,6 +470,11 @@ public abstract class Canvas extends JPanel {
 	private long lastFPSTime;
 	private int lastDrawCount;
 	private double fps;
+
+	private DownloadEvent downloadEvt;
+
+	private long downloadUpdate;
+	private long downloadMsgDelay = 1000;
 	protected void drawDebug(Graphics g) {
 		if (g != null) {
 			double mb = 1024 * 1024;
@@ -475,6 +497,52 @@ public abstract class Canvas extends JPanel {
 			g.drawString(String.format("FPS: %.2f",fps), x+200, y);
 		}
 	}
+	
+	protected void drawDownloading(Graphics g) {
+		if(this.downloadEvt!=null && System.currentTimeMillis()-downloadUpdate<downloadMsgDelay) {
+			String msg = "";
+			String resourceName = this.downloadEvt.getResource();
+			int size = this.downloadEvt.getSize();
+			int received = this.downloadEvt.getReceived();
+			//if(size==0)size = -1;//保证除数不为0
+			//int percent = this.downloadEvt.getReceived()*100/size;
+			switch (this.downloadEvt.getId()) {
+			case DownloadEvent.DOWNLOAD_UPDATE:
+				msg = String.format("正在下载  %s， 共%.2fKB，已下载%.2fKB ...",resourceName,size/1024.0, received/1024.0);
+				break;
+			case DownloadEvent.DOWNLOAD_STARTED:
+				msg = String.format("开始下载 %s ...", resourceName);
+				break;
+			case DownloadEvent.DOWNLOAD_COMPLETED:
+				//percent = 100;
+				msg = String.format("下载完毕 %s .", resourceName);
+				break;
+			case DownloadEvent.DOWNLOAD_INTERRUPTED:
+				msg = String.format("下载失败 %s .", resourceName);				
+				break;
+
+			default:
+				break;
+			}
+//			int rw = 400;
+//			int rh = 30;
+//			int rx = (getWidth()-rw)/2;
+//			int ry = (getHeight()-rh)/2;			
+			//提示信息
+			int x = 100, y = 40;
+			g.setColor(Color.GREEN);
+			g.drawString(msg ,x , y);
+			//FontMetrics fm = g.getFontMetrics();
+			//g.drawString(msg ,rx +(rw-fm.stringWidth(msg))/2, ry-10);
+			//外框
+			//g.setColor(Color.DARK_GRAY);
+			//g.drawRect(rx, ry, rw, rh);
+			//进度
+			//g.setColor(Color.GREEN);
+			//g.fillRect(rx+2, ry+2, (int) ((rw-4)*percent/100.0), rh-4);
+			
+		}
+	}
 
 	abstract protected String getMusic();
 
@@ -489,4 +557,30 @@ public abstract class Canvas extends JPanel {
 	public void stopMusic() {
 		MP3Player.stopLoop();
 	}
+
+	@Override
+	public void downloadCompleted(DownloadEvent e) {
+		this.downloadEvt = e;
+		this.downloadUpdate = System.currentTimeMillis();
+	}
+
+	@Override
+	public void downloadInterrupted(DownloadEvent e) {
+		this.downloadEvt = e;
+		this.downloadUpdate = System.currentTimeMillis();
+	}
+
+	@Override
+	public void downloadStarted(DownloadEvent e) {
+		this.downloadEvt = e;
+		this.downloadUpdate = System.currentTimeMillis();
+	}
+
+	@Override
+	public void downloadUpdate(DownloadEvent e) {
+		this.downloadEvt = e;
+		this.downloadUpdate = System.currentTimeMillis();
+	}
+
+	
 }

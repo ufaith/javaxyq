@@ -5,7 +5,7 @@
 <project name="JavaXYQ" default="default" basedir=".">
 	<description>Builds, tests, and runs the project JavaXYQ.</description>
 	<property name="project_name" value="JavaXYQ" />
-	<property name="version" value="1.4" />
+	<property name="version" value="1.4_20100305_2" />
 	<property environment="env" />
 	<property name="publisher" value="${env.USERNAME}" />
 	<property name="computer" value="${env.COMPUTERNAME}" />
@@ -33,10 +33,7 @@
 	</target>
 		
 	<target name="jar" depends="init">
-		<delete>
-			<fileset dir="${build_dir}" includes="**/*.*" />
-		</delete>
-		<jar destfile="${build_dir}/JavaXYQ-${version}-build${builddate}.jar">
+		<jar destfile="${build_dir}/JavaXYQ.jar" update="true">
 			<manifest>
 				<attribute name="Version" value="${version}" />
 				<attribute name="Created-By" value="${publisher}" />
@@ -51,16 +48,20 @@
 			</fileset>
 		</jar>
 	</target>
-
-	<target name="build" depends="init,jar">
+	
+	<target name="build" depends="init">
+		<delete>
+			<fileset dir="${build_dir}" includes="**/**" />
+		</delete>
 		<exec executable="cmd">
 			<arg value="/c" />
-			<arg value="echo java -Xmx128m -jar JavaXYQ-${version}-build${builddate}.jar" />
+			<arg value="echo java -Xmx128m -jar JavaXYQ.jar" />
 			<arg value=">" />
 			<arg value="${build_dir}/run.bat" />
 		</exec>
 		<copy todir="${build_dir}">
 			<fileset dir="${res_dir}">
+				<include name="**" />
 				<include name="**/**" />
 				<include name="**/*.*" />
 				<exclude name="temp/**" />
@@ -72,13 +73,14 @@
 				<include name="lib/groovy-all-1.6.5.jar" />
 			</fileset>
 		</copy>
+		<antcall target="jar"></antcall> 
 	</target>
 
 	<target name="deploy" depends="init">
 		<delete file="${deploy_dir}/JavaXYQ-${version}-build${builddate}.zip"/>
 		<zip destfile="${deploy_dir}/JavaXYQ-${version}-build${builddate}.zip">
 			<fileset dir="${build_dir}">
-				<include name="**/*.*" />
+				<include name="**/**" />
 			</fileset>
 		</zip>
 	</target>
@@ -91,8 +93,14 @@
 		<zip destfile="${deploy_dir}/JavaXYQ-${version}-src${builddate}.zip">
 			<fileset dir="${project}">
 				<include name="src/**/**" />
-				<include name="res/**/**" />
+				<include name="res/**/*.groovy" />
+				<include name="res/**/*.xml" />
+				<exclude name="**/temp/**" />
 				<exclude name="**/*.class" />
+				<exclude name="**/*.map" />
+				<exclude name="**/*.mp3" />
+				<exclude name="**/*.was" />
+				<exclude name="**/*.tcp" />
 			</fileset>
 		</zip>
 	</target>
@@ -105,7 +113,7 @@
 	
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="ant-googlecode-0.0.2.jar" name="gcupload"/> 
 
-	<target name="upload-src" depends="init,src">
+	<target name="upload-source" depends="init">
 		<gcupload 
 		        username="gongdewei"  
 		        password="nQ7eS9tq9xW2"  
@@ -113,6 +121,16 @@
 		        filename="${deploy_dir}/JavaXYQ-${version}-src${builddate}.zip"  
 		        targetfilename="JavaXYQ-${version}-src${builddate}.zip" 
 		        summary="Source of javaxyq ${version}" 
+		        labels="Featured, Type-Package, OpSys-All" />	
+	</target>
+	<target name="upload-build" depends="init">
+		<gcupload 
+		        username="gongdewei"  
+		        password="nQ7eS9tq9xW2"  
+		        projectname="javaxyq"  
+		        filename="${deploy_dir}/JavaXYQ-${version}-build${builddate}.zip"  
+		        targetfilename="JavaXYQ-${version}-build${builddate}.zip" 
+		        summary="executable file of javaxyq ${version} " 
 		        labels="Featured, Type-Package, OpSys-All" />	
 	</target>
 </project>

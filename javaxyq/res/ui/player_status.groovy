@@ -67,8 +67,8 @@ class player_status extends PanelHandler{
 		def levelExp = DataStore.getLevelExp(vo.level);
 		if(vo.exp >= levelExp) {
 			UIHelper.prompt( '恭喜你，升级咯~~加油吧！', 2000)
-			player.playEffect('升级');
-			MP3Player.play("resources/sound/升级.mp3");
+			player.playEffect('level_up');
+			MP3Player.play("resources/sound/level_up.mp3");
 			vo.level += 1
 			vo.体质 += 1
 			vo.魔力 += 1

@@ -72,7 +72,7 @@ public class JumpTrigger implements Trigger {
 
     public Sprite getSprite() {
         if (s == null) {
-            s = SpriteFactory.loadSprite("/resources/³¡¾°/Ìø×ª1.was");
+            s = SpriteFactory.loadSprite("/magic/jump.tcp");
         }
         return s;
     }
