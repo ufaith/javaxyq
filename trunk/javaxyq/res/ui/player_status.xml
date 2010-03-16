@@ -3,7 +3,7 @@
   <Dialog id="player_status" x="383" y="0" width="257" height="451" background="/wzife/dialog/status.tcp">
     <Button actionId="close" x="235" y="4" was="/wzife/button/closebtn.tcp"/>
     <Button actionId="help" x="218" y="4" was="/wzife/button/question.tcp"/>
-    <Button actionId="更改称谓" x="7" y="53" text="称谓" was="/wzife/button/smallbtn.tcp"/>
+    <Button actionId="changeTitle" x="7" y="53" text="称谓" was="/wzife/button/smallbtn.tcp"/>
     <Button name="+体质" actionId="add_point 体质" x="205" y="253" was="/wzife/button/add.tcp"/>
     <Button name="-体质" actionId="subtract_point 体质" x="225" y="253" enable="false" was="/wzife/button/sub.tcp"/>
     <Button name="+魔力" actionId="add_point 魔力" x="205" y="276" was="/wzife/button/add.tcp"/>
@@ -14,9 +14,9 @@
     <Button name="-耐力" actionId="subtract_point 耐力" x="225" y="322" enable="false" was="/wzife/button/sub.tcp"/>
     <Button name="+敏捷" actionId="add_point 敏捷" x="205" y="345" was="/wzife/button/add.tcp"/>
     <Button name="-敏捷" actionId="subtract_point 敏捷" x="225" y="345" enable="false" was="/wzife/button/sub.tcp"/>
-    <Button name="更改属性" actionId="更改属性" x="172" y="369" text="更改属性" was="/wzife/button/longbtn.tcp"/>
+    <Button name="assignPoints" actionId="assignPoints" x="172" y="369" text="更改属性" was="/wzife/button/longbtn.tcp"/>
     <Button name="升级" actionId="level_up" x="172" y="395" text="升级" was="/wzife/button/longbtn.tcp"/>
-    <Button text="技能"  actionId="技能" x="172" y="421" was="/wzife/button/longbtn.tcp"/>
+    <Button text="技能"  actionId="openSkills" x="172" y="421" was="/wzife/button/longbtn.tcp"/>
     <Text name="text级别" text="${level}" x="55" y="33" width="25" height="16"/>
     <Text name="text名称" text="${name}" x="138" y="33" width="100" height="16"/>
     <Text name="text称谓" text="${title}" x="55" y="56" width="100" height="16"/>

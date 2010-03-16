@@ -37,7 +37,7 @@ public class ItemLabel extends Label {
 	public void setItem(Item item) {
 		this.item = item;
 		if(item!=null) {
-			Animation anim = SpriteFactory.loadAnimation("item/item50/${item.id}.tcp"); 
+			Animation anim = SpriteFactory.loadAnimation(String.format("item/item50/%s.tcp",item.id)); 
 			setAnim(anim);
 		}else {
 			setAnim(null);

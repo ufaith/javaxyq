@@ -44,7 +44,7 @@ class player_status extends PanelHandler{
 		this.timer.cancel();
 	}
 	
-	private void 更改属性(ActionEvent evt) {
+	private void assignPoints(ActionEvent evt) {
 		Button button = (Button) evt.getSource();
 		Panel panel = (Panel) button.getParent();
 	
@@ -132,11 +132,11 @@ class player_status extends PanelHandler{
 		updateLabels(panel);
 	}
 
-	private void 技能(ActionEvent evt) {
+	private void openSkills(ActionEvent evt) {
 		UIHelper.showHideDialog('main_skill')
 	}
 	
-	private void 更改称谓(ActionEvent evt) {
+	private void changeTitle(ActionEvent evt) {
 		println "称谓"
 	}
 	

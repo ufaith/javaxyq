@@ -48,7 +48,7 @@ public class ItemDetailLabel extends PromptLabel {
 	
 	public void setItem(Item item) {
 		this.item = item;
-		this.anim = SpriteFactory.loadAnimation("item/item120/${item.id}.tcp");
+		this.anim = SpriteFactory.loadAnimation(String.format("item/item120/%s.tcp",item.id));
 	}
 	
 	protected void paintComponent(java.awt.Graphics g) {

@@ -459,8 +459,10 @@ public class DataStore {
 		for(int i=0;i<items.size();i++) {
 			DataStore.setPlayerItem(player,i,items[i]);
 		}
-		tasks.each{
-			TaskManager.instance.add(it);
+		if(tasks!=null) {
+			tasks.each{
+				TaskManager.instance.add(it);
+			}
 		}
 	}
 	

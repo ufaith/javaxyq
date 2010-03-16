@@ -31,16 +31,16 @@ class mainwin extends PanelHandler{
 	public void initial(PanelEvent evt) {
 		super.initial(evt);
 		println "initial：system.mainwin "
-		def btnHeader = panel.findCompByName("btn-人物头像");
+		def btnHeader = panel.findCompByName("btn_player_header");
 		def playerId = GameMain.getPlayer().getCharacter();
 		def sprite = SpriteFactory.loadSprite("wzife/photo/facesmall/${playerId}.tcp");
 		btnHeader.init(sprite);
-		coordinateLabel = (Label) panel.findCompByName("人物坐标");
-		sceneLabel = (Label) panel.findCompByName("地图名称");
-		hpTrough = (Label) panel.findCompByName("人物气血");
-		mpTrough = (Label) panel.findCompByName("人物魔法");
-		spTrough = (Label) panel.findCompByName("人物愤怒");
-		expTrough = (Label) panel.findCompByName("人物经验");
+		coordinateLabel = (Label) panel.findCompByName("player_coordinate");
+		sceneLabel = (Label) panel.findCompByName("scene_name");
+		hpTrough = (Label) panel.findCompByName("player_hp");
+		mpTrough = (Label) panel.findCompByName("player_mp");
+		spTrough = (Label) panel.findCompByName("player_sp");
+		expTrough = (Label) panel.findCompByName("player_exp");
 		
 		updateCoords();
 		timer = new Timer();
@@ -60,16 +60,16 @@ class mainwin extends PanelHandler{
 		if(!player)return;
 		PlayerVO playerVO = player.getData();
 		int maxLen = 50;
-		// 人物气血
+		// player_hp
 		int len = playerVO.getHp() * maxLen / playerVO.getMaxHp();
 		hpTrough.setSize(len, hpTrough.getHeight());
-		// 人物魔法
+		// player_mp
 		len = playerVO.getMp() * maxLen / playerVO.getMaxMp();
 		mpTrough.setSize(len, mpTrough.getHeight());
-		// 人物愤怒
+		// player_sp
 		len = playerVO.getSp() * maxLen / 150;
 		spTrough.setSize(len, spTrough.getHeight());
-		// 人物经验
+		// player_exp
 		len = (int) (playerVO.getExp() * maxLen / DataStore.getLevelExp(playerVO.getLevel()));
 		expTrough.setSize(len, expTrough.getHeight());
 
@@ -82,7 +82,7 @@ class mainwin extends PanelHandler{
 	private void updateCoords() {
 		Canvas canvas = GameMain.getGameCanvas();
 		if(canvas == GameMain.getSceneCanvas()) {
-			// 人物坐标
+			// player_coordinate
 			Point pp = canvas.getPlayerSceneLocation();
 			String strCoordinate = "X:" + pp.@x + " Y:" + pp.@y;
 			coordinateLabel.setText(strCoordinate);
@@ -92,18 +92,18 @@ class mainwin extends PanelHandler{
 	}
 	
 	/**
-	 * 补充人物气血
+	 * 补充player_hp
 	 */
 	public void eke_player_hp(ActionEvent evt) {
-		println "补充人物气血"
+		println "补充player_hp"
 	}
 	
 	/**
-	 * 补充人物魔法值
+	 * 补充player_mp值
 	 * @param evt
 	 */
 	public void eke_player_mp(ActionEvent evt) {
-		println "补充人物魔法"
+		println "补充player_mp"
 	}
 	
 	/**

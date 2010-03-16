@@ -21,6 +21,7 @@ import java.util.Set;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;

@@ -15,8 +15,10 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.jar.JarFile;
 
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
@@ -29,8 +31,8 @@ import com.javaxyq.graph.Canvas;
 import com.javaxyq.graph.GameWindow;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.ui.UIHelper;
-import com.javaxyq.util.ClassUtil;
 import com.javaxyq.widget.Cursor;
+import groovy.util.XmlParser;
 
 /**
  * @author dewitt
@@ -45,6 +47,7 @@ public class AppletWindow extends JApplet implements GameWindow {
 	}
 	@Override
 	public void destroy() {
+		//DataStore.saveData();
 	}
 	
 	@Override
@@ -71,7 +74,14 @@ public class AppletWindow extends JApplet implements GameWindow {
 		GameMain.loadGame();
 		
 		GameMain.updateLoading("loading groovy ...");
-		ClassUtil.init();
+//		try {
+//			JarFile jarfile = new JarFile(GameMain.getFile("lib/groovy-all-1.6.5.jar"));
+//			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
 		GameMain.updateLoading("loading cursor ...");
 		Main.defCursors();
 		GameMain.setCursor(Cursor.DEFAULT_CURSOR);
@@ -105,6 +115,7 @@ public class AppletWindow extends JApplet implements GameWindow {
 	
 	@Override
 	public void stop() {
+		DataStore.saveData();
 	}
 	
     private DisplayMode displayMode;

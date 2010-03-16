@@ -3,6 +3,7 @@ package com.javaxyq.event;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import com.javaxyq.core.DataStore;
 import com.javaxyq.ui.*;
 
 public class GameWindowHandler implements WindowListener {
@@ -11,6 +12,8 @@ public class GameWindowHandler implements WindowListener {
 	}
 
 	public void windowClosed(WindowEvent e) {
+		System.out.println("Game Window Closed.");
+		DataStore.saveData();
 	}
 
 	public void windowClosing(WindowEvent e) {

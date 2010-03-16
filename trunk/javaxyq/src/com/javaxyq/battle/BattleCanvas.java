@@ -138,7 +138,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		battleMask = SpriteFactory.loadAnimation("/addon/battlebg.tcp");
 		UIHelper.showDialog(BATTLE_ROLE_CMD);
 		UIHelper.showDialog(BATTLE_MSG);
-		lblMsg = (Label) super.findCompByName("text战斗消息");
+		lblMsg = (Label) super.findCompByName("lbl_battle_msg");
 
 		rank();
 		cmdIndex = 0;
@@ -501,12 +501,14 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			drawHpSlot(g, elapsedTime);
 			drawCurrentArrow(g, elapsedTime);
 			drawPoints(g);
-			drawDebug(g);
 			// update comps on the canvas
 			drawComponents(g, elapsedTime);
 			// draw fade
 			g.setColor(new Color(0, 0, 0, alpha));
 			g.fillRect(0, 0, getWidth(), getHeight());
+			
+			drawDebug(g);
+			drawDownloading(g);
 		} catch (Exception e) {
 			System.out.printf("更新Canvas时失败！\n");
 			e.printStackTrace();

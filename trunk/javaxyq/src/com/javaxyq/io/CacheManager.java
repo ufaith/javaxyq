@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,7 +56,8 @@ public class CacheManager {
 			File file = createFile(filename);
 			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
 			System.out.println("ÏÂÔØ×ÊÔ´£º" + filename + ", url=" + url);
-			BufferedInputStream bis = new BufferedInputStream(url.openStream());
+			//BufferedInputStream bis = new BufferedInputStream(url.openStream());
+			InputStream bis = url.openStream();
 			byte[] buf = new byte[1024];
 			int count = 0;
 			long lastUpdate = 0;
