@@ -2,10 +2,11 @@
 <!-- You may freely edit this file. See commented blocks below for -->
 <!-- some examples of how to customize the build. -->
 <!-- (If you delete it and reopen the project it will be recreated.) -->
-<project name="JavaXYQ" default="default" basedir=".">
+<project name="JavaXYQ" default="default" basedir="." >
 	<description>Builds, tests, and runs the project JavaXYQ.</description>
+	<buildnumber file="build.properties" />
 	<property name="project_name" value="JavaXYQ" />
-	<property name="version" value="1.4_20100305_2" />
+	<property name="version" value="1.4" />
 	<property environment="env" />
 	<property name="publisher" value="${env.USERNAME}" />
 	<property name="computer" value="${env.COMPUTERNAME}" />
@@ -25,7 +26,7 @@
 		</tstamp>
 		<echo message="当前时间：${buildtime}" />
 		<echo message="project: ${project_name}" />
-		<echo message="version: ${version}" />
+		<echo message="version: ${version}_${builddate}_${build.number}" />
 		<echo message="publisher: ${publisher}" />
 		<echo message="computer: ${computer}" />
 		<mkdir dir="${build_dir}" />
@@ -33,9 +34,11 @@
 	</target>
 		
 	<target name="jar" depends="init">
+		<echo message="${build_dir}/JavaXYQ.jar"></echo>
+		<delete file="${build_dir}/JavaXYQ.jar"></delete>
 		<jar destfile="${build_dir}/JavaXYQ.jar" update="true">
 			<manifest>
-				<attribute name="Version" value="${version}" />
+				<attribute name="Version" value="${version}_${builddate}_${build.number}" />
 				<attribute name="Created-By" value="${publisher}" />
 				<attribute name="Computer-Name" value="${computer}" />
 				<attribute name="Created-Time" value="${buildtime}" />
@@ -44,7 +47,8 @@
 			</manifest>
 
 			<fileset dir="${class_dir}">
-				<include name="**/*.*" />
+				<include name="**/*.class" />
+				<exclude name="com/javaxyq/tools/**"/>
 			</fileset>
 		</jar>
 	</target>
@@ -113,6 +117,13 @@
 	
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="ant-googlecode-0.0.2.jar" name="gcupload"/> 
 
+	<target name="autojar" depends="init">
+		<delete file="${build_dir}/JavaXYQ-all.jar"></delete>
+		<exec executable="java" dir=".">
+			<arg line=" -jar autojar.jar -vdc ${class_dir};lib/jl1.0.jar -o ${build_dir}/JavaXYQ-all.jar -m ${build_dir}/MANIFEST.MF" />
+		</exec>
+
+	</target>
 	<target name="upload-source" depends="init">
 		<gcupload 
 		        username="gongdewei"  

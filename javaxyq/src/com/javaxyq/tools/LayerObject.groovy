@@ -8,8 +8,10 @@
  */
 package com.javaxyq.tools;
 
+import com.javaxyq.util.StringUtils;
+
 //图层列表对象
-class LayerObject {
+public class LayerObject {
 	public Node node;
 	public LayerObject(Node node){
 		this.node = node;
@@ -22,7 +24,7 @@ class LayerObject {
 			sb << node.@name 
 		}else if(node.@id) {
 			//println "${node.@id}  => ${node.@id.afterLast('com.javaxyq.action.dialog.') ?: node.@id}"
-			sb << ( node.@id.afterLast('com.javaxyq.action.dialog.')?:node.@id.afterLast('com.javaxyq.action.') ?: node.@id)
+			sb << ( StringUtils.afterLast(node.@id,'com.javaxyq.action.dialog.')?:node.@id.afterLast('com.javaxyq.action.') ?: node.@id)
 		}
 		sb << ' - '
 		if(node.@path) {

@@ -17,6 +17,9 @@ import com.javaxyq.trigger.JumpTrigger;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.ui.XmlDialogBuilder;
 import com.javaxyq.util.ClassUtil;
+
+import groovy.util.Node;
+import groovy.util.XmlParser;
 /**
  * @author dewitt
  *
@@ -31,10 +34,10 @@ class Main {
 		ItemManager.init();
 		
 		GameMain.setDebug(false);
-		GameMain.showCopyright = false;
+		GameMain.setShowCopyright(false);
 		GameMain.setApplicationName("JavaXYQ ");
-		GameMain.setVersion('1.4 M1');
-		GameMain.setHomeURL('http://javaxyq.googlecode.com/');
+		GameMain.setVersion("1.4 M1");
+		GameMain.setHomeURL("http://javaxyq.googlecode.com/");
 		
 		defActions();
 		
@@ -52,12 +55,12 @@ class Main {
 		MovementManager.addMovementAction("random", new RandomMovementAction());
 		
 		//task
-		TaskManager.instance.register('school', 'com.javaxyq.task.SchoolTaskCoolie');
+		TaskManager.instance.register("school", "com.javaxyq.task.SchoolTaskCoolie");
 		
 		GameMain.init(args);
 		DataStore.loadData();
 		GameMain.stopLoading();
-		println("游戏加载完毕！");
+		System.out.println("游戏加载完毕！");
 
 	}
 
@@ -70,9 +73,9 @@ class Main {
 		try {
 		Action action = (Action) Class.forName(className).newInstance();
 		action.putValue(Action.ACTION_COMMAND_KEY, actionId);
-		GameMain.actionMap.put(actionId, action);
+		GameMain.getActionMap().put(actionId, action);
 		}catch(ClassNotFoundException e) {
-			println("警告：找不到[ ${actionId}] 的处理类${className}")
+			System.out.println("警告：找不到[ ${actionId}] 的处理类${className}");
 		}
 	}
 
@@ -81,17 +84,17 @@ class Main {
 	}
 
 	public static void defActions() {
-		def xml = new XmlParser().parse(GameMain.getFile("xml/actions.xml"));
+		Node xml = new groovy.util.XmlParser().parse(GameMain.getFile("xml/actions.xml"));
 		def rs = ResourceStore.getInstance();
 		for(el in xml.Action) {
-			println "define Action: ${el.@id}"
+			System.out.println "define Action: ${el.@id}"
 			defAction(el.@id,el.@class);
 			if(el.@shortcut) {
 				defShortcut(el.@shortcut,el.@id);
 			}
 		}
 		for(el in xml.Listener) {
-			println "define Listener: ${el.@type} -> ${el.@class}"
+			System.out.println "define Listener: ${el.@type} -> ${el.@class}"
 			addListener(el.@type,el.@class);
 		}
 	}
@@ -99,7 +102,7 @@ class Main {
 		def cursors = new XmlParser().parse(GameMain.getFile("xml/cursors.xml"));
 		def rs = ResourceStore.getInstance();
 		for(el in cursors.Cursor) {
-			println "define Cursor: ${el.@id}"
+			System.out.println "define Cursor: ${el.@id}"
 			rs.registerCursor(new CursorConfig(el.@id, el.@cursor, el.@effect));
 		}
 	}
@@ -107,7 +110,7 @@ class Main {
 		def scenes = new XmlParser().parse(GameMain.getFile("xml/scenes.xml"));
 		def rs = ResourceStore.getInstance();
 		for(scene in scenes.scene) {
-			println "define scene: ${scene.@id}"
+			System.out.println "define scene: ${scene.@id}"
 			rs.registerMap(new MapConfig(scene.@id,scene.@name,scene.@map,scene.@music));
 			for(t in scene.transport) {
 				rs.registerTrigger( scene.@id, new JumpTrigger(
@@ -120,10 +123,10 @@ class Main {
 	}
 
 	public static void preprocessUIs() {
-		//def filelist = GameMain.getFile('ui').list().findAll{ it.endsWith('.xml')};
+		//def filelist = GameMain.getFile("ui").list().findAll{ it.endsWith(".xml")};
 //		for(def file in filelist) {
-//			file = 'ui/'+file;
-//			println("find ui: $file")
+//			file = "ui/"+file;
+//			System.out.println("find ui: $file")
 //			//processUI(file);
 //			def dialogs = new XmlParser().parse(GameMain.getFile(file));
 //			for(def dlg in dialogs.Dialog) {
@@ -131,10 +134,10 @@ class Main {
 //			}
 //		}
 		
-		GameMain.getFile('ui/list.txt').eachLine{
+		GameMain.getFile("ui/list.txt").eachLine{
 			try {
-				String file = 'ui/'+it;
-				println("find ui: $file")
+				String file = "ui/"+it;
+				System.out.println("find ui: $file")
 				//processUI(file);
 				def dialogs = new XmlParser().parse(GameMain.getFile(file));
 				for(def dlg in dialogs.Dialog) {
@@ -156,7 +159,7 @@ class Main {
 			if(action)action.onUnload(new SceneEvent(currentScene,-1,-1));
 		}
 		}catch(e) {e.printStackTrace();}
-		println("切换场景："+id+" ("+x+","+y+")");
+		System.out.println("切换场景："+id+" ("+x+","+y+")");
 		try {
 			action = findSceneAction(id);
 			if(action)action.onInit(new SceneEvent(id,x,y));

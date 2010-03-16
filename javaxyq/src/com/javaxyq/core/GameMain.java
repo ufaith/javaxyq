@@ -248,12 +248,12 @@ public final class GameMain {
         sceneCanvas.setSize(preferredSize);
         
 		DesktopWindow win = new DesktopWindow(displayMode);
+		gameWindow = win;
 		win.setTitle(applicationName +" "+ version);
 		win.setCanvas(loadingCanvas);
 		win.setLocationRelativeTo(null);
 		win.setVisible(true);
 		fontMetrics = win.getFontMetrics(TEXT_NAME_FONT);
-		gameWindow = win;
 		loadGame();
 	}
 	
@@ -624,10 +624,10 @@ public final class GameMain {
 	public static Point getMousePosition() {
 		try {
 			Point p = gameWindow.getMousePosition();
-			if(p!=null && gameWindow instanceof JFrame) {
-				//SwingUtilities.convertPoint(gameWindow, p, canvas);
-				p.y -= 20;
-			}
+//			if(p!=null && gameWindow instanceof JFrame) {
+//				//SwingUtilities.convertPoint(gameWindow, p, canvas);
+//				p.y -= 20;
+//			}
 			return p;
 		} catch (Exception e) {
 			System.out.println("获取鼠标位置失败！"+e.getMessage());

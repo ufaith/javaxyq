@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.javaxyq.core.GameMain;
+
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -54,8 +56,7 @@ public class MP3Player {
 	// play the MP3 file to the sound card
 	public static void play(String filename) {
 		try {
-			FileInputStream fis = new FileInputStream(filename);
-			BufferedInputStream bis = new BufferedInputStream(fis);
+			BufferedInputStream bis = new BufferedInputStream(GameMain.getResourceAsStream(filename));
 
 			final Player player = new Player(bis);
 			playersMap.put(filename, player);
@@ -83,8 +84,7 @@ public class MP3Player {
 	 */
 	public static void loop(String filename) {
 		try {
-			FileInputStream fis = new FileInputStream(filename);
-			BufferedInputStream bis = new BufferedInputStream(fis);
+			BufferedInputStream bis = new BufferedInputStream(GameMain.getResourceAsStream(filename));
 
 			if (loopplayer != null)
 				loopplayer.close();

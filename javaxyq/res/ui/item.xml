@@ -4,9 +4,9 @@
     <Sprite id="" name="face" x="55" y="28" width="129" height="117" tooltip="" path="/wzife/photo/facebig/0001.tcp" actionId=""/>
     <Button id="" name="" text="" x="290" y="5" width="" height="" actionId="close" was="/wzife/button/closebtn.tcp" tooltip="" />
     <Button id="" name="" text="" x="271" y="5" width="" height="" actionId="help" was="/wzife/button/question.tcp" tooltip="" />
-    <Text id="" name="现金" x="15" y="152" width="40" height="20" tooltip="" text="现金" font="" size="52" color="white" align="" actionId=""/>
-    <Text id="" name="现金" x="65" y="152" width="90" height="20" tooltip="" text="${money}" font="" size="" color="blue" align="" actionId=""/>
-    <Text id="" name="存银" x="65" y="172" width="90" height="20" tooltip="" text="${deposit}" font="" size="" color="blue" align="" actionId=""/>
+    <Text id="" x="15" y="152" width="40" height="20" tooltip="" text="现金" font="" size="52" color="white" align="" actionId=""/>
+    <Text id="" name="lbl_cash" x="65" y="152" width="90" height="20" tooltip="" text="${money}" font="" size="" color="blue" align="" actionId=""/>
+    <Text id="" name="lbl_deposit" x="65" y="172" width="90" height="20" tooltip="" text="${deposit}" font="" size="" color="blue" align="" actionId=""/>
     <Sprite id="" name="武器" x="200" y="81" width="" height="" tooltip="" path="" actionId=""/>
     <Sprite id="" name="腰带" x="202" y="137" width="" height="" tooltip="" path="" actionId=""/>
     <Sprite id="" name="头盔" x="202" y="26" width="" height="" tooltip="" path="" actionId=""/>

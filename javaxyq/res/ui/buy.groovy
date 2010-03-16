@@ -62,7 +62,7 @@ class buy extends PanelHandler implements MouseListener,MouseMotionListener,Docu
 				label.addMouseMotionListener(this);
 			}
 		}
-		fieldAmount = panel.findCompByName('textfield数量');
+		fieldAmount = panel.findCompByName('field_amount');
 		fieldAmount.getDocument().addDocumentListener(this);
 		timer = new Timer();
 		timer.schedule(new ClosureTask({update(null)}) , 100, 500);
@@ -70,10 +70,10 @@ class buy extends PanelHandler implements MouseListener,MouseMotionListener,Docu
 
 	public void update(PanelEvent evt) {
 		this.totalCost = amount * price;
-		panel.findCompByName('lbl单价').setText("${price}");
-		panel.findCompByName('lbl总额').setText("${totalCost}");
+		panel.findCompByName('lbl_price').setText("${price}");
+		panel.findCompByName('lbl_cost').setText("${totalCost}");
 		def player = GameMain.getPlayer();
-		panel.findCompByName('lbl现金').setText("${player.data.money}");
+		panel.findCompByName('lbl_cash').setText("${player.data.money}");
 		
 	}
 	private void confirm_buy(ActionEvent evt) {

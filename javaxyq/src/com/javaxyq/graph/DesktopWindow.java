@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -15,6 +16,7 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
@@ -102,6 +104,21 @@ public class DesktopWindow extends JFrame implements GameWindow {
 
 	@Override
 	public void showCursor() {
+	}
+	
+	@Override
+	public Point getMousePosition() throws HeadlessException {
+		Point p = super.getMousePosition();
+		//减去标题栏的高度差
+//		Dimension d1 = getSize();
+//		Dimension d2 = canvas.getSize();
+//		int dx = 0;
+//		int dy = -(d1.height-d2.height)+2;
+//		System.out.printf("mouse translate : (%s,%s)\n",dx,dy);
+//		p.translate(dx, dy);
+		SwingUtilities.convertPointToScreen(p, this);
+		SwingUtilities.convertPointFromScreen(p, canvas);
+		return p;
 	}
 
 }
