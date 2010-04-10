@@ -87,7 +87,7 @@ public class RichLabel extends JComponent {
             if (section.startsWith("#")) {
                 anim = faceAnimations.get(section);
                 if (anim == null && section.charAt(1) >= '0' && section.charAt(1) <= '9') {
-                    anim = SpriteFactory.loadAnimation("/resources/emoticons/" + section + ".was");
+                    anim = SpriteFactory.loadAnimation("/resources/emoticons/" + section.substring(1) + ".was");
                     if (anim != null) {
                         faceAnimations.put(section, anim);
                     }

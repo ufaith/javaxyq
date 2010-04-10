@@ -99,7 +99,7 @@ class player_coloring extends PanelHandler {
 	 * 切换到头部
 	 * @param evt
 	 */
-	private void head(ActionEvent evt) {
+	public void head(ActionEvent evt) {
 		material = "彩果";
   		this.selectionPart = 0;
 		textMaterial.setText("所需" + material);
@@ -109,7 +109,7 @@ class player_coloring extends PanelHandler {
 	 * 切换到头巾
 	 * @param evt
 	 */
-	private void hood(ActionEvent evt) {
+	public void hood(ActionEvent evt) {
 		material = "花豆";
   		this.selectionPart = 1;
 		textMaterial.setText("所需" + material);
@@ -119,7 +119,7 @@ class player_coloring extends PanelHandler {
 	 * 切换到衣服
 	 * @param evt
 	 */
-	private void clothes(ActionEvent evt) {
+	public void clothes(ActionEvent evt) {
 		material = "彩果";
   		this.selectionPart = 2;
 		textMaterial.setText("所需" + material);
@@ -130,7 +130,7 @@ class player_coloring extends PanelHandler {
 	 * 改变颜色
 	 * @param evt
 	 */
-	private void coloring(ActionEvent evt) {
+	public void coloring(ActionEvent evt) {
 		Player player = GameMain.getPlayer();
 		Sprite weapon = player.getWeapon();
 		int count = player.getColorationCount(this.selectionPart);
@@ -154,7 +154,7 @@ class player_coloring extends PanelHandler {
 	 * 人物转向
 	 * @param evt
 	 */
-	private void turn(ActionEvent evt) {
+	public void turn(ActionEvent evt) {
 		Player player = GameMain.getPlayer();
 		Sprite weapon = player.getWeapon();
 		int count = character.getAnimationCount();
@@ -177,7 +177,7 @@ class player_coloring extends PanelHandler {
 	 * 确认染色
 	 * @param evt
 	 */
-	private void confirm(ActionEvent evt) {
+	public void confirm(ActionEvent evt) {
 		Player player = GameMain.getPlayer();
 		Button btnSave = (Button) evt.getSource();
 		UIHelper.hideDialog((Panel) btnSave.getParent());

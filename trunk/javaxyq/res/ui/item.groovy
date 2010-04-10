@@ -232,7 +232,7 @@ class item extends PanelHandler implements MouseListener,MouseMotionListener {
 	 * @param e
 	 * @return
 	 */
-	private boolean useItem(MouseEvent e) {
+	public boolean useItem(MouseEvent e) {
 		Component c = e.getComponent();
 		if (c instanceof ItemLabel) {
 			ItemLabel label = (ItemLabel) c;

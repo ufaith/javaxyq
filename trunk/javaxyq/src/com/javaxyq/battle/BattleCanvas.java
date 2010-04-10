@@ -22,10 +22,10 @@ import java.util.Map.Entry;
 
 import javax.swing.event.EventListenerList;
 
-import com.javaxyq.core.DataStore;
 import com.javaxyq.core.DialogFactory;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.SpriteFactory;
+import com.javaxyq.data.DataStore;
 import com.javaxyq.graph.Canvas;
 import com.javaxyq.graph.Label;
 import com.javaxyq.model.Item;
@@ -544,7 +544,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			Player player = ownsideTeam.get(i);
 			PlayerVO data = player.getData();
 			int slotx = player.getX() - maxWidth / 2;
-			int slotw = data.getHp() * maxWidth / data.getMaxHp();
+			int slotw = data.hp * maxWidth / data.maxHp;
 			emptysoltAnim.draw(g, slotx, player.getTop() - 10);
 			soltAnim.setWidth(slotw);
 			soltAnim.draw(g, slotx + 1, player.getTop() + 1 - 10);
@@ -664,7 +664,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		if (e.isAltDown() && waitingCmd) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				if (target == null || target.getData().getHp() == 0 || isOwnside(target)) {
+				if (target == null || target.getData().hp == 0 || isOwnside(target)) {
 					target = randomEnemy();
 				}
 				attackCmd();
@@ -678,7 +678,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			case KeyEvent.VK_Q:
 				// TODO 判断：如果是我方的增益法术.....
 				if (lastMagic != null) {
-					if (target == null || target.getData().getHp() == 0 || isOwnside(target)) {
+					if (target == null || target.getData().hp == 0 || isOwnside(target)) {
 						target = randomEnemy();
 					}
 					selectedMagic = lastMagic;
@@ -689,7 +689,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 				if (lastCmd != null) {
 					target = lastCmd.getTarget();
 					// 如果上次的目标已经死亡，自动随机选择目标
-					if (target != null && target.getData().getHp() == 0) {
+					if (target != null && target.getData().hp == 0) {
 						target = randomEnemy();
 					}
 					addCmd(lastCmd);
@@ -722,7 +722,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		Player target = null;
 		do {
 			target = adversaryTeam.get(random.nextInt(adversaryTeam.size()));
-		} while (target.getData().getHp() == 0);
+		} while (target.getData().hp == 0);
 		return target;
 	}
 

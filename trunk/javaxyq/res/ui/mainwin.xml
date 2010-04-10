@@ -28,7 +28,7 @@
     <Sprite name="player_sp-底" x="572" y="24" path="/wzife/main/blank.tcp" tooltip="${sp}" actionId=""/>
     <Sprite name="player_exp" x="585" y="39" path="/wzife/main/exp.tcp" tooltip="${exp} ${(exp*100).intdiv(levelExp)}%" actionId=""/>
     <Sprite name="player_exp-底" x="572" y="36" path="/wzife/main/blank.tcp" tooltip="${exp} ${(exp*100).intdiv(levelExp)}%" actionId=""/>
-    <Editor x="44" y="458" width="252" height="21" name="聊天输入框" actionId="chat" background="/wzife/main/chatframe.tcp"/>
+    <Editor x="44" y="458" width="252" height="21" name="聊天输入框" actionId="chat"/>
     <Button actionId="attack" x="323" y="447" was="/wzife/button/attack.tcp"/>
     <Button actionId="open_item" x="350" y="447" was="/wzife/button/item.tcp"/>
     <Button actionId="giving" x="376" y="447" was="/wzife/button/give.tcp"/>

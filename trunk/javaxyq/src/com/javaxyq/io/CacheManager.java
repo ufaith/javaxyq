@@ -87,19 +87,18 @@ public class CacheManager {
 
 	/**
 	 * 创建文件
-	 * 
+	 * 如果文件已存在，则删除旧的并重新创建一个
 	 * @param filename
 	 * @return
 	 * @throws IOException
 	 */
 	public File createFile(String filename) throws IOException {
 		File file = new File(GameMain.cacheBase, filename);
-		if (!file.exists() || file.length() == 0) {
-			if (!file.exists()) {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-			}
+		if (file.exists()) {
+			file.delete();
 		}
+		file.getParentFile().mkdirs();
+		file.createNewFile();
 		return file;
 	}
 

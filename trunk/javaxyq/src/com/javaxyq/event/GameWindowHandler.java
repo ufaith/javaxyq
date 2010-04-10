@@ -3,8 +3,8 @@ package com.javaxyq.event;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import com.javaxyq.core.DataStore;
-import com.javaxyq.ui.*;
+import com.javaxyq.data.DataStore;
+import com.javaxyq.ui.UIHelper;
 
 public class GameWindowHandler implements WindowListener {
 

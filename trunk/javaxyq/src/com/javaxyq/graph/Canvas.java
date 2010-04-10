@@ -298,13 +298,15 @@ public abstract class Canvas extends JPanel implements DownloadListener{
 	private void drawTooltips(Graphics g) {
 		Component[] comps = GameMain.getWindow().getLayeredPane().getComponentsInLayer(JLayeredPane.POPUP_LAYER);
 		for (Component comp : comps) {
-			Graphics g1 = g.create(comp.getX(), comp.getY(), comp.getWidth(), comp.getHeight());
-			try {
-				comp.paint(g1);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if(comp.isShowing()) {
+				Graphics g1 = g.create(comp.getX(), comp.getY(), comp.getWidth(), comp.getHeight());
+				try {
+					comp.paint(g1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				g1.dispose();
 			}
-			g1.dispose();
 		}
 	}
 

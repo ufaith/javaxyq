@@ -5,7 +5,7 @@ import com.javaxyq.util.ClosureTask;
 import java.awt.Point;
 import java.util.Timer;
 
-import com.javaxyq.core.DataStore;
+import com.javaxyq.data.DataStore;
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.event.*;

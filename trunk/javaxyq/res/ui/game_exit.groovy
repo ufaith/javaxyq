@@ -10,10 +10,12 @@ package ui_script;
 
 import java.awt.Desktop;
 import java.net.URI;
+import java.util.Timer;
 
 import com.javaxyq.core.*;
 import com.javaxyq.event.*;
 import com.javaxyq.ui.*;
+import com.javaxyq.data.*;
 
 /**
  * 退出游戏对话框脚本
@@ -23,7 +25,16 @@ import com.javaxyq.ui.*;
 class game_exit extends PanelHandler {
 	
 	private static final String blogURL = "http://blog.csdn.net/Kylixs";
+	private Timer timer;
+	
+	public void initial(PanelEvent evt) {
+		super.initial(evt);
+	}	
 
+	public void dispose(PanelEvent evt) {
+		println "dispose: system.mainwin "
+	}
+	
 	public void exit_game(ActionEvent evt) {
 		saveData();
 		GameMain.exit();
@@ -38,7 +49,7 @@ class game_exit extends PanelHandler {
 		UIHelper.showDialog("contributors");
 	}
 	
-	private void toggle_debug(ActionEvent evt) {
+	public void toggle_debug(ActionEvent evt) {
 		GameMain.setDebug(!GameMain.isDebug());
 		def btn = panel.findCompByName("debugbtn");
 		if(GameMain.isDebug()) {
@@ -50,7 +61,7 @@ class game_exit extends PanelHandler {
 		}
 	}
 	
-	private void toggle_music(ActionEvent evt) {
+	public void toggle_music(ActionEvent evt) {
 		GameMain.setPlayingMusic(!GameMain.isPlayingMusic());
 		def btn = panel.findCompByName("musicbtn");
 		if(GameMain.isPlayingMusic()) {
@@ -62,7 +73,7 @@ class game_exit extends PanelHandler {
 		}
 	}
 	
-	private void saveData() {
+	public void saveData() {
 		DataStore.saveData();
 	}
 }

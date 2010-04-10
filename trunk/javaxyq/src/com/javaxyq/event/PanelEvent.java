@@ -14,7 +14,7 @@ import com.javaxyq.graph.Panel;
  * @author dewitt
  * @date 2009-11-26 create
  */
-class PanelEvent extends ActionEvent{
+public class PanelEvent extends ActionEvent{
 	
 	public static final String INITIAL = "initial";
 	
