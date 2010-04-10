@@ -9,11 +9,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Random;
 
@@ -21,14 +18,12 @@ import javax.swing.ImageIcon;
 
 import com.javaxyq.action.DefaultTalkAction;
 import com.javaxyq.config.MapConfig;
-import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
 import com.javaxyq.event.PlayerAdapter;
 import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.event.PlayerListener;
 import com.javaxyq.io.CacheManager;
-import com.javaxyq.model.PlayerVO;
 import com.javaxyq.model.Task;
 import com.javaxyq.search.SearchUtils;
 import com.javaxyq.search.Searcher;
@@ -36,7 +31,6 @@ import com.javaxyq.task.TaskManager;
 import com.javaxyq.trigger.JumpTrigger;
 import com.javaxyq.trigger.Trigger;
 import com.javaxyq.ui.UIHelper;
-import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
@@ -256,7 +250,7 @@ public class SceneCanvas extends Canvas {
 		try {
 			File file = CacheManager.getInstance().getFile(musicfile);
 			if(file!=null && file.exists() && !musicfile.equals(this.musicfile)) {
-				this.musicfile = file.getAbsolutePath();
+				this.musicfile = musicfile;
 				playMusic();
 			}
 		} catch (Exception e) {

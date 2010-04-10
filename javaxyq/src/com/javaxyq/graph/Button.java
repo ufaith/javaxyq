@@ -22,8 +22,8 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 import org.codehaus.groovy.control.CompilationFailedException;
 
-import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
+import com.javaxyq.data.DataStore;
 import com.javaxyq.event.EventDelegator;
 import com.javaxyq.widget.Frame;
 import com.javaxyq.widget.Sprite;

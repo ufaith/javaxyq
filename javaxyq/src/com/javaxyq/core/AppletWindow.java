@@ -15,24 +15,19 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.jar.JarFile;
 
 import javax.swing.ImageIcon;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
-import com.javaxyq.action.DefaultTransportAction;
 import com.javaxyq.action.RandomMovementAction;
+import com.javaxyq.data.DataStore;
+import com.javaxyq.data.XmlDataLoader;
 import com.javaxyq.graph.Canvas;
 import com.javaxyq.graph.GameWindow;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
-import groovy.util.XmlParser;
 
 /**
  * @author dewitt
@@ -54,63 +49,12 @@ public class AppletWindow extends JApplet implements GameWindow {
 	public void start() {
 		Thread loadingThread = new Thread() {
 			public void run() {
-				loadGame();
+				GameMain.initApplet(AppletWindow.this, null);
+				GameMain.loadGame();
 			}
 		};
 		loadingThread.setDaemon(true);
 		loadingThread.start();
-	}
-	
-	private void loadGame() {
-		GameMain.setDebug(false);
-		GameMain.setShowCopyright(false);
-		GameMain.setApplicationName("JavaXYQ ");
-		GameMain.setVersion("1.4 M2");
-		GameMain.setHomeURL("http://javaxyq.googlecode.com/");
-		GameMain.initApplet(this, null);
-		GameMain.updateLoading("loading game ...");
-		UIHelper.init();
-		//GameMain.updateLoading("loading game ...");
-		GameMain.loadGame();
-		
-		GameMain.updateLoading("loading groovy ...");
-//		try {
-//			JarFile jarfile = new JarFile(GameMain.getFile("lib/groovy-all-1.6.5.jar"));
-//			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
-		GameMain.updateLoading("loading cursor ...");
-		Main.defCursors();
-		GameMain.setCursor(Cursor.DEFAULT_CURSOR);
-		
-		GameMain.updateLoading("loading actions ...");
-		Main.defActions();
-		GameMain.updateLoading("loading scenes ...");
-		Main.defScenes();
-		GameMain.updateLoading("loading talks ...");
-		Main.defTalks();
-		GameMain.updateLoading("loading ui ...");
-		Main.preprocessUIs();
-		
-		GameMain.updateLoading("loading npcs ...");
-		Helper.loadNPCs();
-		
-		GameMain.registerAction("com.javaxyq.action.transport",new DefaultTransportAction());
-		MovementManager.addMovementAction("random", new RandomMovementAction());
-		
-		//task
-		TaskManager.instance.register("school", "com.javaxyq.task.SchoolTaskCoolie");
-		
-		GameMain.updateLoading("loading data ...");
-		DataStore.init();
-		ItemManager.init();
-		DataStore.loadData();
-		GameMain.updateLoading("starting game ...");
-		GameMain.stopLoading();
-		//GameMain.setPlayingMusic(false);//debug
 	}
 	
 	@Override

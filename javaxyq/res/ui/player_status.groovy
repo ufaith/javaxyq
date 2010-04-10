@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.util.Timer;
 
 import com.javaxyq.core.DialogFactory;
-import com.javaxyq.core.DataStore;
+import com.javaxyq.data.DataStore;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.graph.Button;
 import com.javaxyq.graph.Label;
@@ -28,6 +28,11 @@ class player_status extends PanelHandler{
 	
 	private Timer timer ;
 	private def template;
+	public void actionPerformed(ActionEvent evt) {
+		String cmd =evt.getCommand();
+		//cmd的第一段为函数名，后面可以有参数
+		this.invokeMethod(cmd.split(" ")[0],evt); 
+	}
 	
 	public void initial(PanelEvent evt) {
 		super.initial(evt);
@@ -44,7 +49,7 @@ class player_status extends PanelHandler{
 		this.timer.cancel();
 	}
 	
-	private void assignPoints(ActionEvent evt) {
+	public void assignPoints(ActionEvent evt) {
 		Button button = (Button) evt.getSource();
 		Panel panel = (Panel) button.getParent();
 	
@@ -61,7 +66,7 @@ class player_status extends PanelHandler{
 		DataStore.recalcProperties(player.getData());
 	}
 
-	private void level_up(ActionEvent evt) {
+	public void level_up(ActionEvent evt) {
     	Player player = GameMain.getPlayer()
     	PlayerVO vo = player.getData();
 		def levelExp = DataStore.getLevelExp(vo.level);
@@ -94,7 +99,7 @@ class player_status extends PanelHandler{
 	 * 增加属性点
 	 * @param evt
 	 */
-	private void add_point(ActionEvent evt) {
+	public void add_point(ActionEvent evt) {
 		println "add point: $evt"
 		//取参数 , like 'add_point 体质'
 		String attr = evt.command.split()[1];
@@ -114,7 +119,7 @@ class player_status extends PanelHandler{
 	 * 减少属性点
 	 * @param evt
 	 */
-	private void subtract_point(ActionEvent evt) {
+	public void subtract_point(ActionEvent evt) {
 		println "subtract point: $evt"
 		//取参数 , like 'add_point 体质'
 		String attr = evt.command.split()[1];
@@ -132,11 +137,11 @@ class player_status extends PanelHandler{
 		updateLabels(panel);
 	}
 
-	private void openSkills(ActionEvent evt) {
+	public void openSkills(ActionEvent evt) {
 		UIHelper.showHideDialog('main_skill')
 	}
 	
-	private void changeTitle(ActionEvent evt) {
+	public void changeTitle(ActionEvent evt) {
 		println "称谓"
 	}
 	

@@ -8,14 +8,13 @@
  */
 package com.javaxyq.util;
 
-import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
 
 /**
  * @author dewitt
  *
  */
-class Cheat {
+public class Cheat {
 	
 	public static void process(String cmdLine) {
 		def args = cmdLine.split();

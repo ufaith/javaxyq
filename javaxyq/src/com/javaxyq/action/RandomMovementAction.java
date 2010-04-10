@@ -18,18 +18,17 @@ public class RandomMovementAction implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Player player = e.getSource();
-		def xy = e.getActionCommand().split();
-		int x = xy[0].toInteger();
-		int y = xy[1].toInteger();
-		if(Math.abs(player.sceneX-x)>4) {
-			player.stepTo((player.sceneX-x)>0? Sprite.DIRECTION_LEFT : Sprite.DIRECTION_RIGHT);
-		}else if(Math.abs(player.sceneY-y)>4) {
-			player.stepTo((player.sceneY-y)<0?Sprite.DIRECTION_TOP : Sprite.DIRECTION_BOTTOM)
+		Player player = (Player) e.getSource();
+		String[] xy = e.getActionCommand().split(" ");
+		int x = Integer.valueOf(xy[0]);
+		int y = Integer.valueOf(xy[1]);
+		if(Math.abs(player.getSceneX()-x)>4) {
+			player.stepTo((player.getSceneX()-x)>0? Sprite.DIRECTION_LEFT : Sprite.DIRECTION_RIGHT);
+		}else if(Math.abs(player.getSceneY()-y)>4) {
+			player.stepTo((player.getSceneY()-y)<0?Sprite.DIRECTION_TOP : Sprite.DIRECTION_BOTTOM);
 		}else if(random.nextBoolean()) {
 			player.stepTo(random.nextInt(8));
 		}
-		println "random: (${player.sceneX},${player.sceneY})";
 	}
 
 }

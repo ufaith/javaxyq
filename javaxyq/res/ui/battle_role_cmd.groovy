@@ -24,22 +24,22 @@ class battle_role_cmd extends PanelHandler {
 		super.initial(evt);
 	}
 	
-	private void warmagic(ActionEvent evt) {
+	public void warmagic(ActionEvent evt) {
 		BattleCanvas canvas = GameMain.getBattleCanvas();
 		canvas.selectMagic();
 	}
-	private void waritem(ActionEvent evt) {
+	public void waritem(ActionEvent evt) {
 		BattleCanvas canvas = GameMain.getBattleCanvas();
 		canvas.selectItem();
 	}
-	private void wardefend(ActionEvent evt) {
+	public void wardefend(ActionEvent evt) {
 		BattleCanvas canvas = GameMain.getBattleCanvas();
 		canvas.defendCmd();
 	}
-	private void warcatch(ActionEvent evt) {
+	public void warcatch(ActionEvent evt) {
 		
 	}
-	private void warrunaway(ActionEvent evt) {
+	public void warrunaway(ActionEvent evt) {
 		BattleCanvas canvas = GameMain.getBattleCanvas();
 		canvas.runawayCmd();
 	}

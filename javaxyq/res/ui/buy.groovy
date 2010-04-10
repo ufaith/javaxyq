@@ -76,7 +76,7 @@ class buy extends PanelHandler implements MouseListener,MouseMotionListener,Docu
 		panel.findCompByName('lbl_cash').setText("${player.data.money}");
 		
 	}
-	private void confirm_buy(ActionEvent evt) {
+	public void confirm_buy(ActionEvent evt) {
 		update(null);
 		def money = GameMain.getPlayer().getData().money;
 		if(money < totalCost) {

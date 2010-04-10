@@ -1,8 +1,10 @@
 package com.javaxyq.action;
 
+import groovy.lang.Closure;
+
 import com.javaxyq.event.ActionEvent;
 
-class ClosureAction extends BaseAction {
+public class ClosureAction extends BaseAction {
 	
 	private Closure closure;
 	public ClosureAction(Closure closure) {
@@ -12,7 +14,7 @@ class ClosureAction extends BaseAction {
 
 	@Override
 	public void doAction(ActionEvent e) {
-		this.closure.call e;
+		this.closure.call(e);
 	}
 	
 }

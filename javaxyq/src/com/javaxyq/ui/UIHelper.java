@@ -10,7 +10,9 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,7 +43,7 @@ import com.javaxyq.widget.Animation;
  */
 public class UIHelper {
 	public static List prompts = new ArrayList();
-	
+	private static Map<String, Color> colors = new HashMap<String, Color>();
 	/**
 	 * 初始化UI参数
 	 */
@@ -57,6 +59,20 @@ public class UIHelper {
 		
 		UIManager.put("GameLabelUI", "com.javaxyq.graph.GameLabelUI");
 		UIManager.put("GameButtonUI", "com.javaxyq.graph.GameButtonUI");
+		
+		colors.put("black", Color.black);
+		colors.put("blue", Color.blue);
+		colors.put("cyan", Color.cyan);
+		colors.put("darkGray", Color.darkGray);
+		colors.put("gray", Color.gray);
+		colors.put("green", Color.green);
+		colors.put("lightGray", Color.lightGray);
+		colors.put("magenta", Color.magenta);
+		colors.put("orange", Color.orange);
+		colors.put("pink", Color.pink);
+		colors.put("red", Color.red);
+		colors.put("white", Color.white);
+		colors.put("yellow", Color.yellow);
 	}		
 	/**
 	 * 弹出提示信息
@@ -241,6 +257,17 @@ public class UIHelper {
 			return (TalkPanel) comp;
 		}
 		return null;
+	}
+	/**
+	 * @param color
+	 * @return
+	 */
+	public static Color getColor(String color) {
+		Color c = colors.get(color);
+		if(c == null) {
+			c = Color.getColor(color, Color.white);
+		}
+		return c;
 	}
 			
 }

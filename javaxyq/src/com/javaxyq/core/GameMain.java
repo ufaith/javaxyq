@@ -22,10 +22,13 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,29 +39,28 @@ import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.BorderUIResource;
-import javax.swing.plaf.ColorUIResource;
-import javax.swing.plaf.FontUIResource;
 
 import com.javaxyq.action.BaseAction;
+import com.javaxyq.action.DefaultTransportAction;
+import com.javaxyq.action.RandomMovementAction;
 import com.javaxyq.battle.BattleCanvas;
 import com.javaxyq.config.TalkConfig;
+import com.javaxyq.data.DataStore;
+import com.javaxyq.data.XmlDataLoader;
 import com.javaxyq.event.ActionEvent;
 import com.javaxyq.event.Listener;
+import com.javaxyq.event.SceneEvent;
+import com.javaxyq.event.SceneListener;
 import com.javaxyq.graph.Canvas;
 import com.javaxyq.graph.DesktopWindow;
 import com.javaxyq.graph.GameWindow;
-import com.javaxyq.graph.LightweightToolTipManager;
 import com.javaxyq.graph.LoadingCanvas;
 import com.javaxyq.graph.Panel;
 import com.javaxyq.graph.SceneCanvas;
 import com.javaxyq.graph.TalkPanel;
 import com.javaxyq.io.CacheManager;
+import com.javaxyq.task.TaskManager;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
@@ -186,12 +188,7 @@ public final class GameMain {
 		return gameWindow;
 	}
 
-	public static void loadGame() {
-		startLoading();
-		// load scripts
-		//updateLoading("loading resources ...");
-		// loadResources();
-
+	private static void showCopyright() {
 		// copyright
 		if (showCopyright) {
 			Image img = SpriteFactory.loadImage("/resources/loading/声明.jpg");
@@ -207,13 +204,64 @@ public final class GameMain {
 			loadingCanvas.showImage(img, 3000);
 		}
 	}
+	public static void loadGame() {
+		startLoading();
+		setDebug(false);
+		setShowCopyright(false);
+		setApplicationName("JavaXYQ ");
+		setVersion("1.4 M2");
+		setHomeURL("http://javaxyq.googlecode.com/");
+		updateLoading("loading game ...");
+		
+		showCopyright();
+		UIHelper.init();
+		
+		updateLoading("loading groovy ...");
+//		try {
+//			JarFile jarfile = new JarFile(getFile("lib/groovy-all-1.6.5.jar"));
+//			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
+		updateLoading("loading cursor ...");
+		XmlDataLoader.defCursors();
+		setCursor(Cursor.DEFAULT_CURSOR);
+		
+		updateLoading("loading actions ...");
+		XmlDataLoader.defActions();
+		updateLoading("loading scenes ...");
+		XmlDataLoader.defScenes();
+		updateLoading("loading talks ...");
+		XmlDataLoader.defTalks();
+		updateLoading("loading ui ...");
+		loadUIs();
+		
+		updateLoading("loading npcs ...");
+		XmlDataLoader.loadNPCs();
+		
+		registerAction("com.javaxyq.action.transport",new DefaultTransportAction());
+		MovementManager.addMovementAction("random", new RandomMovementAction());
+		
+		//task
+		TaskManager.instance.register("school", "com.javaxyq.task.SchoolTaskCoolie");
+		
+		updateLoading("loading data ...");
+		DataStore.init();
+		ItemManager.init();
+		DataStore.loadData();
+		updateLoading("starting game ...");
+		stopLoading();
+		//setPlayingMusic(false);//debug
+	}
 
 	private static void installUI() {
 		String[] uiIds = new String[] {"mainwin"};
    		for(String id : uiIds) {
    			System.out.println("安装UI："+id);
    			Panel dlg = DialogFactory.getDialog(id, true);
-   			GameMain.addUIComponent(dlg);
+   			addUIComponent(dlg);
    		}
 	}
 
@@ -735,4 +783,58 @@ public final class GameMain {
 	public static File createFile(String filename) throws IOException {
 		return CacheManager.getInstance().createFile(filename);
 	}
+	
+	public static void addListener(String type,String className){
+		try {
+			GameMain.addListener(type,Class.forName(className));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void loadUIs() {
+		File file = GameMain.getFile("ui/list.txt");
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+			String str = null;
+			while((str=br.readLine())!=null) {
+				String uifile = "ui/"+str;
+				System.out.println("find ui: "+uifile);
+				XmlDataLoader.loadUI(uifile);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void setScene(String id, int x, int y){
+		if(id == null || id=="null")id="wzg";
+		SceneListener action = null;
+		try {
+		String currentScene = GameMain.getCurrentScene();
+		if(currentScene!=null) {
+			action = findSceneAction(currentScene);
+			if(action!=null)action.onUnload(new SceneEvent(currentScene,-1,-1));
+		}
+		}catch(Exception e) {e.printStackTrace();}
+		System.out.println("切换场景："+id+" ("+x+","+y+")");
+		try {
+			action =  findSceneAction(id);
+			if(action!=null)action.onInit(new SceneEvent(id,x,y));
+		}catch(Exception e) {e.printStackTrace();};
+	
+		GameMain.fadeToMap(id,x,y);
+		
+		try {
+			if(action!=null)action.onLoad(new SceneEvent(id,x,y));
+		}catch(Exception e) {e.printStackTrace();};
+	}
+
+	public static SceneListener findSceneAction(String id) {
+		Object action = GroovyScript.loadClass("scripts/scene/"+id+".groovy");
+		return (SceneListener)action;
+	}	
 }

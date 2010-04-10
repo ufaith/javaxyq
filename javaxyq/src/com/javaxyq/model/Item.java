@@ -14,13 +14,13 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
+ * 物品数据模型类
  * @author dewitt
- *
  */
-class Item implements Serializable{
-	public static final String TYPE_MEDICINE = '药品';
-	public static final String TYPE_WEAPON = '武器';
-	public static final String TYPE_EQUIPMENT = '装备';
+public class Item implements Serializable{
+	public static final String TYPE_MEDICINE = "药品";
+	public static final String TYPE_WEAPON = "武器";
+	public static final String TYPE_EQUIPMENT = "装备";
 	private static final long serialVersionUID = -4027503236184637259L;
 	
 	public String id;
@@ -31,11 +31,10 @@ class Item implements Serializable{
 	public int price;
 	public int amount = 1;
 	
+	@Override
 	public String toString() {
-		def props = this.getProperties();
-		props.remove('class');
-		props.remove('metaClass');
-		return props.toString();
+		return String.format("Item [amount=%s, desc=%s, id=%s, level=%s, name=%s, price=%s, type=%s]", amount, desc,
+				id, level, name, price, type);
 	}
 
 	protected void writeObject(ObjectOutputStream s)

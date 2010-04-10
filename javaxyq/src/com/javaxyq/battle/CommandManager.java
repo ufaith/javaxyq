@@ -7,21 +7,18 @@
  */
 package com.javaxyq.battle;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import com.javaxyq.widget.Player;
-import com.javaxyq.battle.BattleCalculator;
-import com.javaxyq.core.GameMain;
-import com.javaxyq.ui.UIHelper;
 /**
  * @author dewitt
  * @date 2009-11-11 create
  */
-class CommandManager  {
+public class CommandManager  {
 	private BattleCanvas canvas;
 	private List cmdlist;
 	private List playerlist;
@@ -31,7 +28,7 @@ class CommandManager  {
 	public CommandManager(BattleCanvas canvas) {
 		this.canvas = canvas;
 		this.interpretor = new CommandInterpreter(canvas);
-		this.cmdlist = [];
+		this.cmdlist = new ArrayList();
 		this.battleCalculator = new BattleCalculator();
 	}
 	
@@ -42,17 +39,18 @@ class CommandManager  {
 	synchronized public void turnBattle() {
 		turnBegin();
 		//TODO 计算战斗结果
-		def params = [:];//影响因素
-		def t1 = canvas.getAdversaryTeam();
-		def t2 = canvas.getOwnsideTeam();
-		def results = battleCalculator.calc(cmdlist,t2,t1,params);
+		Map params = new HashMap();//影响因素
+		List<Player> t1 = canvas.getAdversaryTeam();
+		List<Player> t2 = canvas.getOwnsideTeam();
+		List<Command> results = battleCalculator.calc(cmdlist,t2,t1,params);
 		//依次执行指令
-		results.each{ cmd ->
+		for (int i = 0; i < results.size(); i++) {
+			Command cmd = results.get(i);
 			try {
-				println "执行：$cmd";
+				System.out.println("执行：$cmd");
 				this.interpretor.exec(cmd);
 			}catch(Exception e) {
-				println "战斗指令执行失败！$cmd"
+				System.out.println("战斗指令执行失败！$cmd");
 				e.printStackTrace();
 			}
 		}
@@ -65,12 +63,12 @@ class CommandManager  {
 	 */
 	protected void turnBegin() {
 		//生成npc的指令
-		def t1 = canvas.getAdversaryTeam();
-		def t2 = canvas.getOwnsideTeam();
-
-		t1.each{ elf ->
-			def target = t2.get(random.nextInt(t2.size()));
-			cmdlist << new Command('attack',elf,target);
+		List<Player> t1 = canvas.getAdversaryTeam();
+		List<Player> t2 = canvas.getOwnsideTeam();
+		for (int i = 0; i < t1.size(); i++) {
+			Player elf = t1.get(i);
+			Player target = t2.get(random.nextInt(t2.size()));
+			cmdlist.add( new Command("attack",elf,target));
 		}
 
 	}
@@ -78,15 +76,15 @@ class CommandManager  {
 	 * 回合结束
 	 */
 	protected void turnEnd() {
-		cmdlist = [];
+		cmdlist.clear();
 		// TODO fireEvent
-		def t1 = canvas.getAdversaryTeam();
-		def t2 = canvas.getOwnsideTeam();
+		List<Player> t1 = canvas.getAdversaryTeam();
+		List<Player> t2 = canvas.getOwnsideTeam();
 		//如果敌方单位都已死亡，则我方胜利
 		boolean win = true;
 		for(int i=0;i<t1.size();i++) {
-			def elf = t1[i];
-			if(elf.data.hp>0) {
+			Player elf = t1.get(i);
+			if(elf.getData().hp > 0) {
 				win = false;
 				break;
 			}
@@ -99,8 +97,8 @@ class CommandManager  {
 		//如果我方单位全部死亡，则战斗失败
 		boolean failure = true;
 		for(int i=0;i<t2.size();i++) {
-			def player = t2[i];
-			if(player.data.hp>0) {
+			Player player = t2.get(i);
+			if(player.getData().hp>0) {
 				failure = false;
 				break;
 			}
@@ -114,7 +112,7 @@ class CommandManager  {
 		canvas.turnBegin();
 	}	
 	synchronized public void addCmd(Command cmd) {
-		cmdlist << cmd;
+		cmdlist.add(cmd);
 	}
 
 }

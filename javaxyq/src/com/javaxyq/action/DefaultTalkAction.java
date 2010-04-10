@@ -6,8 +6,8 @@ package com.javaxyq.action;
 import java.util.List;
 
 import com.javaxyq.config.TalkConfig;
-import com.javaxyq.core.DataStore;
 import com.javaxyq.core.GameMain;
+import com.javaxyq.data.DataStore;
 import com.javaxyq.event.PlayerAdapter;
 import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.model.Task;
