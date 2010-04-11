@@ -28,6 +28,7 @@ import com.javaxyq.model.Item;
 import com.javaxyq.ui.*;
 import com.javaxyq.util.ClosureTask;
 import com.javaxyq.core.*;
+import com.javaxyq.data.*;
 
 /**
  * 道具行囊对话框脚本
@@ -64,8 +65,8 @@ class item extends PanelHandler implements MouseListener,MouseMotionListener {
 		def player = GameMain.getPlayer();
 		Label face  = this.panel.findCompByName("face");
 		face.setAnim(SpriteFactory.loadAnimation("wzife/photo/facebig/${player.character}.tcp"));
-		this.updateLabels();
 		this.updateItems();
+		this.updateLabels();
 		this.timer = new Timer();
 		this.timer.schedule(new ClosureTask({
 			this.updateLabels();
@@ -125,18 +126,20 @@ class item extends PanelHandler implements MouseListener,MouseMotionListener {
 	private void updateLabels() {
 		def attrs = GameMain.getPlayer().getData().getProperties();
 		attrs['levelExp'] = DataStore.getLevelExp(attrs.level);
-		if(!template) {
-			labels = panel.getComponents().findAll {it instanceof Label };
+		if(this.template == null) {
+			this.labels = panel.getComponents().findAll {it.getClass() == Label.class };
 			def engine = new groovy.text.SimpleTemplateEngine()
 			def vars = []
 			for(Label label in labels) {
 				vars.add(label.textTpl)
 			}
-			this.template = engine.createTemplate(vars.join(';'))
+			String strTemplate = vars.join(';');
+			this.template = engine.createTemplate(strTemplate);
+			System.out.println("template: "+strTemplate);
 		}
-		def values = template.make(attrs).toString().split(';')
+		def values = this.template.make(attrs).toString().split(';')
 		def i=0;
-		for(Label label in labels) {
+		for(Label label in this.labels) {
 			label.text = values[i++];
 		}
 	}

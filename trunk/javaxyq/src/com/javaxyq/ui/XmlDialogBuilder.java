@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -169,7 +170,8 @@ public class XmlDialogBuilder implements DialogBuilder{
 					}
 				}
 			}catch(Exception e) {
-				System.out.println("处理控件失败：${node.name()} ${node.attributes()}");
+				System.err.println("处理控件失败：");
+				node.print(new PrintWriter(System.err));
 				e.printStackTrace();
 			}
 		}		
@@ -405,23 +407,14 @@ public class XmlDialogBuilder implements DialogBuilder{
 	 * @param mName method name
 	 * @param arg argument 
 	 * @return
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 * @throws NoSuchMethodException 
+	 * @throws SecurityException 
 	 */
-	private Object invokeMethod(String mName, Object... arg) {
-		try {
-			
-			Method m = this.getClass().getMethod(mName, arg[0].getClass(),arg[1].getClass());
-			return m.invoke(this, arg);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
+	private Object invokeMethod(String mName, Object... arg) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
+		Method m = this.getClass().getMethod(mName, arg[0].getClass(),arg[1].getClass());
+		return m.invoke(this, arg);
 	}	
 }

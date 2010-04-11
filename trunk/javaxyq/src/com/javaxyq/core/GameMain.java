@@ -212,6 +212,7 @@ public final class GameMain {
 		setVersion("1.4 M2");
 		setHomeURL("http://javaxyq.googlecode.com/");
 		updateLoading("loading game ...");
+		setCursor(Cursor.DEFAULT_CURSOR);
 		
 		showCopyright();
 		UIHelper.init();
@@ -225,9 +226,6 @@ public final class GameMain {
 //			e.printStackTrace();
 //		}
 		
-		updateLoading("loading cursor ...");
-		XmlDataLoader.defCursors();
-		setCursor(Cursor.DEFAULT_CURSOR);
 		
 		updateLoading("loading actions ...");
 		XmlDataLoader.defActions();

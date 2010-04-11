@@ -3,8 +3,6 @@
  */
 package com.javaxyq.ui;
 
-import groovy.lang.Closure;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
@@ -34,8 +32,8 @@ import com.javaxyq.graph.Canvas;
 import com.javaxyq.graph.LightweightToolTipManager;
 import com.javaxyq.graph.Panel;
 import com.javaxyq.graph.TalkPanel;
-import com.javaxyq.util.ClosureTask;
 import com.javaxyq.widget.Animation;
+import com.javaxyq.widget.Cursor;
 
 /**
  * 游戏UI帮助类
@@ -44,6 +42,7 @@ import com.javaxyq.widget.Animation;
 public class UIHelper {
 	public static List prompts = new ArrayList();
 	private static Map<String, Color> colors = new HashMap<String, Color>();
+	private static Map<String, Cursor>cursors = new HashMap<String, Cursor>();
 	/**
 	 * 初始化UI参数
 	 */
@@ -258,6 +257,7 @@ public class UIHelper {
 		}
 		return null;
 	}
+	
 	/**
 	 * @param color
 	 * @return
@@ -269,5 +269,15 @@ public class UIHelper {
 		}
 		return c;
 	}
-			
+
+	public static Cursor getCursor(String cursorId) {
+		Cursor cursor = cursors.get(cursorId);
+		if(cursor==null) {
+			boolean effect = Cursor.DEFAULT_CURSOR.equals(cursorId);
+			cursor = new Cursor(cursorId, effect);
+			cursors.put(cursorId, cursor);
+		}
+		return cursor;
+	}
+	
 }

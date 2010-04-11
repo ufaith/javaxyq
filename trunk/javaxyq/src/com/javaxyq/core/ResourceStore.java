@@ -14,12 +14,10 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.javaxyq.config.Config;
-import com.javaxyq.config.CursorConfig;
 import com.javaxyq.config.ImageConfig;
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.config.PlayerConfig;
 import com.javaxyq.trigger.Trigger;
-import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
 import com.javaxyq.widget.SpriteImage;
@@ -40,8 +38,6 @@ public class ResourceStore {
 
 	private Map<String, List<PlayerConfig>> sceneNpcsMap = new HashMap<String, List<PlayerConfig>>();
 
-	private Map<String, Cursor> cursorMap = new HashMap<String, Cursor>();
-	
 	private List<PlayerConfig> allNpcs = new ArrayList<PlayerConfig>();
 
 	private ResourceStore() {
@@ -175,24 +171,6 @@ public class ResourceStore {
 			return new SpriteImage(s, cfg.getX(), cfg.getY(), width, height);
 		}
 		return new SpriteImage(s, cfg.getX(), cfg.getY());
-	}
-
-	public Cursor getCursor(String cursorId) {
-		return cursorMap.get(cursorId);
-	}
-
-	private Cursor loadCursor(CursorConfig cfg) {
-		SpriteImage pointer = new SpriteImage(SpriteFactory.loadSprite(cfg.getPointer()));
-		SpriteImage effect = null;
-		if (cfg.getEffect() != null) {
-			effect = new SpriteImage(SpriteFactory.loadSprite(cfg.getEffect()));
-		}
-		Cursor cursor = new Cursor(cfg, pointer, effect);
-		return cursor;
-	}
-
-	public void registerCursor(CursorConfig cfg) {
-		this.cursorMap.put(cfg.getId(), this.loadCursor(cfg));
 	}
 
 	/**
