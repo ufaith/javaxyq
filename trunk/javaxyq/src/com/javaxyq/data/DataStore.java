@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import com.javaxyq.config.TalkConfig;
 import com.javaxyq.core.GameMain;
@@ -237,7 +238,7 @@ public class DataStore {
 	 * 成长率表
 	 */
 	private static Map<String,Double> growthRateTable = new HashMap<String, Double>();
-	{
+	static{
 		growthRateTable.put("2009", 1.5);
 		growthRateTable.put("2010", 0.9);
 		growthRateTable.put("2011", 1.0);
@@ -252,7 +253,10 @@ public class DataStore {
 	 */
 	public static void recalcElfProps(PlayerVO vo) {
 		//TODO 完善成长率
-		double rate = growthRateTable.get(vo.character);
+		Double rate = growthRateTable.get(vo.character);
+		if(rate == null) {
+			rate = 1.0;
+		}
 		int maxhp0 = vo.maxHp;
 		int maxmp0 = vo.maxMp;
 		vo.maxHp = vo.体质*5 + 100;
@@ -290,7 +294,7 @@ public class DataStore {
 	 */
 	public static Map getProperties(Player player) {
 		try {
-			Map props = BeanUtils.describe(player.getData());
+			Map props = PropertyUtils.describe(player.getData());
 			props.put("levelExp", getLevelExp(player.getData().level));
 			return props;
 		} catch (IllegalAccessException e) {
@@ -430,7 +434,7 @@ public class DataStore {
 	public static void removePlayerItem(Player player,int index) {
 		Item[] items = getPlayerItems(player);
 		items[index] = null;
-		System.out.println("remove item: $index ");
+		System.out.println("remove item: "+index);
 	}
 	
 	public static void removePlayerItem(Player player,Item item) {
@@ -441,7 +445,7 @@ public class DataStore {
 				break;
 			}
 		}
-		System.out.println("remove item: $item ");
+		System.out.println("remove item: "+item );
 	}
 	
 	public static void swapItem(Player player, int srcIndex, int destIndex){
@@ -519,7 +523,7 @@ public class DataStore {
 	
 	public static void main(String[] args) {
 		Item item = DataStore.createItem("四叶花");
-		System.out.println("$item");
+		System.out.println(item);
 	}
 
 	/**
@@ -548,7 +552,11 @@ public class DataStore {
 		item = DataStore.createItem("佛手");
 		item.amount = 99;
 		DataStore.addItemToPlayer(p,item);
-				
+		item = DataStore.createItem("山药");
+		item.amount = 99;
+		DataStore.addItemToPlayer(p,item);
+		int money = 50000;
+		addMoney(p, money);		
 	}
 	
 	/**
@@ -647,7 +655,7 @@ public class DataStore {
 			}
 			oos.close();
 			//替换默认存档
-			File defaultfile = GameMain.getFile("save/0.jxd");
+			File defaultfile = GameMain.createFile("save/0.jxd");
 //			if(defaultfile!=null && defaultfile.exists()) {
 //				GameMain.deleteFile("save/1.jxd");
 //				defaultfile.renameTo(new File(defaultfile.getAbsolutePath().replaceFirst("0\\.jxd", "1.jxd")));

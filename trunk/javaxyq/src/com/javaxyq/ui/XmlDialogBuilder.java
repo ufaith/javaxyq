@@ -45,7 +45,7 @@ public class XmlDialogBuilder implements DialogBuilder{
 	public Panel createDialog(String id, String res) {
 		if(StringUtils.isBlank(id))throw new IllegalArgumentException("Dialog的id不能为空");
 		if(StringUtils.isBlank(res))throw new IllegalArgumentException("Dialog["+id+"]的界面描述文件路径不能为空") ;
-		System.out.println("createDialog $id in $res");
+		System.out.println("createDialog "+id+" in "+res);
 		File input = GameMain.getFile(res);
 		try {
 			Node xml = new XmlParser().parse(input);

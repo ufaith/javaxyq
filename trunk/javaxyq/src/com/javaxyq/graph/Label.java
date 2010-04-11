@@ -137,6 +137,7 @@ public class Label extends JLabel {
 				return template.make(DataStore.getProperties(GameMain.getPlayer())).toString();
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return super.getToolTipText();
 	}

@@ -25,6 +25,7 @@ import com.javaxyq.core.*;
 import com.javaxyq.event.*;
 import com.javaxyq.ui.*;
 import com.javaxyq.util.*;
+import com.javaxyq.data.*;
 /**
  * ¹ºÂò¶Ô»°¿ò½Å±¾
  * @author dewitt

@@ -13,13 +13,13 @@ import com.javaxyq.graph.*;
 import com.javaxyq.config.*;
 import com.javaxyq.event.*;
 import com.javaxyq.ui.*;
-
+import com.javaxyq.data.*;
 /**
  * 场景事件处理类
  * @author dewitt
  * @date 2009-11-23 create
  */
-class CommonSceneAction implements SceneListener{
+class wzg implements SceneListener{
 	
 	void onInit(SceneEvent e) {
 		println "初始化场景：五庄观.."

@@ -79,8 +79,8 @@ public class SchoolTaskCoolie extends TaskCoolie {
 						DataStore.removePlayerItem(player,item);
 					}
 					task.setFinished(true);
-					rounds = Integer.valueOf((String) task.get("rounds"));
-					times = Integer.valueOf((String)task.get("times"));
+					rounds = (Integer)task.get("rounds");
+					times = (Integer)task.get("times");
 					return true;
 				}
 			}
@@ -124,8 +124,8 @@ public class SchoolTaskCoolie extends TaskCoolie {
 				UIHelper.prompt("获得"+exp+"点经验。",3000);
 				if((Integer)task.get("battle") == 2) {
 					task.setFinished(true);
-					rounds = Integer.valueOf((String)task.get("rounds"));
-					times = Integer.valueOf((String)task.get("times"));
+					rounds = (Integer) task.get("rounds");
+					times = (Integer)task.get("times");
 					UIHelper.prompt("师门巡逻任务完成，快去禀报师傅吧。",3000);
 				}else {
 					UIHelper.prompt("小贼们趁你不注意，又不知道溜到哪里。",3000);

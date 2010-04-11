@@ -70,7 +70,7 @@ public class PlayerVO  implements Serializable{
 	public int 门派贡献= 0;
 
 	//待分配点数
-	public Map assignPoints = null;//[体质:0,魔力:0,力量:0,耐力:0,敏捷:0];
+	public Map<String,Integer> assignPoints = new HashMap<String, Integer>();//[体质:0,魔力:0,力量:0,耐力:0,敏捷:0];
 
 	//成长率
 	public float growthRate; 
@@ -78,10 +78,9 @@ public class PlayerVO  implements Serializable{
 	public String state;
 	public int direction;
 	public int[] colorations;
-	public Point sceneLocation;
+	public Point sceneLocation = new Point();
 	
 	public PlayerVO() {
-		assignPoints = new HashMap();
 		assignPoints.put("体质", 0);
 		assignPoints.put("魔力", 0);
 		assignPoints.put("力量", 0);
@@ -92,6 +91,11 @@ public class PlayerVO  implements Serializable{
 		this.id = id;
 		this.name = name;
 		this.character = character;
+		assignPoints.put("体质", 0);
+		assignPoints.put("魔力", 0);
+		assignPoints.put("力量", 0);
+		assignPoints.put("耐力", 0);
+		assignPoints.put("敏捷", 0);
 	}
 
 	/**

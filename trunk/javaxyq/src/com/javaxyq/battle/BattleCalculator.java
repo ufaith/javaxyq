@@ -54,7 +54,7 @@ public class BattleCalculator {
 		//按人物速度排序
 		Collections.sort(cmdlist);
 		//cmdlist = cmdlist.sort{cmd -> cmd.source.data.速度 + cmd.source.data.tmp速度}.reverse()
-		System.out.println("cmdlist: $cmdlist");
+		System.out.println("cmdlist: "+cmdlist);
 		for (int i = 0; i < cmdlist.size(); i++) {
 			Command cmd = (Command) cmdlist.get(i);
 			Object result = this.invokeMethod(cmd.getCmd(),cmd);
@@ -67,18 +67,18 @@ public class BattleCalculator {
 		return results;
 	}
 	
-	private Command attack(Command cmd) {
+	public Command attack(Command cmd) {
 		PlayerVO src = datas.get(cmd.getSource());
 		PlayerVO target = datas.get(cmd.getTarget());
 		if(target == null) {
-			System.out.println("${cmd.target.name}已经退出战场，攻击无效。");
+			System.out.println(cmd.getTarget().getName()+"已经退出战场，攻击无效。");
 			return null;
 		}
 		if(src.hp <=0) {
-			System.out.println("${src.name} 已倒下，无法发动攻击");
+			System.out.println(src.getName()+" 已倒下，无法发动攻击");
 			return null;
 		}else if(target.hp <= 0) {
-			System.out.println("${target.name}已倒下，${src.name}的攻击无效");
+			System.out.println(target.getName()+"已倒下，"+src.getName() +"的攻击无效");
 			return null;
 		}
 		int hitpoints = 0;
@@ -104,22 +104,22 @@ public class BattleCalculator {
 		return cmd;
 	}
 	
-	private Command magic(Command cmd) {
+	public Command magic(Command cmd) {
 		PlayerVO src = datas.get(cmd.getSource());
 		PlayerVO target = datas.get(cmd.getTarget());
 		int usedmp = cmd.getInt("mp");
 		if(target == null) {
-			System.out.println("${cmd.target.name}已经退出战场，攻击无效。");
+			System.out.println(cmd.getTarget().getName()+"已经退出战场，攻击无效。");
 			return null;
 		}
 		if(src.hp <=0) {
-			System.out.println("${src.name} 已倒下，无法发动攻击");
+			System.out.println(src.getName()+" 已倒下，无法发动攻击");
 			return null;
 		}else if(target.hp <= 0) {
-			System.out.println("${target.name}已倒下，${src.name}的攻击无效");
+			System.out.println(target.getName()+"已倒下，"+src.getName() +"的攻击无效");
 			return null;
 		}else if(src.mp < usedmp) {
-			System.out.println("${src.name} 法力不足，施放法术失败！");
+			System.out.println(src.getName()+" 法力不足，施放法术失败！");
 			return null;
 		}
 		src.mp -= usedmp;
@@ -142,12 +142,12 @@ public class BattleCalculator {
 		return cmd;
 	}
 
-	private Command defend(Command cmd) {
+	public Command defend(Command cmd) {
 		defends.put(datas.get(cmd.getSource()),true);
 		return cmd;
 	}
 	
-	private Command runaway(Command cmd) {
+	public Command runaway(Command cmd) {
 		boolean success = random.nextFloat()<0.9; 
 		cmd.add("runaway",success);
 		if(success) {
@@ -158,18 +158,18 @@ public class BattleCalculator {
 		return cmd;
 	}
 
-	private Command item(Command cmd) {
+	public Command item(Command cmd) {
 		PlayerVO src = datas.get(cmd.getSource());
 		PlayerVO target = datas.get(cmd.getTarget());
 		if(target == null) {
-			System.out.println("${cmd.target.name}已经退出战场，操作无效。");
+			System.out.println(cmd.getTarget().getName()+"已经退出战场，操作无效。");
 			return null;
 		}
 		if(src.hp <=0) {
-			System.out.println("${src.name} 已倒下，无法使用道具");
+			System.out.println(src.getName()+" 已倒下，无法使用道具");
 			return null;
 		}else if(target.hp <= 0) {
-			System.out.println("${target.name}已倒下，无法接受药物");
+			System.out.println(target.getName()+"已倒下，无法接受药物");
 			return null;
 		}		
 		MedicineItem item = (MedicineItem) cmd.get("item");

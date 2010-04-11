@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -304,7 +305,7 @@ public abstract class Canvas extends JPanel implements DownloadListener{
 				try {
 					comp.paint(g1);
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				g1.dispose();
 			}

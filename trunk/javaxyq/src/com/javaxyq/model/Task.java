@@ -60,7 +60,7 @@ public class Task implements Serializable{
 	public void add(String paramName,Object value) {
 		//params[paramName] += value;
 		Integer val = (Integer) params.get(paramName);
-		if(val!=null) {
+		if(val == null) {
 			val = new Integer(0);
 		}
 		params.put(paramName, val + (Integer)value);

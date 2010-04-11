@@ -67,7 +67,7 @@ public class CommandInterpreter {
 		source.playOnce("attack");
 		delay(300);
 		if(hit) {
-			System.out.println("${source.name}击中${target.name}，伤害${hitpoints}点");
+			System.out.printf("%s 击中 %s，伤害%s点\n",source.getName(),target.getName(),hitpoints);
 			showPoints(target, -hitpoints);
 			target.getData().hp -= hitpoints;
 			if(cmd.get("defend")!=null) {
@@ -80,7 +80,7 @@ public class CommandInterpreter {
 			source.waitFor();
 		}else {
 			backward(target);
-			System.out.println("${target.name} 躲开了${source.name}的攻击");
+			System.out.printf("%s 躲开了%s的攻击\n",target.getName(),source.getName());
 		}
 		rushBack(source, p0.x, p0.y);
 		source.setState("stand");
@@ -88,7 +88,7 @@ public class CommandInterpreter {
 		if(target.getData().hp <=0) {
 			target.playOnce("die");
 			target.getData().hp = 0;
-			System.out.println("${target.name}招架不住，倒在战场上。");
+			System.out.printf("%s招架不住，倒在战场上。\n",target.getName());
 		}else {
 			target.setState(oldState);
 		}
@@ -104,7 +104,7 @@ public class CommandInterpreter {
 		int hitpoints = cmd.getInt("hitpoints");
 		int usemp = cmd.getInt("mp");
 		String magicId = (String) cmd.get("magic");
-		setMsg("${source.name} 施法法术 — $magicId");
+		setMsg(source.getName()+" 施法法术 — "+magicId);
 		//消耗魔法
 		source.getData().mp -= usemp;
 		//effect
@@ -113,7 +113,7 @@ public class CommandInterpreter {
 		target.playEffect(magicId);
 		delay(100);
 		if(hit) {
-			System.out.println("${source.name}击中${target.name}，伤害${hitpoints}点");
+			System.out.printf("%s击中%s，伤害%s点\n",source.getName(),target.getName(),hitpoints);
 			target.playOnce("hit");
 			//target.playEffect("hit");
 			showPoints(target, -hitpoints);
@@ -121,14 +121,14 @@ public class CommandInterpreter {
 			source.waitFor();
 			source.setState("stand");
 		}else {
-			System.out.println("${target.name} 抵御了${source.name}的法术攻击");
+			System.out.printf("%s 抵御了%s的法术攻击\n",target.getName(),source.getName());
 		}
 		target.waitForEffect(null);//等待法术施法完毕
 		if(target.getData().hp <=0) {
 			//TODO 改善死亡的计算
 			target.playOnce("die");
 			target.getData().hp = 0;
-			System.out.println("${target.name}招架不住，倒在战场上。");
+			System.out.printf("%s招架不住，倒在战场上。\n",target.getName());
 		}else {
 			target.setState(oldState);
 		}
@@ -136,17 +136,17 @@ public class CommandInterpreter {
 		hidePoints(target);
 	}
 
-	private void defend(Command cmd) {
-		setMsg("${cmd.source.name}摆起防御招式");
+	public void defend(Command cmd) {
+		setMsg(String.format("%s摆起防御招式",cmd.getSource().getName()));
 		//cmd.source.playOnce("defend");
 		delay(300);
 	}
 	
-	private void runaway(Command cmd) {
+	public void runaway(Command cmd) {
 		
 	}
 	
-	private void item(Command cmd) {
+	public void item(Command cmd) {
 		Player source = cmd.getSource();
 		Player target = cmd.getTarget();
 		String oldState = target.getState();
@@ -156,7 +156,7 @@ public class CommandInterpreter {
 		delay(100);
 		Item item = (Item) cmd.get("item");
 		ItemListener listener = ItemManager.findItemAction(item.type);
-		setMsg("${source.name} 使用了一个${item.name}");
+		setMsg(String.format("%s 使用了一个%s",source.getName(),item.name));
 		if(listener!=null) {
 			listener.itemUsed(new ItemEvent(target,item,""));
 		}
@@ -166,7 +166,7 @@ public class CommandInterpreter {
 		int hpval = cmd.getInt("hp");
 		if(hpval > 0) {
 			showPoints(target, hpval);
-			System.out.println("${target.name} 恢复了${hpval}点气血");
+			System.out.printf("%s 恢复了%s点气血\n",target.getName(),hpval);
 		}
 		source.waitFor();
 		source.setState("stand");
@@ -201,7 +201,7 @@ public class CommandInterpreter {
 		canvas.showPoints(player, value);
 	}
 	
-	private void backward(Player player) {
+	public void backward(Player player) {
 		canvas.backward(player);
 	}
 	/**
