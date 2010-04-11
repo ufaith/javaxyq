@@ -6,7 +6,7 @@
 	<description>Builds, tests, and runs the project JavaXYQ.</description>
 	<buildnumber file="build.properties" />
 	<property name="project_name" value="JavaXYQ" />
-	<property name="version" value="1.4" />
+	<property name="version" value="1.4_m2" />
 	<property environment="env" />
 	<property name="publisher" value="${env.USERNAME}" />
 	<property name="computer" value="${env.COMPUTERNAME}" />
@@ -141,7 +141,7 @@
 		        projectname="javaxyq"  
 		        filename="${deploy_dir}/JavaXYQ-${version}-build${builddate}.zip"  
 		        targetfilename="JavaXYQ-${version}-build${builddate}.zip" 
-		        summary="executable file of javaxyq ${version} " 
+		        summary="javaxyq ${version} 可以执行文件" 
 		        labels="Featured, Type-Package, OpSys-All" />	
 	</target>
 </project>

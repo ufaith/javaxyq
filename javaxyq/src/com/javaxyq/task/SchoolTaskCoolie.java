@@ -30,7 +30,7 @@ import com.javaxyq.widget.Player;
  * @author dewitt
  * @date 2009-11-23 create
  */
-class SchoolTaskCoolie extends TaskCoolie {
+public class SchoolTaskCoolie extends TaskCoolie {
 	
 	/** 每10次为一轮任务 */
 	private static final int ROUND = 10;

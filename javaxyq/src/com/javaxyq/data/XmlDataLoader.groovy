@@ -13,7 +13,6 @@ import groovy.util.XmlParser;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import com.javaxyq.config.CursorConfig;
 import com.javaxyq.config.LinkConfig;
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.config.TalkConfig;
@@ -59,14 +58,7 @@ public class XmlDataLoader {
 			GameMain.addListener(el.@type,el.@class);
 		}
 	}
-	public static void defCursors() {
-		def cursors = new XmlParser().parse(GameMain.getFile("xml/cursors.xml"));
-		def rs = ResourceStore.getInstance();
-		for(el in cursors.Cursor) {
-			System.out.println "define Cursor: ${el.@id}"
-			rs.registerCursor(new CursorConfig(el.@id, el.@cursor, el.@effect));
-		}
-	}
+	
 	public static void defScenes() {
 		def scenes = new XmlParser().parse(GameMain.getFile("xml/scenes.xml"));
 		def rs = ResourceStore.getInstance();

@@ -7,12 +7,14 @@
     <Text id="" x="15" y="152" width="40" height="20" tooltip="" text="现金" font="" size="52" color="white" align="" actionId=""/>
     <Text id="" name="lbl_cash" x="65" y="152" width="90" height="20" tooltip="" text="${money}" font="" size="" color="blue" align="" actionId=""/>
     <Text id="" name="lbl_deposit" x="65" y="172" width="90" height="20" tooltip="" text="${deposit}" font="" size="" color="blue" align="" actionId=""/>
+<!-- 
     <Sprite id="" name="武器" x="200" y="81" width="" height="" tooltip="" path="" actionId=""/>
     <Sprite id="" name="腰带" x="202" y="137" width="" height="" tooltip="" path="" actionId=""/>
     <Sprite id="" name="头盔" x="202" y="26" width="" height="" tooltip="" path="" actionId=""/>
     <Sprite id="" name="饰品" x="254" y="28" width="" height="" tooltip="" path="" actionId=""/>
     <Sprite id="" name="靴子" x="252" y="139" width="" height="" tooltip="" path="" actionId=""/>
     <Sprite id="" name="铠甲" x="258" y="85" width="" height="" tooltip="" path="" actionId=""/>
+ -->
     <Sprite id="" name="武器底" x="198" y="82" width="" height="" tooltip="" path="/wzife/button/itembk.tcp" actionId=""/>
     <Sprite id="" name="头盔底" x="200" y="28" width="" height="" tooltip="" path="/wzife/button/itembk.tcp" actionId=""/>
     <Sprite id="" name="铠甲底" x="253" y="82" width="" height="" tooltip="" path="/wzife/button/itembk.tcp" actionId=""/>

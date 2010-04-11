@@ -27,6 +27,7 @@ import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
 import com.javaxyq.event.DownloadEvent;
 import com.javaxyq.event.DownloadListener;
+import com.javaxyq.ui.UIHelper;
 import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Cursor;
@@ -382,7 +383,7 @@ public abstract class Canvas extends JPanel implements DownloadListener{
 	}
 
 	public void setGameCursor(String type) {
-		Cursor cursor = ResourceStore.getInstance().getCursor(type);
+		Cursor cursor = UIHelper.getCursor(type);
 		if(cursor!=null) {
 			GameMain.getWindow().hideCursor();
 			this.gameCursor = cursor;

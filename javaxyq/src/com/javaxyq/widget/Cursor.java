@@ -10,7 +10,7 @@ package com.javaxyq.widget;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import com.javaxyq.config.CursorConfig;
+import com.javaxyq.core.SpriteFactory;
 
 /**
  * 游戏指针
@@ -19,30 +19,29 @@ import com.javaxyq.config.CursorConfig;
  * @history 2008-6-8 龚德伟 新建
  */
 public class Cursor {
-    public static final String DEFAULT_CURSOR = "default";
+    public static final String DEFAULT_CURSOR = "01";
 
-    public static final String ATTACK_CURSOR = "attack";
+    public static final String ATTACK_CURSOR = "15";
 
     public static final String EXCHANGE_CURSOR = "exchange";
 
-    public static final String GIVE_CURSOR = "give";
+    public static final String GIVE_CURSOR = "13";
 
-    public static final String TALK_CURSOR = "talk";
+    public static final String TALK_CURSOR = "22";
 
-    public static final String PICKUP_CURSOR = "pickup";
+    public static final String PICKUP_CURSOR = "03";
 
     public static final String FRIEND_CURSOR = "friend";
 
-    public static final String SELECT_CURSOR = "select";
+    public static final String SELECT_CURSOR = "11";
 
-    public static final String TEAM_CURSOR = "team";
+    public static final String CATCH_CURSOR = "21";
 
-    public static final String FORBID_CURSOR = "forbid";
+    public static final String FORBID_CURSOR = "04";
 
-    public static final String TEXT_CURSOR = "text";
+    public static final String TEXT_CURSOR = "02";
 
-    private CursorConfig config;
-
+    public static final String PROTECT_CURSOR = "17";
     private SpriteImage pointer;
 
     private SpriteImage effect;
@@ -61,16 +60,11 @@ public class Cursor {
 
     private int offsetY;
 
-    public Cursor(CursorConfig cfg, SpriteImage pointer) {
-        this(cfg, pointer, null);
-    }
-
-    public Cursor(CursorConfig cfg, SpriteImage pointer, SpriteImage effect) {
-        this.config = cfg;
-        this.pointer = pointer;
-        this.effect = effect;
-        if (this.effect != null) {
-            this.effect.setVisible(false);
+    public Cursor(String type, boolean effect) {
+        this.pointer = new SpriteImage(SpriteFactory.loadSprite("/wzife/cursor/"+type+".tcp"));
+        if(effect) {        	
+        	this.effect = new SpriteImage(SpriteFactory.loadSprite("/addon/wave.tcp"));;
+        	this.effect.setVisible(false);
         }
     }
 
@@ -137,10 +131,6 @@ public class Cursor {
     public void setLocation(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    public CursorConfig getConfig() {
-        return config;
     }
 
     public void draw(Graphics g) {
