@@ -50,7 +50,7 @@ public class Helper {
 		//data.level = cfg.level;
 		DataStore.initPlayerData(data);
 		DataStore.recalcProperties(data);
-		System.out.println("create player: $data");
+		System.out.println("create player: "+data);
 		player.setData(data);
 		return player;
 	}
@@ -72,7 +72,7 @@ public class Helper {
 		initElf(data);
 		player.setData(data);
 		//player.setNameForeground(GameMain.TEXT_NAME_NPC_COLOR);
-		System.out.println("create elf: $data");
+		System.out.println("create elf: "+data);
 		return player;
 	}
 

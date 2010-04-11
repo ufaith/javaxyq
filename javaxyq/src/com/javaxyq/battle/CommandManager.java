@@ -47,10 +47,10 @@ public class CommandManager  {
 		for (int i = 0; i < results.size(); i++) {
 			Command cmd = results.get(i);
 			try {
-				System.out.println("执行：$cmd");
+				System.out.println("执行："+cmd);
 				this.interpretor.exec(cmd);
 			}catch(Exception e) {
-				System.out.println("战斗指令执行失败！$cmd");
+				System.out.println("战斗指令执行失败！"+cmd);
 				e.printStackTrace();
 			}
 		}

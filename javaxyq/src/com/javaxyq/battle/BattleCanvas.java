@@ -34,6 +34,7 @@ import com.javaxyq.ui.ItemDetailLabel;
 import com.javaxyq.ui.ItemLabel;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Animation;
+import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
 
@@ -640,11 +641,11 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		setGameCursor(selectingTarget ? "select" : "attack");
+		setGameCursor(selectingTarget ? Cursor.SELECT_CURSOR : Cursor.ATTACK_CURSOR);
 	}
 
 	public void mouseExited(MouseEvent e) {
-		setGameCursor("default");
+		setGameCursor(Cursor.DEFAULT_CURSOR);
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -657,7 +658,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		setGameCursor(selectingTarget ? "select" : "attack");
+		setGameCursor(selectingTarget ? Cursor.SELECT_CURSOR : Cursor.ATTACK_CURSOR);
 	}
 
 	public void keyPressed(KeyEvent e) {

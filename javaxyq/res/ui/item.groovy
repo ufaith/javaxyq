@@ -133,12 +133,13 @@ class item extends PanelHandler implements MouseListener,MouseMotionListener {
 			for(Label label in labels) {
 				vars.add(label.textTpl)
 			}
-			String strTemplate = vars.join(';');
+			String strTemplate = vars.join('#');
 			this.template = engine.createTemplate(strTemplate);
 			System.out.println("template: "+strTemplate);
 		}
-		def values = this.template.make(attrs).toString().split(';')
-		def i=0;
+		int i=0;
+		String[] values = this.template.make(attrs).toString().split('#');
+		//System.out.println("labels: "+this.labels.size()+", values:"+values.size());
 		for(Label label in this.labels) {
 			label.text = values[i++];
 		}

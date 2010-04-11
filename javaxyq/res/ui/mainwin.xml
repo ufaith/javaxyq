@@ -12,22 +12,22 @@
     <Image x="419" y="0" path="/wzife/main/summonframe.was" actionId=""/>
     <Image x="522" y="0" path="/wzife/main/heroframe.tcp" actionId=""/>
     <Button actionId="summon_status" x="422" y="3" was="/wzife/photo/summon/0000.tcp" tooltip="没有召唤兽"/>
-    <Button name="btn_player_header" actionId="player_status" x="526" y="3" was="/wzife/photo/facesmall/0001.tcp" tooltip="&lt;html&gt;气血：${(hp*100).intdiv(maxHp)}%&lt;br&gt;魔法：${(mp*100).intdiv(maxMp)}%&lt;/html&gt;"/>
+    <Button name="btn_player_header" actionId="player_status" x="526" y="3" was="/wzife/photo/facesmall/0001.tcp" tooltip="&lt;html&gt;气血：${(int)(hp*100/maxHp)}%&lt;br&gt;魔法：${(int)(mp*100/maxMp)}%&lt;/html&gt;"/>
     <Sprite name="召唤兽气血-底" x="457" y="0" path="/wzife/main/blank.tcp" tooltip="100%" actionId="" mousePressed="eke_summon_hp"/>
     <Sprite name="召唤兽气血" x="470" y="3" path="/wzife/main/hp.tcp" tooltip="100%" actionId="" mousePressed="eke_summon_hp"/>
     <Sprite name="召唤兽魔法-底" x="457" y="12" path="/wzife/main/blank.tcp" tooltip="100%" actionId="" mousePressed="eke_summon_mp"/>
     <Sprite name="召唤兽魔法" x="470" y="15" path="/wzife/main/mp.tcp" tooltip="100%" actionId="" mousePressed="eke_summon_mp"/>
     <Sprite name="召唤兽经验-底" x="457" y="24" path="/wzife/main/blank.tcp" tooltip="100%" actionId=""/>
     <Sprite name="召唤兽经验" x="470" y="27" path="/wzife/main/exp.tcp" tooltip="100%" actionId=""/>
-    <Sprite name="player_hp" x="585" y="3" path="/wzife/main/hp.tcp" tooltip="${hp}/${maxHp} ${(hp*100).intdiv(maxHp)}%" mousePressed="eke_player_hp" actionId=""/>
-    <Sprite name="player_hp-空" x="585" y="3" path="/wzife/main/eff_hp.tcp" tooltip="${hp}/${maxHp} ${(hp*100).intdiv(maxHp)}%" mousePressed="eke_player_hp" actionId=""/>
-    <Sprite name="player_hp-底" x="572" y="0" path="/wzife/main/blank.tcp" tooltip="${hp}/${maxHp} ${(hp*100).intdiv(maxHp)}%" actionId=""/>
-    <Sprite name="player_mp" x="585" y="15" path="/wzife/main/mp.tcp" tooltip="${mp}/${maxMp} ${(mp*100).intdiv(maxMp)}%" actionId="" mousePressed="eke_player_mp"/>
-    <Sprite name="player_mp-底" x="572" y="12" path="/wzife/main/blank.tcp" tooltip="${mp}/${maxMp} ${(mp*100).intdiv(maxMp)}%" actionId="" mousePressed="eke_player_mp"/>
+    <Sprite name="player_hp" x="585" y="3" path="/wzife/main/hp.tcp" tooltip="${hp}/${maxHp} ${(int)(hp*100/maxHp)}%" mousePressed="eke_player_hp" actionId=""/>
+    <Sprite name="player_hp-空" x="585" y="3" path="/wzife/main/eff_hp.tcp" tooltip="${hp}/${maxHp} ${(int)(hp*100/maxHp)}%" mousePressed="eke_player_hp" actionId=""/>
+    <Sprite name="player_hp-底" x="572" y="0" path="/wzife/main/blank.tcp" tooltip="${hp}/${maxHp} ${(int)(hp*100/maxHp)}%" actionId=""/>
+    <Sprite name="player_mp" x="585" y="15" path="/wzife/main/mp.tcp" tooltip="${mp}/${maxMp} ${(int)(mp*100/maxMp)}%" actionId="" mousePressed="eke_player_mp"/>
+    <Sprite name="player_mp-底" x="572" y="12" path="/wzife/main/blank.tcp" tooltip="${mp}/${maxMp} ${(int)(mp*100/maxMp)}%" actionId="" mousePressed="eke_player_mp"/>
     <Sprite name="player_sp" x="585" y="27" path="/wzife/main/sp.tcp" tooltip="${sp}" actionId=""/>
     <Sprite name="player_sp-底" x="572" y="24" path="/wzife/main/blank.tcp" tooltip="${sp}" actionId=""/>
-    <Sprite name="player_exp" x="585" y="39" path="/wzife/main/exp.tcp" tooltip="${exp} ${(exp*100).intdiv(levelExp)}%" actionId=""/>
-    <Sprite name="player_exp-底" x="572" y="36" path="/wzife/main/blank.tcp" tooltip="${exp} ${(exp*100).intdiv(levelExp)}%" actionId=""/>
+    <Sprite name="player_exp" x="585" y="39" path="/wzife/main/exp.tcp" tooltip="${exp} ${(int)(exp*100/levelExp)}%" actionId=""/>
+    <Sprite name="player_exp-底" x="572" y="36" path="/wzife/main/blank.tcp" tooltip="${exp} ${(int)(exp*100/levelExp)}%" actionId=""/>
     <Editor x="44" y="458" width="252" height="21" name="聊天输入框" actionId="chat"/>
     <Button actionId="attack" x="323" y="447" was="/wzife/button/attack.tcp"/>
     <Button actionId="open_item" x="350" y="447" was="/wzife/button/item.tcp"/>

@@ -227,7 +227,7 @@ public class UIHelper {
 	
 	public static void showHideDialog(String id) {
 		Panel dlg = DialogFactory.getDialog(id,false);
-		System.out.println("showHideDialog: $id, $dlg");
+		System.out.println("showHideDialog: "+id+", "+dlg);
 		if(dlg!=null && dlg.isShowing()) {
 			hideDialog(dlg);
 		}else {
