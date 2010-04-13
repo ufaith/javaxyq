@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -19,7 +20,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 
+import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
 
 import com.javaxyq.core.DialogFactory;
@@ -33,6 +36,7 @@ import com.javaxyq.model.PlayerVO;
 import com.javaxyq.ui.ItemDetailLabel;
 import com.javaxyq.ui.ItemLabel;
 import com.javaxyq.ui.UIHelper;
+import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
@@ -75,7 +79,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	private boolean selectingItem;
 	private Item selectedItem;
 	private Command lastCmd;
-
+	
 	public BattleCanvas(int width, int height) {
 		Dimension size = new Dimension(width, height);
 		setPreferredSize(size);
@@ -133,6 +137,16 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 */
 	public void setOwnsideTeam(List<Player> team) {
 		this.ownsideTeam = team;
+	}
+	
+	/**
+	 * 将人物或npc移出战斗队伍
+	 * @param p
+	 */
+	public void removePlayerFromTeam(Player p) {
+		this.adversaryTeam.remove(p);
+		this.ownsideTeam.remove(p);
+		removeNPC(p);
 	}
 
 	public void init() {
@@ -400,7 +414,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		for (int i = 0; i < adversaryTeam.size(); i++) {
 			Player player = adversaryTeam.get(i);
 			player.setLocation(x1 - dx * i, y1 + dy * i);
-			player.setDirection(Sprite.DIRECTION_BOTTOM_RIGHT);
+			player.setDirection(Sprite.DIR_DOWN_RIGHT);
 			addNPC(player);
 		}
 
@@ -426,7 +440,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		for (int i = 0; i < ownsideTeam.size(); i++) {
 			Player player = ownsideTeam.get(i);
 			player.setLocation(x0 + dx * i, y0 - dy * i);
-			player.setDirection(Sprite.DIRECTION_TOP_LEFT);
+			player.setDirection(Sprite.DIR_UP_LEFT);
 			addNPC(player);
 		}
 		ranked = true;
@@ -801,11 +815,63 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		super.setPlayer(player);
 	}
 
+
+	public void setBattleBackground(Image battleBackground) {
+		this.battleBackground = battleBackground;
+	}
+	/**
+	 * 最近一次施放的法术
+	 * @return the lastMagic
+	 */
+	public String getLastMagic() {
+		return lastMagic;
+	}
+	/**
+	 * set value of lastMagic
+	 * @param lastMagic 
+	 */
+	public void setLastMagic(String lastMagic) {
+		this.lastMagic = lastMagic;
+	}
+
+	protected String getMusic() {
+		return "music/2003.mp3";
+	}
+	/**
+	 * @param target2
+	 */
+	public void cleanPlayer(Player player) {
+		try {
+			BlinkWorker blinker = new BlinkWorker(player, 400);
+			blinker.execute();
+			blinker.get();
+			FadeOutWorker worker = new FadeOutWorker(player, 200);
+			worker.execute();
+			worker.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void runaway(Player player, boolean success) {
+		try {
+			RunawayWorker worker = new RunawayWorker(player,success, 2000);
+			worker.execute();
+			worker.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private class BackwardThread extends Thread {
 		public void run() {
 			int dist = 15;
 			int step = 2;
-			if (backingPlayer.getDirection() == Sprite.DIRECTION_BOTTOM_RIGHT) {// 面朝右下
+			if (backingPlayer.getDirection() == Sprite.DIR_DOWN_RIGHT) {// 面朝右下
 				step = -step;
 			}
 			int backingX = backingPlayer.getX();
@@ -841,26 +907,165 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 			backingPlayer = null;
 		}
 	}
+	private static class FlyOutWorker extends SwingWorker<Point, Point>{
 
-	public void setBattleBackground(Image battleBackground) {
-		this.battleBackground = battleBackground;
+		private Player player;
+
+		public FlyOutWorker(Player player) {
+			this.player = player;
+		}
+		
+		@Override
+		protected Point doInBackground() throws Exception {
+			
+			return null;
+		}
+		
+		@Override
+		protected void process(List<Point> chunks) {
+			super.process(chunks);
+		}
+		
 	}
-	/**
-	 * 最近一次施放的法术
-	 * @return the lastMagic
-	 */
-	public String getLastMagic() {
-		return lastMagic;
+	
+	private class FadeOutWorker extends SwingWorker<Float, Float>{
+		private Player player;
+		private long duration;
+
+		public FadeOutWorker(Player player,long duration) {
+			this.player = player;
+			this.duration = duration;
+		}
+		
+		@Override
+		protected Float doInBackground() throws Exception {
+			long passTime = 0;
+			long interval = 50; 
+			float alpha = 1.0f;
+			while (passTime < duration) {
+				// System.out.println(this.getId()+" "+this.getName());
+				passTime += interval;
+				alpha = (float) (1 - (1.0 * passTime / duration));
+				if (alpha < 0) {
+					alpha = 0;
+				}
+				if (alpha > 1) {
+					alpha = 1;
+				}
+				player.setAlpha(alpha);
+				publish(alpha);
+				try {
+					Thread.sleep(interval);
+				} catch (InterruptedException e) {
+				}
+			}
+			removePlayerFromTeam(player);
+			player.setAlpha(1.0f);
+			System.out.println("将"+player.getName()+"移出队伍。");
+			return alpha;
+		}
+		
+		@Override
+		protected void done() {
+			super.done();
+		}
+		
+		@Override
+		protected void process(List<Float> chunks) {
+			super.process(chunks);
+//			for (Float a : chunks) {
+//				System.out.println("player alpha: "+a);
+//			}
+		}
+		
 	}
-	/**
-	 * set value of lastMagic
-	 * @param lastMagic 
-	 */
-	public void setLastMagic(String lastMagic) {
-		this.lastMagic = lastMagic;
+	
+	private class BlinkWorker extends SwingWorker{
+		private Player player;
+		private long duration;
+		public BlinkWorker(Player player, long duration) {
+			super();
+			this.player = player;
+			this.duration = duration;
+		}
+		@Override
+		protected Object doInBackground() throws Exception {
+			long minShow = 50;
+			long interval = (this.duration - minShow*2)/2;
+			try {
+				this.player.setAlpha(0);
+				Thread.sleep(interval);
+				this.player.setAlpha(1.0f);
+				Thread.sleep(minShow);
+				this.player.setAlpha(0);
+				Thread.sleep(interval);
+				this.player.setAlpha(1.0f);
+				Thread.sleep(minShow);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				this.player.setAlpha(1.0f);
+			}
+			return null;
+		}
 	}
 
-	protected String getMusic() {
-		return "music/2003.mp3";
+	private class RunawayWorker extends SwingWorker{
+		private Player player;
+		private long duration;
+		private boolean success;
+		public RunawayWorker(Player player, boolean success, long duration) {
+			super();
+			this.player = player;
+			this.duration = duration;
+			this.success = success;
+		}
+		@Override
+		protected Object doInBackground() throws Exception {
+			//转身
+			int dir =  player.getDirection();
+			player.setDirection(dir-2);
+			//切换到rush
+			player.setState("rusha");
+			Thread.sleep(500);
+			if(this.success) {
+				MP3Player.play("sound/addon/escape_ok.mp3");
+				long interval = 50;
+				long t = 0;
+				while(t<duration) {
+					Thread.sleep(interval);
+					// 计算移动量
+					long elapsedTime = interval;
+					int distance = (int) (2*GameMain.NORMAL_SPEED * elapsedTime);
+					int dx = distance; //向右下逃跑
+					int dy = distance;
+					if(player.getDirection() == Sprite.DIR_UP_LEFT) {//向左上逃跑
+						dx = -dx;
+						dy = -dy;
+					}
+					player.moveBy(dx, dy);
+					publish(new Point(dx,dy));
+					t += interval;
+					//如果移出场景则终止动画
+					if(player.getX()<0 || player.getY()< 0 || player.getX()>BattleCanvas.this.getWidth() 
+							||player.getY() > BattleCanvas.this.getHeight()) {
+						break;
+					}
+				}
+			}else {				
+				UIHelper.prompt("运气不济，逃跑失败！#83",3000);
+			}
+			player.setState(Player.STATE_STAND);
+			player.setDirection(dir);
+			return null;
+		}
+		
+//		protected void process(List chunks) {
+//			super.process(chunks);
+//			for (Object p : chunks) {
+//				System.out.println("moveby: "+p);
+//			}
+//		}
 	}
+
 }

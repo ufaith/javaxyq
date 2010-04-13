@@ -192,6 +192,10 @@ public abstract class Canvas extends JPanel implements DownloadListener{
 		npc.setSceneLocation(x, y);
 		this.addNPC(npc);
 	}
+	
+	public void removeNPC(Player npc) {
+		npcs.remove(npc);
+	}
 
 	protected void clearNPCs() {
 		this.npcs.clear();

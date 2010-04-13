@@ -172,25 +172,25 @@ public class Player extends AbstractWidget implements EventTarget {
 		int dir = 0;
 		if (dx < 0) {
 			if (dy < 0) {
-				dir = Sprite.DIRECTION_BOTTOM_LEFT;
+				dir = Sprite.DIR_DOWN_LEFT;
 			} else if (dy > 0) {
-				dir = Sprite.DIRECTION_TOP_LEFT;
+				dir = Sprite.DIR_UP_LEFT;
 			} else {
-				dir = Sprite.DIRECTION_LEFT;
+				dir = Sprite.DIR_LEFT;
 			}
 		} else if (dx > 0) {
 			if (dy < 0) {
-				dir = Sprite.DIRECTION_BOTTOM_RIGHT;
+				dir = Sprite.DIR_DOWN_RIGHT;
 			} else if (dy > 0) {
-				dir = Sprite.DIRECTION_TOP_RIGHT;
+				dir = Sprite.DIR_UP_RIGHT;
 			} else {
-				dir = Sprite.DIRECTION_RIGHT;
+				dir = Sprite.DIR_RIGHT;
 			}
 		} else {// x=0
 			if (dy < 0) {
-				dir = Sprite.DIRECTION_BOTTOM;
+				dir = Sprite.DIR_DOWN;
 			} else if (dy > 0) {
-				dir = Sprite.DIRECTION_TOP;
+				dir = Sprite.DIR_UP;
 			} else {
 				// no move
 				dir = -1;
@@ -255,31 +255,31 @@ public class Player extends AbstractWidget implements EventTarget {
 		int dx = 0;
 		int dy = 0;
 		switch (direction) {
-		case Sprite.DIRECTION_LEFT:
+		case Sprite.DIR_LEFT:
 			dx = -1;
 			break;
-		case Sprite.DIRECTION_TOP:
+		case Sprite.DIR_UP:
 			dy = 1;
 			break;
-		case Sprite.DIRECTION_RIGHT:
+		case Sprite.DIR_RIGHT:
 			dx = 1;
 			break;
-		case Sprite.DIRECTION_BOTTOM:
+		case Sprite.DIR_DOWN:
 			dy = -1;
 			break;
-		case Sprite.DIRECTION_BOTTOM_LEFT:
+		case Sprite.DIR_DOWN_LEFT:
 			dx = -1;
 			dy = -1;
 			break;
-		case Sprite.DIRECTION_TOP_LEFT:
+		case Sprite.DIR_UP_LEFT:
 			dx = -1;
 			dy = 1;
 			break;
-		case Sprite.DIRECTION_TOP_RIGHT:
+		case Sprite.DIR_UP_RIGHT:
 			dx = -1;
 			dy = 1;
 			break;
-		case Sprite.DIRECTION_BOTTOM_RIGHT:
+		case Sprite.DIR_DOWN_RIGHT:
 			dx = 1;
 			dy = -1;
 			break;
@@ -606,7 +606,6 @@ public class Player extends AbstractWidget implements EventTarget {
 			g.drawLine(x-10, y, x+10, y);
 			g.drawLine(x, y-10, x, y+10);
 		}
-		
 	}
 
 	private boolean shouldDisplay(FloatPanel chatPanel) {
@@ -616,12 +615,6 @@ public class Player extends AbstractWidget implements EventTarget {
 	@Override
 	public void dispose() {
 		// TODO Player: dispose
-
-	}
-
-	@Override
-	protected void doDraw(Graphics2D g2, int x, int y, int width, int height) {
-		// TODO Player: doDraw
 
 	}
 
@@ -880,6 +873,20 @@ public class Player extends AbstractWidget implements EventTarget {
 		for (int i = 0; i < listeners.length; i++) {
 			this.removePlayerListener(listeners[i]);
 		}
+	}
+	
+	@Override
+	public void setAlpha(float alpha) {
+		super.setAlpha(alpha);
+		shadow.setAlpha(alpha);
+		person.setAlpha(alpha);
+		if(this.weapon!=null) {
+			this.weapon.setAlpha(alpha);
+		}
+	}
+
+	@Override
+	protected void doDraw(Graphics2D g2, int x, int y, int width, int height) {
 	}
 
 }

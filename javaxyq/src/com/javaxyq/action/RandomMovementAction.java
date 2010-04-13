@@ -23,9 +23,9 @@ public class RandomMovementAction implements ActionListener {
 		int x = Integer.valueOf(xy[0]);
 		int y = Integer.valueOf(xy[1]);
 		if(Math.abs(player.getSceneX()-x)>4) {
-			player.stepTo((player.getSceneX()-x)>0? Sprite.DIRECTION_LEFT : Sprite.DIRECTION_RIGHT);
+			player.stepTo((player.getSceneX()-x)>0? Sprite.DIR_LEFT : Sprite.DIR_RIGHT);
 		}else if(Math.abs(player.getSceneY()-y)>4) {
-			player.stepTo((player.getSceneY()-y)<0?Sprite.DIRECTION_TOP : Sprite.DIRECTION_BOTTOM);
+			player.stepTo((player.getSceneY()-y)<0?Sprite.DIR_UP : Sprite.DIR_DOWN);
 		}else if(random.nextBoolean()) {
 			player.stepTo(random.nextInt(8));
 		}

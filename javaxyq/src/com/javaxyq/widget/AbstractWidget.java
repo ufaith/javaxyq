@@ -62,9 +62,14 @@ public abstract class AbstractWidget implements Widget {
 
     public void draw(Graphics g, int x, int y, int width, int height) {
         Graphics2D g2 = (Graphics2D) g.create();
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-        doDraw(g2, x, y, width, height);
-        g2.dispose();
+        try {
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+			doDraw(g2, x, y, width, height);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			g2.dispose();
+		}
     }
 
     protected abstract void doDraw(Graphics2D g2, int x, int y, int width, int height);
