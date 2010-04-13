@@ -86,9 +86,10 @@ public class CommandInterpreter {
 		source.setState("stand");
 		//target.waitFor();
 		if(target.getData().hp <=0) {
-			target.playOnce("die");
+			//target.playOnce("die");
 			target.getData().hp = 0;
 			System.out.printf("%s招架不住，倒在战场上。\n",target.getName());
+			canvas.cleanPlayer(target);
 		}else {
 			target.setState(oldState);
 		}
@@ -126,9 +127,10 @@ public class CommandInterpreter {
 		target.waitForEffect(null);//等待法术施法完毕
 		if(target.getData().hp <=0) {
 			//TODO 改善死亡的计算
-			target.playOnce("die");
+			//target.playOnce("die");
 			target.getData().hp = 0;
 			System.out.printf("%s招架不住，倒在战场上。\n",target.getName());
+			canvas.cleanPlayer(target);
 		}else {
 			target.setState(oldState);
 		}
@@ -143,7 +145,8 @@ public class CommandInterpreter {
 	}
 	
 	public void runaway(Command cmd) {
-		
+		boolean success = cmd.getBool("runaway");
+		canvas.runaway(cmd.getSource(),success);
 	}
 	
 	public void item(Command cmd) {

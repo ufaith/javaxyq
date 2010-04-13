@@ -21,21 +21,21 @@ import java.util.Vector;
  */
 public class Sprite extends AbstractWidget {
 
-    public static final int DIRECTION_BOTTOM = 0x4;
+    public static final int DIR_DOWN = 0x4;
 
-    public static final int DIRECTION_BOTTOM_LEFT = 0x1;
+    public static final int DIR_DOWN_LEFT = 0x1;
 
-    public static final int DIRECTION_BOTTOM_RIGHT = 0x0;
+    public static final int DIR_DOWN_RIGHT = 0x0;
 
-    public static final int DIRECTION_LEFT = 0x5;
+    public static final int DIR_LEFT = 0x5;
 
-    public static final int DIRECTION_RIGHT = 0x7;
+    public static final int DIR_RIGHT = 0x7;
 
-    public static final int DIRECTION_TOP = 0x6;
+    public static final int DIR_UP = 0x6;
 
-    public static final int DIRECTION_TOP_LEFT = 0x2;
+    public static final int DIR_UP_LEFT = 0x2;
 
-    public static final int DIRECTION_TOP_RIGHT = 0x3;
+    public static final int DIR_UP_RIGHT = 0x3;
 
     private static double k1 = Math.tan(Math.PI / 8);
 
@@ -50,35 +50,35 @@ public class Sprite extends AbstractWidget {
      */
     public static int computeDirection(Point src, Point mouse) {
         double dy, dx, k;
-        int direction = Sprite.DIRECTION_BOTTOM_RIGHT;
+        int direction = Sprite.DIR_DOWN_RIGHT;
         dy = mouse.y - src.y;
         dx = mouse.x - src.x;
         if (dx == 0) {
-            return (dy >= 0) ? Sprite.DIRECTION_BOTTOM : Sprite.DIRECTION_TOP;
+            return (dy >= 0) ? Sprite.DIR_DOWN : Sprite.DIR_UP;
         } else if (dy == 0) {
-            return (dx >= 0) ? Sprite.DIRECTION_RIGHT : Sprite.DIRECTION_LEFT;
+            return (dx >= 0) ? Sprite.DIR_RIGHT : Sprite.DIR_LEFT;
         }
         k = Math.abs(dy / dx);
         if (k >= k2) {
             if (dy > 0)
-                direction = Sprite.DIRECTION_BOTTOM;
+                direction = Sprite.DIR_DOWN;
             else
-                direction = Sprite.DIRECTION_TOP;
+                direction = Sprite.DIR_UP;
         } else if (k <= k1) {
             if (dx > 0)
-                direction = Sprite.DIRECTION_RIGHT;
+                direction = Sprite.DIR_RIGHT;
             else
-                direction = Sprite.DIRECTION_LEFT;
+                direction = Sprite.DIR_LEFT;
         } else if (dy > 0) {
             if (dx > 0)
-                direction = Sprite.DIRECTION_BOTTOM_RIGHT;
+                direction = Sprite.DIR_DOWN_RIGHT;
             else
-                direction = Sprite.DIRECTION_BOTTOM_LEFT;
+                direction = Sprite.DIR_DOWN_LEFT;
         } else {
             if (dx > 0)
-                direction = Sprite.DIRECTION_TOP_RIGHT;
+                direction = Sprite.DIR_UP_RIGHT;
             else
-                direction = Sprite.DIRECTION_TOP_LEFT;
+                direction = Sprite.DIR_UP_LEFT;
         }
         return direction;
     }
