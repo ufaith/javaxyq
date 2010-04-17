@@ -1,4 +1,5 @@
 #summary 介绍SwingWorker在JavaXYQ中的应用
+#labels Featured
 
 = Introduction =
 
