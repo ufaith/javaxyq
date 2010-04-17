@@ -10,22 +10,23 @@ package com.javaxyq.ui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.SpriteFactory;
+import com.javaxyq.data.ItemInstance;
+import com.javaxyq.data.MedicineItem;
 import com.javaxyq.model.Item;
-import com.javaxyq.model.MedicineItem;
 import com.javaxyq.widget.Animation;
 
 
 
 /**
+ * 物品详细提示组件
  * @author dewitt
- *
  */
 public class ItemDetailLabel extends PromptLabel {
 
@@ -34,9 +35,9 @@ public class ItemDetailLabel extends PromptLabel {
 	private static final int TITLE_POS = 30;
 	private static Font titleFont = new Font("宋体", Font.BOLD, 18); 
 	
-	private Item item;
+	private ItemInstance item;
 	private Animation anim;
-	public ItemDetailLabel(Item item) {
+	public ItemDetailLabel(ItemInstance item) {
 		super("");
 		this.setItem(item);
 		setSize(310,170);
@@ -46,9 +47,9 @@ public class ItemDetailLabel extends PromptLabel {
 		setSize(310,170);
 	}
 	
-	public void setItem(Item item) {
+	public void setItem(ItemInstance item) {
 		this.item = item;
-		this.anim = SpriteFactory.loadAnimation(String.format("item/item120/%s.tcp",item.id));
+		this.anim = SpriteFactory.loadAnimation(String.format("item/item120/%04d.tcp",item.getId()));
 	}
 	
 	protected void paintComponent(java.awt.Graphics g) {
@@ -59,16 +60,22 @@ public class ItemDetailLabel extends PromptLabel {
 		g.translate(IMG_WIDTH, TITLE_POS);
 		g.setColor(Color.YELLOW);
 		g.setFont(titleFont);
-		g.drawString(item.name, 0, 0);//title
+		g.drawString(item.getName(), 0, 0);//title
 		List<String> strs = new ArrayList<String>();
 		//说明
-		strs.add(item.desc);
+		strs.add(item.getDescription());
+		strs.add("【等级】"+item.getLevel());
 		//功效
-		if (item instanceof MedicineItem) {
-			MedicineItem mitem = (MedicineItem) item;
-			if(mitem.efficacy != null) {
-				strs.add( "【功效】"+mitem.efficacy);
-				strs.add("#Y"+mitem.efficacy+"，等级："+mitem.level);
+		Item _item = item.getItem();
+		if (_item instanceof MedicineItem) {
+			MedicineItem mitem = (MedicineItem) _item;
+			String efficacy = mitem.getEfficacy();
+			if(efficacy != null) {
+				strs.add("【功效】"+efficacy);
+				strs.add("#Y"+efficacy);
+			}
+			if(mitem.getLevel()==3) {
+				strs.add("#Y"+mitem.actualEfficacy()); 
 			}
 		}
 			

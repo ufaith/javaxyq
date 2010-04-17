@@ -24,7 +24,6 @@ import com.javaxyq.event.PanelEvent;
 import com.javaxyq.event.PanelHandler;
 import com.javaxyq.graph.Label;
 import com.javaxyq.graph.Panel;
-import com.javaxyq.model.Item;
 import com.javaxyq.ui.*;
 import com.javaxyq.util.ClosureTask;
 import com.javaxyq.core.*;

@@ -29,8 +29,10 @@ import com.javaxyq.core.DialogFactory;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.data.DataStore;
+import com.javaxyq.data.ItemInstance;
 import com.javaxyq.graph.Canvas;
 import com.javaxyq.graph.Label;
+import com.javaxyq.model.Item;
 import com.javaxyq.model.Item;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.ui.ItemDetailLabel;
@@ -77,7 +79,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 */
 	private String selectedMagic;
 	private boolean selectingItem;
-	private Item selectedItem;
+	private ItemInstance selectedItem;
 	private Command lastCmd;
 	
 	public BattleCanvas(int width, int height) {
@@ -208,7 +210,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 		selectingItem = true;
 	}
 
-	public void setSelectedItem(Item item) {
+	public void setSelectedItem(ItemInstance item) {
 		this.selectedItem = item;
 		this.selectingItem = false;
 		UIHelper.hideDialog(BATTLE_USEITEM);
@@ -450,7 +452,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 
 	private void initItems() {
 		BattleCanvas canvas = GameMain.getBattleCanvas();
-		Item[] items = DataStore.getPlayerItems(canvas.getPlayer());
+		ItemInstance[] items = DataStore.getPlayerItems(canvas.getPlayer());
 		// 设置显示的道具
 		for (int i = 0; i < items.length; i++) {
 			ItemLabel label = (ItemLabel) DialogFactory.getDialog(BATTLE_USEITEM, true).findCompByName("item" + (i + 1));
@@ -472,7 +474,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	private class ItemMouseHandler extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			ItemLabel label = (ItemLabel) e.getComponent();
-			Item item = label.getItem();
+			ItemInstance item = label.getItem();
 			if (item != null) {
 				setSelectedItem(item);
 				UIHelper.hideToolTip(detailLabel);
@@ -481,7 +483,7 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 
 		public void mouseMoved(MouseEvent e) {
 			ItemLabel label = (ItemLabel) e.getComponent();
-			Item item = label.getItem();
+			ItemInstance item = label.getItem();
 			if (item != null) {
 				detailLabel.setItem(item);
 				UIHelper.showToolTip(detailLabel, label, e);

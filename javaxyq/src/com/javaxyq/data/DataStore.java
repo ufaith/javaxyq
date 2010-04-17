@@ -1,12 +1,10 @@
 package com.javaxyq.data;
 
 import java.awt.Point;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,11 +23,9 @@ import com.javaxyq.core.Helper;
 import com.javaxyq.core.PlayerPropertyCalculator;
 import com.javaxyq.model.Item;
 import com.javaxyq.model.ItemTypes;
-import com.javaxyq.model.MedicineItem;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.model.Task;
 import com.javaxyq.task.TaskManager;
-import com.javaxyq.util.StringUtils;
 import com.javaxyq.widget.Player;
 
 /**
@@ -74,6 +70,7 @@ public class DataStore {
 		PlayerVO vo = player.getData();
 		vo.money += money;
 	}
+	
 	public static void addHp(Player player,int hp) {
 		PlayerVO vo = player.getData();
 		vo.hp = Math.min(vo.hp+hp,vo.maxHp);
@@ -81,6 +78,7 @@ public class DataStore {
 			vo.hp = 0;
 		}
 	}
+	
 	public static void addMp(Player player,int mp) {
 		PlayerVO vo = player.getData();
 		vo.mp = Math.min(vo.mp+mp,vo.maxMp);
@@ -313,125 +311,37 @@ public class DataStore {
 		return null;
 	}
 	
-	private static Map<String,MedicineItem> medicines = null;
-	private static void loadMedicines() {
-		medicines = new HashMap<String, MedicineItem>();
-		//一级药品
-		File file = GameMain.getFile("data/medicine1.txt");
-		String str = null;
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
-			while((str=br.readLine())!=null) {
-				if(!str.startsWith("//")){
-					try {
-						MedicineItem item = parseMedicineItem(str);
-						item.level = 1;
-						medicines.put(item.name, item);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			br.close();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		//二级药品
-		try {
-			file = GameMain.getFile("data/medicine2.txt");
-			br = new BufferedReader(new FileReader(file));
-			while((str=br.readLine())!=null) {
-				if(!str.startsWith("//")){
-					try {
-						MedicineItem item = parseMedicineItem(str);
-						item.level = 2;
-						medicines.put(item.name, item);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		//三级药品
-		try {
-			file = GameMain.getFile("data/medicine3.txt");
-			br = new BufferedReader(new FileReader(file));
-			while((str=br.readLine())!=null) {
-				if(!str.startsWith("//")){
-					try {
-						MedicineItem item = parseMedicineItem(str);
-						item.level = 3;
-						medicines.put(item.name, item);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static MedicineItem parseMedicineItem(String str) {
-		System.out.println("parse: "+str);
-		String[] vals = str.trim().split("\t");
-		MedicineItem item = new  MedicineItem();
-		item.id = vals[0];
-		item.name = vals[1];
-		item.desc = vals[2];
-		item.price = Integer.valueOf(vals[3]);
-		item.hp = Integer.valueOf(vals[4]);
-		item.mp = Integer.valueOf(vals[5]);
-		item.injury = Integer.valueOf(vals[6]);
-		item.type = Integer.valueOf(vals[7],16);
-		item.efficacy = vals[8];
-		System.out.println("item: "+item);
-		return item;
-	}
-	
-	public static Item createItem(String name) {
+	public static ItemInstance createItem(String name) {
 		if(name == null) return null;
 		name = name.trim();
-		if(medicines == null) {
-			loadMedicines();
-		}
-		try {
-			return medicines.get(name).clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return null;
+//		if(medicines == null) {
+//			loadMedicines();
+//		}
+//		try {
+//			return medicines.get(name).clone();
+//		} catch (CloneNotSupportedException e) {
+//			e.printStackTrace();
+//		}
+		MedicineItem itemVO = medicineDAO.findMedicineItemByName(name);
+		return new ItemInstance(itemVO,1);
 	}
 	
-	private static Map<Player,Item[]> itemsMap = new HashMap<Player, Item[]>();
+	private static Map<Player,ItemInstance[]> itemsMap = new HashMap<Player, ItemInstance[]>();
+
+	private static MedicineItemJpaController medicineDAO;
 	/**
 	 * 读取游戏人物道具列表
 	 */
-	public static Item[] getPlayerItems(Player player) {
-		Item[] items = itemsMap.get(player);
+	public static ItemInstance[] getPlayerItems(Player player) {
+		ItemInstance[] items = itemsMap.get(player);
 		if(items == null) {
-			items = new Item[20];
+			items = new ItemInstance[20];
 			itemsMap.put(player, items);
 		}
 		return items;
 	}
-	public static Item getItemAt(Player player,int index) {
-		Item[] list = itemsMap.get(player);
+	public static ItemInstance getItemAt(Player player,int index) {
+		ItemInstance[] list = itemsMap.get(player);
 		return list!=null?list[index]: null;
 	}
 	
@@ -441,40 +351,44 @@ public class DataStore {
 	 * @param type 物品类型，参考ItemTypes
 	 * @return
 	 */
-	public static Item[] findItems(Player player,int type) {
-		Item[] allitems = getPlayerItems(player);
-		List<Item> results = new ArrayList<Item>();
+	public static ItemInstance[] findItems(Player player,int type) {
+		ItemInstance[] allitems = getPlayerItems(player);
+		List<ItemInstance> results = new ArrayList<ItemInstance>();
 		for (int i = 0; i < allitems.length; i++) {
-			Item item = allitems[i];
-			if(item!=null && ItemTypes.isType(item, type)) {
+			ItemInstance item = allitems[i];
+			if(item!=null && ItemTypes.isType(item.getItem(), type)) {
 				results.add(item);
 			}
 		}
-		return results.toArray(new Item[results.size()]);
+		return results.toArray(new ItemInstance[results.size()]);
 	}
 	
 	/**
 	 * 设置人物的道具
 	 * @param index 道具位置序号，自上而下，自左至右排列 in 5*4 = [0,20) 
 	 */
-	public static void setPlayerItem(Player player,int index,Item item) {
-		Item[] items = getPlayerItems(player);
+	public static void setPlayerItem(Player player,int index,ItemInstance item) {
+		ItemInstance[] items = getPlayerItems(player);
 		items[index] = item;
 	}
 	public static void setPlayerItemName(Player player,int index,String itemName) {
 		setPlayerItem(player,index,createItem(itemName));
 	}
 	
-	public static void removePlayerItem(Player player,int index) {
-		Item[] items = getPlayerItems(player);
-		items[index] = null;
-		System.out.println("remove item: "+index);
+	public static boolean removePlayerItem(Player player,int index) {
+		ItemInstance[] items = getPlayerItems(player);
+		if(items[index]!=null) {
+			System.out.println("remove item: "+items[index]);
+			items[index] = null;
+			return true;
+		}
+		return false;
 	}
 	
-	public static void removePlayerItem(Player player,Item item) {
-		Item[] items = getPlayerItems(player);
+	public static void removePlayerItem(Player player,ItemInstance item) {
+		ItemInstance[] items = getPlayerItems(player);
 		for (int i = 0; i < items.length; i++) {
-			if(items[i]==item) {
+			if(items[i] == item) {
 				items[i] = null;
 				break;
 			}
@@ -484,8 +398,8 @@ public class DataStore {
 	
 	public static void swapItem(Player player, int srcIndex, int destIndex){
 		synchronized(player) {
-			Item[] items = getPlayerItems(player);
-			Item temp = items[srcIndex];
+			ItemInstance[] items = getPlayerItems(player);
+			ItemInstance temp = items[srcIndex];
 			items[srcIndex] = items[destIndex];
 			items[destIndex] = temp;
 		}
@@ -495,17 +409,17 @@ public class DataStore {
 	 * 给以人物某物品
 	 * @return 给予成功返回true
 	 */
-	public static boolean addItemToPlayer(Player player,Item item) {
+	public static boolean addItemToPlayer(Player player,ItemInstance item) {
 		//TODO 获得物品
 		synchronized(player) {
-			Item[] items = getPlayerItems(player);
+			ItemInstance[] items = getPlayerItems(player);
 			int index = 0;
 			for(index =0;index < items.length;index++) {
 				if(items[index] == null) {
 					items[index] = item;
 					return true;
 				}else if(overlayItems(item, items[index])) {//可以叠加
-					if(item.amount ==0)return true;
+					if(item.getAmount() ==0)return true;//叠加完毕
 				}
 			}
 			return false;
@@ -525,7 +439,7 @@ public class DataStore {
 		int amount = 1;
 		if (item instanceof MedicineItem) {
 			MedicineItem mitem = (MedicineItem) item;
-			switch (mitem.level) {
+			switch (mitem.getLevel()) {
 			case 1:
 				amount = 99;
 				break;
@@ -548,13 +462,13 @@ public class DataStore {
 	 * @param destItem 目标物品
 	 * @return 叠加成功返回true
 	 */
-	public static boolean overlayItems(Item srcItem,Item destItem) {
-		if(StringUtils.equals(srcItem.id, destItem.id)) {
-			int maxAmount = getOverlayAmount(srcItem); 
-			if(maxAmount > destItem.amount) {
-				int total = srcItem.amount + destItem.amount;
-				destItem.amount = Math.min(total,maxAmount);
-				srcItem.amount = total - destItem.amount;
+	public static boolean overlayItems(ItemInstance srcItem,ItemInstance destItem) {
+		if(srcItem.equals(destItem)) {
+			int maxAmount = getOverlayAmount(srcItem.getItem()); 
+			if(maxAmount > destItem.getAmount()) {
+				int total = srcItem.getAmount() + destItem.getAmount();
+				destItem.setAmount( Math.min(total,maxAmount));
+				srcItem.setAmount(total - destItem.getAmount());
 				return true;
 			}
 		}
@@ -566,14 +480,10 @@ public class DataStore {
 	 * 初始化数据中心
 	 */
 	public static void init() {
-		
+		System.setProperty("derby.system.home",GameMain.cacheBase);
+		medicineDAO = new MedicineItemJpaController();
 	}
 	
-	public static void main(String[] args) {
-		Item item = DataStore.createItem("四叶花");
-		System.out.println(item);
-	}
-
 	/**
 	 * 初始化数据
 	 */
@@ -594,14 +504,14 @@ public class DataStore {
 		GameMain.setPlayer(p);
 		GameMain.setScene("wzg",52,32);//五庄观	
 		
-		Item item = DataStore.createItem("四叶花");
-		item.amount = 99;
+		ItemInstance item = DataStore.createItem("四叶花");
+		item.setAmount(99);
 		DataStore.addItemToPlayer(p,item);
 		item = DataStore.createItem("佛手");
-		item.amount = 99;
+		item.setAmount(99);
 		DataStore.addItemToPlayer(p,item);
-		item = DataStore.createItem("山药");
-		item.amount = 99;
+		item = DataStore.createItem("血色茶花");
+		item.setAmount(30);
 		DataStore.addItemToPlayer(p,item);
 		int money = 50000;
 		addMoney(p, money);		
@@ -624,9 +534,14 @@ public class DataStore {
 			//人物数据
 			PlayerVO playerData = (PlayerVO) ois.readObject();
 			//物品数据
-			Item[] items = new Item[ois.readInt()];
+			ItemInstance[] items = new ItemInstance[ois.readInt()];
 			for(int i=0;i<items.length;i++) {
-				items[i] = (Item) ois.readObject();
+				ItemInstance _inst = (ItemInstance) ois.readObject();
+				items[i] = _inst;
+				//read item 
+				if(_inst!=null) {
+					_inst.setItem(medicineDAO.findMedicineItem(_inst.getItemId()));
+				}
 			}
 			//任务数据
 			Task[] tasks = new Task[ois.readInt()]; 
@@ -636,7 +551,6 @@ public class DataStore {
 			ois.close();
 			
 			//初始化
-			
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("name",playerData.name );
 			data.put("level", playerData.level);
@@ -689,7 +603,7 @@ public class DataStore {
 			oos.writeObject(playerData);
 			
 			//物品数据
-			Item[] items = getPlayerItems(player);
+			ItemInstance[] items = getPlayerItems(player);
 			oos.writeInt(items.length);
 			for (int i = 0; i < items.length; i++) {
 				oos.writeObject(items[i]);

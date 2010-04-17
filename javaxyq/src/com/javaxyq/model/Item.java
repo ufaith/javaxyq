@@ -8,56 +8,25 @@
  */
 package com.javaxyq.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * 物品数据模型类
- * @author dewitt
+ * 游戏物品对象接口
+ * @author gongdewei
+ * @date 2010-4-17 create
  */
-public class Item implements Serializable{
-	private static final long serialVersionUID = -4027503236184637259L;
-	
-	public String id;
-	public String name;
-	public int type;
-	public String desc;
-	public int level;
-	public int price;
-	public int amount = 1;
-	
-	@Override
-	public String toString() {
-		return String.format("Item [amount=%s, desc=%s, id=%s, level=%s, name=%s, price=%s, type=%s]", amount, desc,
-				id, level, name, price, type);
-	}
+public interface Item extends Serializable {
 
-	protected void writeObject(ObjectOutputStream s)
-	throws IOException
-	{
-		s.writeUTF(id);
-		s.writeUTF(name);
-		s.writeInt(type);
-		s.writeUTF(desc);
-		s.writeInt(level);
-		s.writeInt(price);
-		s.writeInt(amount);
-	}
-	
-	/**
-	 * Reconstitute this object from a stream (i.e., deserialize it).
-	 */
-	protected void readObject(ObjectInputStream s)
-	throws IOException, ClassNotFoundException
-	{
-		id= s.readUTF();
-		name= s.readUTF();
-		type= s.readInt();
-		desc= s.readUTF();
-		level= s.readInt();
-		price= s.readInt();
-		amount= s.readInt();
-	}
+	public abstract Long getId();
+
+	public abstract String getName();
+
+	public abstract String getType();
+
+	public abstract String getDescription();
+
+	public abstract short getLevel();
+
+	public abstract long getPrice();
+
 }

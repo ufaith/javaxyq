@@ -11,16 +11,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.javaxyq.data.DataStore;
-import com.javaxyq.model.MedicineItem;
+import com.javaxyq.data.ItemInstance;
+import com.javaxyq.data.MedicineItem;
+import com.javaxyq.model.Item;
 import com.javaxyq.model.PlayerVO;
-import com.javaxyq.util.ClassUtil;
 import com.javaxyq.widget.Player;
 
 /**
@@ -173,15 +172,19 @@ public class BattleCalculator {
 			System.out.println(target.getName()+"已倒下，无法接受药物");
 			return null;
 		}		
-		MedicineItem item = (MedicineItem) cmd.get("item");
+		ItemInstance iteminst = (ItemInstance) cmd.get("item");
+		Item item = iteminst.getItem();
 		if(item != null) {
-			if(item.hp!=0) {
-				target.hp += item.hp;
-				cmd.add("hp",item.hp);
-			}
-			if(item.mp!=0) {
-				target.mp += item.mp;
-				cmd.add("mp",item.mp);
+			if (item instanceof MedicineItem) {
+				MedicineItem mitem = (MedicineItem) item;				
+				if(mitem.getHp()!=0) {
+					target.hp += mitem.getHp();
+					cmd.add("hp",mitem.getHp());
+				}
+				if(mitem.getMp()!=0) {
+					target.mp += mitem.getMp();
+					cmd.add("mp",mitem.getMp());
+				}
 			}
 		}
 		return cmd;

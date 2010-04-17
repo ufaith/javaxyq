@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.javaxyq.data.DataStore;
+import com.javaxyq.data.ItemInstance;
 import com.javaxyq.event.ItemEvent;
 import com.javaxyq.event.ItemListener;
 import com.javaxyq.model.Item;
@@ -48,12 +49,12 @@ public class ItemManager {
 		itemHandlers.put(type, l);
 	}
 	
-	public static boolean useItem(Player player,Item item) {
-		if(item.amount > 0) {
-			ItemListener handler = findItemAction(item);
+	public static boolean useItem(Player player,ItemInstance item) {
+		if(item.getAmount() > 0) {
+			ItemListener handler = findItemAction(item.getItem());
 			if(handler != null) {
 				handler.itemUsed(new ItemEvent(GameMain.getPlayer(),item,""));
-				if(item.amount <= 0) {//如果消耗完，则销毁物品
+				if(item.getAmount() <= 0) {//如果消耗完，则销毁物品
 					DataStore.removePlayerItem(GameMain.getPlayer(),item);
 				}
 				return true;

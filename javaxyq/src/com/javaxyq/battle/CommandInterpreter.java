@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import com.javaxyq.core.ItemManager;
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.data.DataStore;
+import com.javaxyq.data.ItemInstance;
 import com.javaxyq.event.ItemEvent;
 import com.javaxyq.event.ItemListener;
 import com.javaxyq.model.Item;
@@ -157,13 +158,13 @@ public class CommandInterpreter {
 		//effect
 		source.playOnce("magic");
 		delay(100);
-		Item item = (Item) cmd.get("item");
-		ItemListener handler = ItemManager.findItemAction(item);
-		setMsg(String.format("%s 使用了一个%s",source.getName(),item.name));
+		ItemInstance item = (ItemInstance) cmd.get("item");
+		ItemListener handler = ItemManager.findItemAction(item.getItem());
+		setMsg(String.format("%s 使用了一个%s",source.getName(),item.getName()));
 		if(handler!=null) {
 			handler.itemUsed(new ItemEvent(target,item,""));
 		}
-		if(item.amount <= 0) {//如果消耗完，则销毁物品
+		if(item.getAmount() <= 0) {//如果消耗完，则销毁物品
 			DataStore.removePlayerItem(source,item);
 		}
 		int hpval = cmd.getInt("hp");
