@@ -10,7 +10,12 @@ JavaXYQ更新说明、进展情况等。
 
 
 = Updates =
- _20100306_ JavaXYQ 1.4 M1
+ _20100418) JavaXYQ 1.4 M2
+ # 添加游戏数据库支持(JavaDB)
+ # 完善战斗动画效果
+ # 自动补血、补蓝
+
+ _20100306_ JavaXYQ 1.4 M2
  # Applet版本
  # 在线下载资源
  # 在线运行主页：http://javaxyq.appspot.com
