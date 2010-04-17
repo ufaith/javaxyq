@@ -8,13 +8,13 @@ import java.awt.Point;
 import java.util.Timer;
 
 import com.javaxyq.data.DataStore;
+import com.javaxyq.data.ItemInstance;
 import com.javaxyq.core.ItemManager;
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.event.*;
 import com.javaxyq.graph.*;
 import com.javaxyq.model.ItemTypes;
-import com.javaxyq.model.Item;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.ui.*;
 /**
@@ -109,11 +109,11 @@ class mainwin extends PanelHandler{
 		PlayerVO data = player.getData();
 		int reqHp = data.maxHp - data.hp;//需要补充的气血量
 		//查找可以补充气血的药品
-		Item[] items = DataStore.findItems(player,ItemTypes.TYPE_MEDICINE_HP);
+		ItemInstance[] items = DataStore.findItems(player,ItemTypes.TYPE_MEDICINE_HP);
 		Arrays.sort(items,new MedicineItemComparator(ItemTypes.TYPE_MEDICINE_HP));
 		for (int i = 0; i < items.length; i++) {
-			Item item = items[i];
-			while(reqHp > 0 && item.amount > 0) {
+			ItemInstance item = items[i];
+			while(reqHp > 0 && item.level <3 && item.amount > 0) {
 				System.out.println("使用一个药品："+item.name);
 				ItemManager.useItem(player, item);
 				reqHp = data.maxHp - data.hp;
@@ -130,7 +130,29 @@ class mainwin extends PanelHandler{
 	 * @param evt
 	 */
 	public void eke_player_mp(ActionEvent evt) {
-		println "补充player_mp"
+		//如果当前在战斗则返回
+		if(GameMain.getState() == GameMain.STATE_BATTLE) {
+			UIHelper.prompt("[温馨提示]战斗中不能自动补充法力哦！",3000);
+			return;
+		}
+		Player player = GameMain.getPlayer();
+		PlayerVO data = player.getData();
+		int reqMp = data.maxMp - data.mp;//需要补充的气血量
+		//查找可以补充气血的药品
+		ItemInstance[] items = DataStore.findItems(player,ItemTypes.TYPE_MEDICINE_MP);
+		Arrays.sort(items,new MedicineItemComparator(ItemTypes.TYPE_MEDICINE_MP));
+		for (int i = 0; i < items.length; i++) {
+			ItemInstance item = items[i];
+			while(reqMp > 0 && item.level <3 && item.amount > 0) {
+				System.out.println("使用一个药品："+item.name);
+				ItemManager.useItem(player, item);
+				reqMp = data.maxMp - data.mp;
+			}
+			if(reqMp == 0) {
+				System.out.println("法力补充完毕！");
+				break;
+			}
+		}
 	}
 	
 	/**

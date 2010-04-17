@@ -26,25 +26,40 @@ public class ItemTypes {
 	public static final int TYPE_WEAPON = 0x2000;
 	public static final int TYPE_EQUIPMENT = 0x4000;
 	
+	/**
+	 * 获取物品的类型
+	 * @param item
+	 * @return
+	 */
+	public static int getType(Item item) {
+		return Integer.valueOf(item.getType(),16);
+	}
+	
+	/**
+	 * 判断物品的类型
+	 * @param item
+	 * @param type
+	 * @return
+	 */
 	public static boolean isType(Item item,int type) {
-		return (item.type & type) == type;
+		return (getType(item) & type) == type;
 	}
 
 	public static boolean isMedicine(Item item) {
-		return (item.type & TYPE_MEDICINE)==TYPE_MEDICINE;
+		return (getType(item) & TYPE_MEDICINE)==TYPE_MEDICINE;
 	}
 	public static boolean isHpMedicine(Item item) {
-		return (item.type & TYPE_MEDICINE_HP)==TYPE_MEDICINE_HP;
+		return (getType(item) & TYPE_MEDICINE_HP)==TYPE_MEDICINE_HP;
 	}
 	public static boolean isMpMedicine(Item item) {
-		return (item.type & TYPE_MEDICINE_MP)==TYPE_MEDICINE_MP;
+		return (getType(item) & TYPE_MEDICINE_MP)==TYPE_MEDICINE_MP;
 	}
 	
 	public static boolean isWeapon(Item item) {
-		return (item.type & TYPE_WEAPON)==TYPE_WEAPON;
+		return (getType(item) & TYPE_WEAPON)==TYPE_WEAPON;
 	}
 	public static boolean isEquipment(Item item) {
-		return (item.type & TYPE_EQUIPMENT)==TYPE_EQUIPMENT;
+		return (getType(item) & TYPE_EQUIPMENT)==TYPE_EQUIPMENT;
 	}
 	
 	

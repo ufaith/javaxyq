@@ -19,6 +19,7 @@ import com.javaxyq.core.GameMain;
 import com.javaxyq.core.Helper;
 import com.javaxyq.core.ResourceStore;
 import com.javaxyq.data.DataStore;
+import com.javaxyq.data.ItemInstance;
 import com.javaxyq.model.Item;
 import com.javaxyq.model.Task;
 import com.javaxyq.ui.UIHelper;
@@ -71,11 +72,11 @@ public class SchoolTaskCoolie extends TaskCoolie {
 			Player player =GameMain.getPlayer();
 			Player target = (Player) task.get("target");
 			String required = (String) task.get("item");
-			Item[] items = DataStore.getPlayerItems(player);
-			for (Item item : items) {
-				if(item!=null && StringUtils.equals(required, item.name)) {
-					item.amount --;
-					if(item.amount == 0) {
+			ItemInstance[] items = DataStore.getPlayerItems(player);
+			for (ItemInstance item : items) {
+				if(item!=null && StringUtils.equals(required, item.getName())) {
+					item.alterAmount(-1);
+					if(item.getAmount() == 0) {//TODO ÎïÆ·Ïú»Ù£¿
 						DataStore.removePlayerItem(player,item);
 					}
 					task.setFinished(true);

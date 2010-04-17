@@ -12,5 +12,8 @@
 	<classpathentry kind="lib" path="lib/groovy-all-1.6.5.jar" sourcepath="D:/TDDownload/Source/groovy-src-1.6.5.zip"/>
 	<classpathentry kind="lib" path="lib/commons-beanutils-core-1.8.2.jar" sourcepath="E:/open-source/commons-beanutils-1.8.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/eclipselink-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/eclipselink-javax.persistence-2.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/Derby Embedded JDBC Driver"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

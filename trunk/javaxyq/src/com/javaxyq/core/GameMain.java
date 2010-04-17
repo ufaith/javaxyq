@@ -48,6 +48,7 @@ import com.javaxyq.action.RandomMovementAction;
 import com.javaxyq.battle.BattleCanvas;
 import com.javaxyq.config.TalkConfig;
 import com.javaxyq.data.DataStore;
+import com.javaxyq.data.ItemInstance;
 import com.javaxyq.data.XmlDataLoader;
 import com.javaxyq.event.ActionEvent;
 import com.javaxyq.event.Listener;
@@ -61,7 +62,6 @@ import com.javaxyq.graph.Panel;
 import com.javaxyq.graph.SceneCanvas;
 import com.javaxyq.graph.TalkPanel;
 import com.javaxyq.io.CacheManager;
-import com.javaxyq.model.Item;
 import com.javaxyq.model.ItemTypes;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.ui.UIHelper;
@@ -257,20 +257,20 @@ public final class GameMain {
 		
 		DataStore.addHp(getPlayer(), -200);
 		DataStore.addMp(getPlayer(), -200);
-		Item item = DataStore.createItem("血色茶花");
-		item.amount = 1;
+		ItemInstance item = DataStore.createItem("血色茶花");
+		item.setAmount(1);
 		DataStore.addItemToPlayer(getPlayer(), item);
 		item = DataStore.createItem("龙之心屑");
-		item.amount = 1;
+		item.setAmount(1);
 		DataStore.addItemToPlayer(getPlayer(), item);
 		item = DataStore.createItem("金创药");
-		item.amount = 1;
+		item.setAmount(1);
 		DataStore.addItemToPlayer(getPlayer(), item);
 		item = DataStore.createItem("金香玉");
-		item.amount = 1;
+		item.setAmount(1);
 		DataStore.addItemToPlayer(getPlayer(), item);
 		item = DataStore.createItem("九转回魂丹");
-		item.amount = 1;
+		item.setAmount(1);
 		DataStore.addItemToPlayer(getPlayer(), item);
 		//setPlayingMusic(false);//debug
 	}

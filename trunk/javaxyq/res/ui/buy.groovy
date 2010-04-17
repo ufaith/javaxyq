@@ -1,3 +1,4 @@
+
 /*
  * JavaXYQ Source Code
  * by kylixs
@@ -6,12 +7,14 @@
  * or mail to kylixs@qq.com
  */
 package ui_script;
+
+import com.javaxyq.data.ItemInstance;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.InputMethodListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
-import com.javaxyq.model.Item;
+
 import java.awt.Color;
 import java.awt.Desktop;
 import java.net.URI;
@@ -38,7 +41,7 @@ class buy extends PanelHandler implements MouseListener,MouseMotionListener,Docu
 	private Timer timer;
 	private Label selectedBorder;
 	private Label selectingBorder;
-	private Item selectedItem;
+	private def selectedItem;
 	private ItemDetailLabel detailLabel = new ItemDetailLabel();
 	private TextField fieldAmount; 
 	
@@ -85,13 +88,12 @@ class buy extends PanelHandler implements MouseListener,MouseMotionListener,Docu
 		}else {
 			money -= totalCost;
 			GameMain.getPlayer().getData().money = money;
-			def item = selectedItem.clone();
-			item.amount=amount;
+			def item = new ItemInstance(selectedItem.getItem(),amount);
 			DataStore.addItemToPlayer(GameMain.getPlayer(),item);
 			GameMain.doTalk(GameMain.getTalker(),"你购买了${amount}个${selectedItem.name}，总共花费了#R${totalCost}#n两。#32");
 			println "buy ${selectedItem.name}*${amount}, cost $totalCost"
 		}	}
-	private void setSelectedItem(Item item) {
+	private void setSelectedItem(def item) {
 		this.selectedItem = item;		
 		def label = panel.findCompByName("item-${item.name}");
 		selectedBorder.location = [label.x-1, label.y-1];
@@ -104,7 +106,21 @@ class buy extends PanelHandler implements MouseListener,MouseMotionListener,Docu
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		setSelectedItem(e.source.item);		
+		def item = e.source.item;
+		if(this.selectedItem == item) {
+			int n = e.isShiftDown()?10:1;
+			this.amount += e.getButton()==MouseEvent.BUTTON1? n:-n;
+			if(this.amount > 99) {
+				this.amount = 99;
+			}
+			if(this.amount < 1) {
+				this.amount = 1;
+			}
+			update(null);
+			fieldAmount.setText("${amount}");
+		}else {
+			setSelectedItem(item);
+		}
 	}
 
 	@Override
