@@ -18,14 +18,11 @@ import java.io.Serializable;
  * @author dewitt
  */
 public class Item implements Serializable{
-	public static final String TYPE_MEDICINE = "Ò©Æ·";
-	public static final String TYPE_WEAPON = "ÎäÆ÷";
-	public static final String TYPE_EQUIPMENT = "×°±¸";
 	private static final long serialVersionUID = -4027503236184637259L;
 	
 	public String id;
 	public String name;
-	public String type;
+	public int type;
 	public String desc;
 	public int level;
 	public int price;
@@ -42,7 +39,7 @@ public class Item implements Serializable{
 	{
 		s.writeUTF(id);
 		s.writeUTF(name);
-		s.writeUTF(type);
+		s.writeInt(type);
 		s.writeUTF(desc);
 		s.writeInt(level);
 		s.writeInt(price);
@@ -57,7 +54,7 @@ public class Item implements Serializable{
 	{
 		id= s.readUTF();
 		name= s.readUTF();
-		type= s.readUTF();
+		type= s.readInt();
 		desc= s.readUTF();
 		level= s.readInt();
 		price= s.readInt();

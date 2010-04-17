@@ -240,15 +240,7 @@ class item extends PanelHandler implements MouseListener,MouseMotionListener {
 		Component c = e.getComponent();
 		if (c instanceof ItemLabel) {
 			ItemLabel label = (ItemLabel) c;
-			Item item = label.item;
-			ItemListener listener = ItemManager.findItemAction(item.type);
-			if(listener) {
-				listener.itemUsed(new ItemEvent(GameMain.getPlayer(),item,''));
-			}
-			if(item.amount <= 0) {//如果消耗完，则销毁物品
-				def cell =getCell(e);
-				DataStore.removePlayerItem(GameMain.getPlayer(),cell.@x+cols*cell.@y);
-			}
+			ItemManager.useItem(GameMain.getPlayer(),label.item);
 			updateItems();
 		}
 	}

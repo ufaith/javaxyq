@@ -43,6 +43,7 @@ import javax.swing.KeyStroke;
 
 import com.javaxyq.action.BaseAction;
 import com.javaxyq.action.DefaultTransportAction;
+import com.javaxyq.action.MedicineItemHandler;
 import com.javaxyq.action.RandomMovementAction;
 import com.javaxyq.battle.BattleCanvas;
 import com.javaxyq.config.TalkConfig;
@@ -60,6 +61,8 @@ import com.javaxyq.graph.Panel;
 import com.javaxyq.graph.SceneCanvas;
 import com.javaxyq.graph.TalkPanel;
 import com.javaxyq.io.CacheManager;
+import com.javaxyq.model.Item;
+import com.javaxyq.model.ItemTypes;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
@@ -244,13 +247,31 @@ public final class GameMain {
 		
 		//task
 		TaskManager.instance.register("school", "com.javaxyq.task.SchoolTaskCoolie");
+		ItemManager.addItem(ItemTypes.TYPE_MEDICINE, new MedicineItemHandler());
 		
 		updateLoading("loading data ...");
 		DataStore.init();
-		ItemManager.init();
 		DataStore.loadData();
 		updateLoading("starting game ...");
 		stopLoading();
+		
+		DataStore.addHp(getPlayer(), -200);
+		DataStore.addMp(getPlayer(), -200);
+		Item item = DataStore.createItem("血色茶花");
+		item.amount = 1;
+		DataStore.addItemToPlayer(getPlayer(), item);
+		item = DataStore.createItem("龙之心屑");
+		item.amount = 1;
+		DataStore.addItemToPlayer(getPlayer(), item);
+		item = DataStore.createItem("金创药");
+		item.amount = 1;
+		DataStore.addItemToPlayer(getPlayer(), item);
+		item = DataStore.createItem("金香玉");
+		item.amount = 1;
+		DataStore.addItemToPlayer(getPlayer(), item);
+		item = DataStore.createItem("九转回魂丹");
+		item.amount = 1;
+		DataStore.addItemToPlayer(getPlayer(), item);
 		//setPlayingMusic(false);//debug
 	}
 
@@ -421,6 +442,8 @@ public final class GameMain {
 
 	public static String cacheBase = System.getProperty("user.home")+"/javaxyq";
 
+	private static int state;
+
 	public static void setPlayer(Player p) {
 		player = p;
 		sceneCanvas.setPlayer(p);
@@ -559,14 +582,16 @@ public final class GameMain {
 
 	public static final int DOUBLE_STEP_DISTANCE = 2 * STEP_DISTANCE;
 
-	public static final String STATE_NORMAL = "stand";
-
-	public static final String STATE_MOVING = "walk";
-
 	/** 冒泡对话显示的时间 (ms) */
 	public static final int TIME_CHAT = 15 * 1000;
 
 	public static final Color COLOR_NAME_HIGHLIGHT = Color.RED;
+
+	/**
+	 * 游戏状态
+	 */
+	public static final int STATE_BATTLE = 0x1;
+	public static final int STATE_NORMAL = 0x0;
 
 	public static Point sceneToLocal(int x, int y) {
 		return getSceneCanvas().sceneToLocal(new Point(x, y));
@@ -690,6 +715,7 @@ public final class GameMain {
 	 * 进入战斗模式
 	 */
 	public static void enterBattle(List team1,List team2) {
+		state = STATE_BATTLE;
 		int width = displayMode.getWidth();
 		int height = displayMode.getHeight();
 		//background
@@ -727,6 +753,7 @@ public final class GameMain {
 		lastMagic = battleCanvas.getLastMagic();
 		battleCanvas.dispose();
 		battleCanvas = null;
+		state = STATE_NORMAL;
 		updateUI();
 		//TODO
 	}
@@ -835,4 +862,8 @@ public final class GameMain {
 		Object action = GroovyScript.loadClass("scripts/scene/"+id+".groovy");
 		return (SceneListener)action;
 	}	
+	
+	public static int getState() {
+		return state;
+	}
 }

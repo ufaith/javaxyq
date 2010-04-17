@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +49,7 @@ import javax.swing.JTree;
 import javax.swing.JViewport;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeSelectionEvent;
@@ -638,8 +641,24 @@ public class ResourceManager extends SingleFrameApplication {
 	}
 
 	private JInternalFrame createFrame(String title, JComponent content) {
-		JInternalFrame frame = new JInternalFrame(title, true, true, true, true);
+		final JInternalFrame frame = new JInternalFrame(title, true, true, true, true);
 		frame.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+		final JComponent titlebar = ((javax.swing.plaf.basic.BasicInternalFrameUI) frame.getUI()).getNorthPane();
+		frame.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				String propName = evt.getPropertyName();
+				if(JInternalFrame.IS_MAXIMUM_PROPERTY.equals(propName)) {
+					Boolean isMax = (Boolean) evt.getNewValue();
+					if(isMax) {
+						((javax.swing.plaf.basic.BasicInternalFrameUI) frame.getUI()).setNorthPane(null);
+					}else {
+						((javax.swing.plaf.basic.BasicInternalFrameUI) frame.getUI()).setNorthPane(titlebar);
+					}
+					frame.revalidate();
+				}
+			}
+		});
 		// frame.add(content, BorderLayout.CENTER);
 		frame.setContentPane(content);
 		frame.pack();

@@ -158,10 +158,10 @@ public class CommandInterpreter {
 		source.playOnce("magic");
 		delay(100);
 		Item item = (Item) cmd.get("item");
-		ItemListener listener = ItemManager.findItemAction(item.type);
+		ItemListener handler = ItemManager.findItemAction(item);
 		setMsg(String.format("%s 使用了一个%s",source.getName(),item.name));
-		if(listener!=null) {
-			listener.itemUsed(new ItemEvent(target,item,""));
+		if(handler!=null) {
+			handler.itemUsed(new ItemEvent(target,item,""));
 		}
 		if(item.amount <= 0) {//如果消耗完，则销毁物品
 			DataStore.removePlayerItem(source,item);

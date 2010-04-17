@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +24,12 @@ import com.javaxyq.core.GameMain;
 import com.javaxyq.core.Helper;
 import com.javaxyq.core.PlayerPropertyCalculator;
 import com.javaxyq.model.Item;
+import com.javaxyq.model.ItemTypes;
 import com.javaxyq.model.MedicineItem;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.model.Task;
 import com.javaxyq.task.TaskManager;
+import com.javaxyq.util.StringUtils;
 import com.javaxyq.widget.Player;
 
 /**
@@ -74,13 +77,16 @@ public class DataStore {
 	public static void addHp(Player player,int hp) {
 		PlayerVO vo = player.getData();
 		vo.hp = Math.min(vo.hp+hp,vo.maxHp);
-		if(vo.hp<=0) {
-			//TODO 人物死亡
+		if(vo.hp < 0) {
+			vo.hp = 0;
 		}
 	}
 	public static void addMp(Player player,int mp) {
 		PlayerVO vo = player.getData();
 		vo.mp = Math.min(vo.mp+mp,vo.maxMp);
+		if(vo.mp < 0) {
+			vo.mp = 0;
+		}
 	}
 	
 	/**
@@ -318,16 +324,13 @@ public class DataStore {
 			br = new BufferedReader(new FileReader(file));
 			while((str=br.readLine())!=null) {
 				if(!str.startsWith("//")){
-					String[] vals = str.trim().split(" ");
-					MedicineItem item = new  MedicineItem();
-					item.id = vals[0];
-					item.name = vals[1];
-					item.desc = vals[2];
-					item.efficacy = vals[3];
-					item.price = Integer.valueOf(vals[4]);
-					item.type = "medicine1";
-					item.level = 1;
-					medicines.put(item.name, item);
+					try {
+						MedicineItem item = parseMedicineItem(str);
+						item.level = 1;
+						medicines.put(item.name, item);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			br.close();
@@ -345,15 +348,13 @@ public class DataStore {
 			br = new BufferedReader(new FileReader(file));
 			while((str=br.readLine())!=null) {
 				if(!str.startsWith("//")){
-					String[] vals = str.trim().split(" ");
-					MedicineItem item = new  MedicineItem();
-					item.id = vals[0];
-					item.name = vals[1];
-					item.desc = vals[2];
-					item.efficacy = vals[3];
-					item.type = "medicine2";
-					item.level = 2;
-					medicines.put(item.name, item);
+					try {
+						MedicineItem item = parseMedicineItem(str);
+						item.level = 2;
+						medicines.put(item.name, item);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			br.close();
@@ -369,15 +370,13 @@ public class DataStore {
 			br = new BufferedReader(new FileReader(file));
 			while((str=br.readLine())!=null) {
 				if(!str.startsWith("//")){
-					String[] vals = str.trim().split(" ");
-					MedicineItem item = new  MedicineItem();
-					item.id = vals[0];
-					item.name = vals[1];
-					item.desc = vals[2];
-					item.efficacy = vals[3];
-					item.type = "medicine3";
-					item.level = 3;
-					medicines.put(item.name, item);
+					try {
+						MedicineItem item = parseMedicineItem(str);
+						item.level = 3;
+						medicines.put(item.name, item);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			br.close();
@@ -386,6 +385,23 @@ public class DataStore {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static MedicineItem parseMedicineItem(String str) {
+		System.out.println("parse: "+str);
+		String[] vals = str.trim().split("\t");
+		MedicineItem item = new  MedicineItem();
+		item.id = vals[0];
+		item.name = vals[1];
+		item.desc = vals[2];
+		item.price = Integer.valueOf(vals[3]);
+		item.hp = Integer.valueOf(vals[4]);
+		item.mp = Integer.valueOf(vals[5]);
+		item.injury = Integer.valueOf(vals[6]);
+		item.type = Integer.valueOf(vals[7],16);
+		item.efficacy = vals[8];
+		System.out.println("item: "+item);
+		return item;
 	}
 	
 	public static Item createItem(String name) {
@@ -417,6 +433,24 @@ public class DataStore {
 	public static Item getItemAt(Player player,int index) {
 		Item[] list = itemsMap.get(player);
 		return list!=null?list[index]: null;
+	}
+	
+	/**
+	 * 查找某类型的物品
+	 * @param player
+	 * @param type 物品类型，参考ItemTypes
+	 * @return
+	 */
+	public static Item[] findItems(Player player,int type) {
+		Item[] allitems = getPlayerItems(player);
+		List<Item> results = new ArrayList<Item>();
+		for (int i = 0; i < allitems.length; i++) {
+			Item item = allitems[i];
+			if(item!=null && ItemTypes.isType(item, type)) {
+				results.add(item);
+			}
+		}
+		return results.toArray(new Item[results.size()]);
 	}
 	
 	/**
@@ -482,17 +516,31 @@ public class DataStore {
 		return false;
 	}
 	
-	private static Map<String,Integer> itemsOverlayAmount = new HashMap<String, Integer>();
-	private static void initItems() {
-		itemsOverlayAmount.put("medicine1", 99);
-		itemsOverlayAmount.put("medicine2", 30);
-		itemsOverlayAmount.put("medicine3", 30);
+	/**
+	 * 物品可以叠加的最大数量
+	 * @param item
+	 * @return
+	 */
+	public static int getOverlayAmount(Item item) {
+		int amount = 1;
+		if (item instanceof MedicineItem) {
+			MedicineItem mitem = (MedicineItem) item;
+			switch (mitem.level) {
+			case 1:
+				amount = 99;
+				break;
+			case 2:
+				amount = 30;
+				break;
+			case 3:
+				amount = 10;
+				break;
 
-		
-	}
-	public static int getItemOverlayAmount(String type) {
-		Integer n = itemsOverlayAmount.get(type);
-		return n!=null?n:1;
+			default:
+				break;
+			}
+		}
+		return amount;
 	}
 	/**
 	 * 叠加物品
@@ -501,8 +549,8 @@ public class DataStore {
 	 * @return 叠加成功返回true
 	 */
 	public static boolean overlayItems(Item srcItem,Item destItem) {
-		if(srcItem.name == destItem.name) {
-			int maxAmount = getItemOverlayAmount(srcItem.type); 
+		if(StringUtils.equals(srcItem.id, destItem.id)) {
+			int maxAmount = getOverlayAmount(srcItem); 
 			if(maxAmount > destItem.amount) {
 				int total = srcItem.amount + destItem.amount;
 				destItem.amount = Math.min(total,maxAmount);
@@ -518,7 +566,7 @@ public class DataStore {
 	 * 初始化数据中心
 	 */
 	public static void init() {
-		initItems();
+		
 	}
 	
 	public static void main(String[] args) {
