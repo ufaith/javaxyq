@@ -9,26 +9,23 @@ import com.javaxyq.model.MedicineItem;
 import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Player;
 //potion  
-public class MedicineItemAction implements ItemListener{
+public class MedicineItemHandler implements ItemListener{
 
 	@Override
 	public void itemUsed(ItemEvent evt) {
 		MP3Player.play("resources/sound/use_item.mp3");
 		MedicineItem item = (MedicineItem) evt.getItem();
 		Player player = evt.getPlayer();
-		Map eff = item.getEfficacyParams();
-		Integer hpval = (Integer) eff.get("hp");
-		Integer mpval = (Integer) eff.get("mp");
-		if(hpval!=null && mpval!=null) {
+		if(item.hp!=0 && item.mp!=0) {
 			player.playEffect("add_hpmp");
-			DataStore.addHp(player,hpval);		
-			DataStore.addMp(player,mpval);		
-		}else if(hpval != null) {
+			DataStore.addHp(player,item.hp);		
+			DataStore.addMp(player,item.mp);		
+		}else if(item.hp != 0) {
 			player.playEffect("add_hp");
-			DataStore.addHp(player,hpval);		
-		}else if(mpval != null) {
+			DataStore.addHp(player,item.hp);		
+		}else if(item.mp != 0) {
 			player.playEffect("add_mp");
-			DataStore.addMp(player,mpval);
+			DataStore.addMp(player,item.mp);
 		}
 		//»Ö¸´ÆøÑª
 		//»Ö¸´·¨Á¦

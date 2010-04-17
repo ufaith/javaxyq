@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Items>
-	<Item type="medicine1" class="com.javaxyq.action.MedicineItemAction" ></Item>
-	<Item type="medicine2" class="com.javaxyq.action.MedicineItemAction" ></Item>
-	<Item type="medicine3" class="com.javaxyq.action.MedicineItemAction" ></Item>
+	<Item type="1000" class="com.javaxyq.action.MedicineItemAction" ></Item>
 </Items>

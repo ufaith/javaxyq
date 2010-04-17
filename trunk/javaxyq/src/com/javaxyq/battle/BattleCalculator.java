@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.javaxyq.data.DataStore;
 import com.javaxyq.model.MedicineItem;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.util.ClassUtil;
@@ -174,16 +175,13 @@ public class BattleCalculator {
 		}		
 		MedicineItem item = (MedicineItem) cmd.get("item");
 		if(item != null) {
-			Map efficacy = item.getEfficacyParams();
-			Integer hpval = (Integer) efficacy.get("hp");
-			if(hpval!=null) {
-				target.hp += hpval;
-				cmd.add("hp",hpval);
+			if(item.hp!=0) {
+				target.hp += item.hp;
+				cmd.add("hp",item.hp);
 			}
-			Integer mpval = (Integer) efficacy.get("mp");
-			if(mpval!=null) {
-				target.mp += mpval;
-				cmd.add("mp",mpval);
+			if(item.mp!=0) {
+				target.mp += item.mp;
+				cmd.add("mp",item.mp);
 			}
 		}
 		return cmd;

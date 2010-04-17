@@ -360,14 +360,14 @@ public class Player extends AbstractWidget implements EventTarget {
 		} else {
 			this.movingOn = false;
 		}
-		// this.setState(GameMain.STATE_NORMAL);
+		// this.setState(STATE_STAND);
 		// System.out.println("stop");
 	}
 
 	private synchronized void stopAction() {
 		this.moving = false;
 		this.movingOn = false;
-		this.setState(GameMain.STATE_NORMAL);
+		this.setState(STATE_STAND);
 		// System.out.println("stop action!");
 	}
 
@@ -393,7 +393,7 @@ public class Player extends AbstractWidget implements EventTarget {
 
 	public synchronized void updateMovement(long elapsedTime) {
 		// 根据状态改变player的sprite（character可能改变）
-		this.setState(this.isMoving() ? GameMain.STATE_MOVING : this.state);
+		this.setState(this.isMoving() ? STATE_WALK: this.state);
 		if (this.isMoving()) {
 			// 如果移动完成,则发送STEP_OVER消息
 			if (this.isStepOver()) {
