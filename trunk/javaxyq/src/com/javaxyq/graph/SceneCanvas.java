@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +21,9 @@ import com.javaxyq.action.DefaultTalkAction;
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
+import com.javaxyq.data.DataStore;
+import com.javaxyq.data.SceneNpc;
+import com.javaxyq.data.SceneTeleporter;
 import com.javaxyq.event.PlayerAdapter;
 import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.event.PlayerListener;
@@ -233,14 +237,23 @@ public class SceneCanvas extends Canvas {
 		MapConfig cfg = map.getConfig();
 		this.setSceneId(cfg.getId());
 		this.setSceneName(cfg.getName());
-		this.triggerList = ResourceStore.getInstance().createTriggers(cfg.getId());
-		List<Player> _npcs = ResourceStore.getInstance().createNPCs(cfg.getId());
+		//场景跳转点
+		this.triggerList = new ArrayList<Trigger>();
+		Integer _sceneId = Integer.valueOf(sceneId);
+		List<SceneTeleporter> teleporters = DataStore.findTeleportersBySceneId(_sceneId);
+		for (int i = 0; i < teleporters.size(); i++) {
+			triggerList.add(new JumpTrigger(teleporters.get(i)));
+		}
+		//场景npc
 		clearNPCs();
-		for (Player npc : _npcs) {
+		List<SceneNpc> _npcs = DataStore.findNpcsBySceneId(_sceneId);
+		for (int i = 0; i < _npcs.size(); i++) {
+			Player npc = ResourceStore.getInstance().createNPC(_npcs.get(i));
 			Point p = sceneToLocal(npc.getSceneLocation());
 			npc.setLocation(p.x, p.y);
 			this.addNPC(npc);
 		}
+		
 		// test! get barrier image
 		this.mapMask = new ImageIcon(cfg.getPath().replace(".map", "_bar.png")).getImage();
 		maskdata = loadMask(cfg.getPath().replace(".map", ".msk"));

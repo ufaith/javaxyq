@@ -787,15 +787,18 @@ public class Player extends AbstractWidget implements EventTarget {
 	 * 单次播放效果动画
 	 * 
 	 * @param name
+	 * @param sound TODO
 	 */
-	public void playEffect(String name) {
+	public void playEffect(String name, boolean sound) {
 		Animation s = SpriteFactory.loadAnimation("/magic/" + name + ".tcp");
 		s.setRepeat(1);
 		this.onceEffect = s;
-		try {
-			MP3Player.play("sound/magic/" + name + ".mp3");
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(sound) {
+			try {
+				MP3Player.play("sound/magic/" + name + ".mp3");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

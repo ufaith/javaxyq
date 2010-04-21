@@ -232,15 +232,12 @@ public final class GameMain {
 		
 		updateLoading("loading actions ...");
 		XmlDataLoader.defActions();
-		updateLoading("loading scenes ...");
-		XmlDataLoader.defScenes();
+		//updateLoading("loading scenes ...");
+		//XmlDataLoader.defScenes();
 		updateLoading("loading talks ...");
 		XmlDataLoader.defTalks();
 		updateLoading("loading ui ...");
 		loadUIs();
-		
-		updateLoading("loading npcs ...");
-		XmlDataLoader.loadNPCs();
 		
 		registerAction("com.javaxyq.action.transport",new DefaultTransportAction());
 		MovementManager.addMovementAction("random", new RandomMovementAction());

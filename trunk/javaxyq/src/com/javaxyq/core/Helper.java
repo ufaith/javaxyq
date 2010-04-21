@@ -103,30 +103,17 @@ public class Helper {
 		DataStore.recalcElfProps(elf);
 	}
 	
-	public static  void registerNPC(String sceneId, Map cfg) {
-		PlayerConfig playerCfg = new PlayerConfig();
-		try {
-			BeanUtils.populate(playerCfg, cfg);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-//		for(attr in cfg.keySet()) {
-//			def val = cfg.get(attr)
-//			try {
-//				def clazz = playerCfg.class.getDeclaredField(attr).getType();
-//				if(clazz == int)clazz = Integer
-//				else if(clazz ==long)clazz = Long;
-//				//System.out.println("$clazz: $attr = $val");
-//				playerCfg[attr] = val.asType(clazz);
-//			}catch(Exception e) {
-//				System.err.println("¸³ÖµÊ§°Ü! $attr=$val");
-//				e.printStackTrace();
-//			}
+//	public static  void registerNPC(String sceneId, Map cfg) {
+//		PlayerConfig playerCfg = new PlayerConfig();
+//		try {
+//			BeanUtils.populate(playerCfg, cfg);
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		} catch (InvocationTargetException e) {
+//			e.printStackTrace();
 //		}
-		store.registerNPC(sceneId, playerCfg);
-	}
+//		store.registerNPC(sceneId, playerCfg);
+//	}
 
 
 }

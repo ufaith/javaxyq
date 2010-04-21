@@ -73,10 +73,10 @@ public class CommandInterpreter {
 			target.getData().hp -= hitpoints;
 			if(cmd.get("defend")!=null) {
 				target.playOnce("defend");
-				target.playEffect("defend");
+				target.playEffect("defend", true);
 			}else {
 				target.playOnce("hit");
-				target.playEffect("hit");
+				target.playEffect("hit", true);
 			}
 			source.waitFor();
 		}else {
@@ -112,7 +112,7 @@ public class CommandInterpreter {
 		//effect
 		source.playOnce("magic");
 		delay(100);
-		target.playEffect(magicId);
+		target.playEffect(magicId, true);
 		delay(100);
 		if(hit) {
 			System.out.printf("%s»÷ÖÐ%s£¬ÉËº¦%sµã\n",source.getName(),target.getName(),hitpoints);

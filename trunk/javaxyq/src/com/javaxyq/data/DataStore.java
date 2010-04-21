@@ -329,6 +329,12 @@ public class DataStore {
 	private static Map<Player,ItemInstance[]> itemsMap = new HashMap<Player, ItemInstance[]>();
 
 	private static MedicineItemJpaController medicineDAO;
+
+	private static SceneJpaController sceneDAO;
+
+	private static SceneNpcJpaController sceneNpcDAO;
+
+	private static SceneTeleporterJpaController sceneTeleporterDAO;
 	/**
 	 * 读取游戏人物道具列表
 	 */
@@ -482,6 +488,9 @@ public class DataStore {
 	public static void init() {
 		System.setProperty("derby.system.home",GameMain.cacheBase);
 		medicineDAO = new MedicineItemJpaController();
+		sceneDAO = new SceneJpaController();
+		sceneNpcDAO = new SceneNpcJpaController();
+		sceneTeleporterDAO = new SceneTeleporterJpaController();
 	}
 	
 	/**
@@ -502,7 +511,7 @@ public class DataStore {
 		data.put("colorations", colorations);
 		Player p = Helper.createPlayer("0010",data);
 		GameMain.setPlayer(p);
-		GameMain.setScene("wzg",52,32);//五庄观	
+		GameMain.setScene("1146",52,32);//五庄观	
 		
 		ItemInstance item = DataStore.createItem("四叶花");
 		item.setAmount(99);
@@ -646,4 +655,29 @@ public class DataStore {
 	public boolean removeItem(String name,int amount) {
 		return false;
 	}
+	
+	/**
+	 * @return 
+	 * 
+	 */
+	public static Scene findScene(int sceneId) {
+		return sceneDAO.findScene(sceneId);
+	}
+
+	public static List<SceneNpc> findNpcsBySceneId(int sceneId) {
+		return sceneNpcDAO.findNpcsBySceneId(sceneId);
+	}
+
+	public static SceneNpc findSceneNpc(Integer id) {
+		return sceneNpcDAO.findSceneNpc(id);
+	}
+
+	public static SceneTeleporter findSceneTeleporter(Integer id) {
+		return sceneTeleporterDAO.findSceneTeleporter(id);
+	}
+
+	public static List<SceneTeleporter> findTeleportersBySceneId(int sceneId) {
+		return sceneTeleporterDAO.findTeleportersBySceneId(sceneId);
+	}
+	
 }
