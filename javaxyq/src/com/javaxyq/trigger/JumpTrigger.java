@@ -11,8 +11,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.javaxyq.core.GameMain;
-import com.javaxyq.core.ResourceStore;
 import com.javaxyq.core.SpriteFactory;
+import com.javaxyq.data.SceneTeleporter;
 import com.javaxyq.widget.Sprite;
 import com.javaxyq.widget.Widget;
 
@@ -21,22 +21,29 @@ import com.javaxyq.widget.Widget;
  * 
  * @author 龚德伟
  * @history 2008-5-31 龚德伟 新建
+ * @history 2010-4-21 gongdewei 修改使用SceneTeleporter实体类
  */
 public class JumpTrigger implements Trigger {
-    private Transport transport;
+    
+    private SceneTeleporter teleporter;
 
     private boolean enable;
 
     private Rectangle bounds;
 
     private Sprite s;
+    
+    private Point startPoint;
 
-    public JumpTrigger(Transport port) {
-        Point p = port.getOriginPosition();
-        s = getSprite();
-        this.bounds = new Rectangle(p.x-2, p.y-2, 4, 4);
-        this.transport = port;
-    }
+	private Point endPoint;
+
+    public JumpTrigger(SceneTeleporter teleporter) {
+		super();
+		this.teleporter = teleporter;
+		startPoint = parsePoint(teleporter.getStartPoint());
+		endPoint = parsePoint(teleporter.getEndPoint());
+		this.bounds = new Rectangle(startPoint.x-2, startPoint.y-2, 4, 4);
+	}
 
     public Rectangle getBounds() {
         return this.bounds;
@@ -51,15 +58,16 @@ public class JumpTrigger implements Trigger {
     }
 
     public void doAction() {
-        String sceneId = this.transport.getGoalScene();
-        Point p = this.transport.getGoalPositoin();
+        String sceneId = String.valueOf(this.teleporter.getEndId());
         //MapManager.getInstance().fadeToMap(sceneId, p);
-        GameMain.doAction(GameMain.getPlayer(), "com.javaxyq.action.transport", new Object[] { sceneId, p.x, p.y });
+        GameMain.doAction(GameMain.getPlayer(), "com.javaxyq.action.transport", new Object[] { sceneId, endPoint.x, endPoint.y });
     }
 
     public void dispose() {
-        this.transport = null;
+        this.teleporter = null;
         this.bounds = null;
+        this.startPoint = null;
+        this.endPoint = null;
     }
 
     public boolean hit(Point p) {
@@ -67,7 +75,7 @@ public class JumpTrigger implements Trigger {
     }
 
     public Widget getWidget() {
-        return ResourceStore.getInstance().findWidget("sprite.jump1");
+        return null;
     }
 
     public Sprite getSprite() {
@@ -79,5 +87,10 @@ public class JumpTrigger implements Trigger {
 
     public Point getLocation() {
         return new Point(this.bounds.x, this.bounds.y);
+    }
+    
+    private static Point parsePoint(String str) {
+    	String[] strs = str.split("[ ,]");
+    	return new Point(Integer.parseInt(strs[0]), Integer.parseInt(strs[1]));
     }
 }

@@ -104,31 +104,14 @@ public class XmlDataLoader {
 	/**
 	 * 加载场景npc数据
 	 */
-	public static void loadNPCs() {
-		def xml =  new XmlParser().parse(GameMain.getFile("xml/npcs.xml"));
-		def npcs = xml.Scene.NPC;
-		for(def npc in npcs) {
-			Helper.registerNPC(npc.parent().@id,npc.attributes());
-		}
-	}
+//	public static void loadNPCs() {
+//		def xml =  new XmlParser().parse(GameMain.getFile("xml/npcs.xml"));
+//		def npcs = xml.Scene.NPC;
+//		for(def npc in npcs) {
+//			Helper.registerNPC(npc.parent().@id,npc.attributes());
+//		}
+//	}
 	
-	public static void loadItems() {
-		try {
-		def xml = new XmlParser().parse(GameMain.getFile('xml/items.xml'));
-		for(Node item in xml.Item) {
-			if(item.@type && item.@class) {
-				try {
-				ItemManager.addItem(item.@type, Class.forName(item.@class).newInstance());
-				}catch(Exception e) {
-					println "加载物品的处理类失败！${item.@type} => ${item.@class}"
-					e.printStackTrace();
-				}
-			}
-		}
-		}catch(e) {
-			println "load items failed!";
-			e.printStackTrace();
-		}
-	}
+
 	
 }

@@ -237,15 +237,15 @@ public class SchoolTaskCoolie extends TaskCoolie {
 		return "近日听闻有异动，你到外面到处走走看看，发现有不轨之徒，教训一下。";
 	}
 	
+	private String[] npclist = {"船夫","配色师","药店掌柜"};//FIXME
 	/**
 	 * 随机选择一个NPC
 	 * @return
 	 */
 	public String randomNpc() {
 		//FIXME 完善随机NPC 
-		List<PlayerConfig> npcs = ResourceStore.getInstance().getAllNpcs();
-		int index = rand.nextInt(npcs.size());
-		return npcs.get(index).getName();
+		int index = rand.nextInt(npclist.length);
+		return npclist[index];
 	}
 	
 	String[] items = {"四叶花","七叶莲","天青地白","草果","九香虫","水黄莲","紫丹罗","佛手","旋复花","百色花",

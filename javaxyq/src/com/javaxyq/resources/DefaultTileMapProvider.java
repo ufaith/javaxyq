@@ -20,6 +20,8 @@ import java.io.RandomAccessFile;
 
 import com.javaxyq.config.MapConfig;
 import com.javaxyq.core.ResourceStore;
+import com.javaxyq.data.DataStore;
+import com.javaxyq.data.Scene;
 import com.javaxyq.io.CacheManager;
 import com.javaxyq.widget.TileMap;
 
@@ -295,7 +297,7 @@ public class DefaultTileMapProvider implements MapProvider {
         }
     }
 
-    private TileMap loadMap(String id) {
+    private TileMap loadMap(String sceneId) {
         if (mapFile != null) {
             try {
                 mapFile.close();
@@ -305,9 +307,12 @@ public class DefaultTileMapProvider implements MapProvider {
             this.blockOffsetTable = null;
         }
 
-        MapConfig cfg = (MapConfig) ResourceStore.getInstance().findConfig(id);
-        if (cfg != null) {
+        Scene scene = DataStore.findScene(Integer.valueOf(sceneId));
+        if(scene!=null) {
             try {
+            	String path = String.format("scene/%s.map", sceneId);
+				String music = String.format("music/%s.mp3", sceneId);;
+				MapConfig cfg = new MapConfig(sceneId, scene.getName(), path, music);
                 File file = CacheManager.getInstance().getFile(cfg.getPath());
                 mapFile = new MyRandomAccessFile(file, "r");
                 loadHeader();
@@ -317,6 +322,19 @@ public class DefaultTileMapProvider implements MapProvider {
                 e.printStackTrace();
             }
         }
+        
+//        MapConfig cfg = (MapConfig) ResourceStore.getInstance().findConfig(id);
+//        if (cfg != null) {
+//            try {
+//                File file = CacheManager.getInstance().getFile(cfg.getPath());
+//                mapFile = new MyRandomAccessFile(file, "r");
+//                loadHeader();
+//                return new TileMap(this, cfg);
+//            } catch (Exception e) {
+//                System.err.println("create map decoder failed!");
+//                e.printStackTrace();
+//            }
+//        }
         return null;
     }
 

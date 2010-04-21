@@ -3,6 +3,9 @@
   <persistence-unit name="xyqdbPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.javaxyq.data.MedicineItem</class>
+    <class>com.javaxyq.data.Scene</class>
+    <class>com.javaxyq.data.SceneNpc</class>
+    <class>com.javaxyq.data.SceneTeleporter</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:xyqdb"/>
       <property name="javax.persistence.jdbc.password" value="javaxyq"/>
