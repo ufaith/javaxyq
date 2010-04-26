@@ -85,7 +85,7 @@ public class TextField extends JTextField {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			EventDelegator.delegateEvent(e);
+			EventDelegator.getInstance().delegateEvent(e);
 		}
 
 		public void keyReleased(KeyEvent e) {

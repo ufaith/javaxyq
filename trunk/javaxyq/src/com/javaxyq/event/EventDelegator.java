@@ -22,10 +22,18 @@ import com.javaxyq.ui.UIHelper;
 public class EventDelegator implements EventTarget {
 
 	private static final EventDelegator instance = new EventDelegator();
+	private final EventDispatcher<EventDelegator, EventObject> dispatcher = EventDispatcher.getInstance(
+		EventDelegator.class, EventObject.class);
 
 	private EventDelegator() {
 	}
 
+	public static EventDelegator getInstance() {
+		return instance;
+	}
+	public boolean isDelegatedThread() {
+		return Thread.currentThread() == dispatcher;
+	}
 	private static class DelegateEvent extends EventObject {
 		private EventObject event;
 
@@ -56,16 +64,20 @@ public class EventDelegator implements EventTarget {
 		return false;
 	}
 
-	public static void delegateEvent(EventObject event) {
+	public void delegateEvent(EventObject event) {
 		if (event instanceof ActionEvent) {
 			ActionEvent ae = (ActionEvent) event;
 			String cmd = ae.getActionCommand();
-			//如果没有设置actionId，则不处理
-			if(cmd==null || cmd.trim().length()==0) {
+			// 如果没有设置actionId，则不处理
+			if (cmd == null || cmd.trim().length() == 0) {
 				return;
 			}
 		}
-		EventDispatcher.getInstance(EventDelegator.class, EventObject.class).dispatchEvent(
-				new DelegateEvent(instance, event));
+		dispatcher.dispatchEvent(new DelegateEvent(instance, event));
 	}
+
+	public void pumpEvents(Conditional cond) {
+		dispatcher.pumpEvents(cond);
+	}
+	
 }

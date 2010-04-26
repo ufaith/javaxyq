@@ -234,8 +234,8 @@ public final class GameMain {
 		XmlDataLoader.defActions();
 		//updateLoading("loading scenes ...");
 		//XmlDataLoader.defScenes();
-		updateLoading("loading talks ...");
-		XmlDataLoader.defTalks();
+		//updateLoading("loading talks ...");
+		//XmlDataLoader.defTalks();
 		updateLoading("loading ui ...");
 		loadUIs();
 		
@@ -645,7 +645,10 @@ public final class GameMain {
 		TalkPanel dlg = (TalkPanel) DialogFactory.getDialog("npctalk", true);
 		Toolkit.getInstance().createTalk(dlg, talk);
 		dlg.setTalker(npc);
-		UIHelper.showDialog(dlg);
+		//UIHelper.showDialog(dlg);
+		UIHelper.showModalDialog(dlg);
+		//System.out.println("talk panel closed");
+		//TODO return user's select
 	}
 	
 	public static void doTalk(Player p,String chat) {

@@ -118,7 +118,7 @@ public class ToggleButton extends JToggleButton {
 	@Override
 	protected void fireActionPerformed(ActionEvent event) {
 		super.fireActionPerformed(event);
-		EventDelegator.delegateEvent(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
+		EventDelegator.getInstance().delegateEvent(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getActionCommand()));
 	}
 
 //    class CustomButtonUI extends BasicButtonUI {

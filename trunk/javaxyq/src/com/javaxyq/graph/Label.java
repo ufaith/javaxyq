@@ -227,7 +227,7 @@ public class Label extends JLabel {
 	 */
 	protected void processMouseEvent(MouseEvent e) {
 		super.processMouseEvent(e);
-		EventDelegator.delegateEvent(e);
+		EventDelegator.getInstance().delegateEvent(e);
 	}
 
 	/**
@@ -236,6 +236,6 @@ public class Label extends JLabel {
 	@Override
 	protected void processMouseMotionEvent(MouseEvent e) {
 		super.processMouseMotionEvent(e);
-		EventDelegator.delegateEvent(e);
+		EventDelegator.getInstance().delegateEvent(e);
 	}
 }
