@@ -1,11 +1,13 @@
 package com.javaxyq.data;
 
 import java.awt.Point;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -26,6 +29,7 @@ import com.javaxyq.model.ItemTypes;
 import com.javaxyq.model.PlayerVO;
 import com.javaxyq.model.Task;
 import com.javaxyq.task.TaskManager;
+import com.javaxyq.util.StringUtils;
 import com.javaxyq.widget.Player;
 
 /**
@@ -53,8 +57,39 @@ public class DataStore {
 		//TODO
 	}
 	
+	private static String lastchat = "";
+	
+	private static Random rand = new Random();
+	
 	public static TalkConfig getTalk(String npcId, String talkId) {
-		return talkMap.get(npcId + "@" + talkId);
+		File file = GameMain.getFile("chat/"+npcId+".txt");
+		List<String> chats = new ArrayList<String>();
+		try {
+			String str = null;
+			BufferedReader br= new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+			while((str=br.readLine())!=null) {
+				if(StringUtils.isNotBlank(str) && !"P N".equals(str.trim())) {
+					chats.add(str);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int index = rand.nextInt(chats.size());
+		if(lastchat!=null && lastchat.startsWith(npcId)) {
+			int lastindex = Integer.valueOf(lastchat.substring(npcId.length()+1));
+			index = (lastindex+1)%chats.size();
+		}
+		if(chats.size()>index) {
+			String text = chats.get(index);
+			TalkConfig talk = new TalkConfig(text);
+			lastchat = npcId+"_"+index;
+			return talk;
+		}
+		return null;
+		//return talkMap.get(npcId + "@" + talkId);
 	}
 
 	public static void addTalk(String npcId, TalkConfig talk) {

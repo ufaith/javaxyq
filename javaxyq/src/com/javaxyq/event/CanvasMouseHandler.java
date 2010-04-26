@@ -25,7 +25,7 @@ public class CanvasMouseHandler implements MouseListener, MouseMotionListener {
             //点击npc
             List<Player> npcs = canvas.getNpcs();
             for (Player npc : npcs) {
-                if (GameMain.isHover(npc)) {
+                if (GameMain.isHover(npc)) {//TODO 判断鼠标是否在对话框上面
                     npc.fireEvent(new PlayerEvent(npc,PlayerEvent.TALK));
                     //FIXME 改进事件的处理
                     //GameMain.doTalk(npc);

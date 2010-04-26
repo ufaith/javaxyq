@@ -59,39 +59,39 @@ public class XmlDataLoader {
 		}
 	}
 	
-	public static void defScenes() {
-		def scenes = new XmlParser().parse(GameMain.getFile("xml/scenes.xml"));
-		def rs = ResourceStore.getInstance();
-		for(scene in scenes.scene) {
-			System.out.println "define scene: ${scene.@id}"
-			rs.registerMap(new MapConfig(scene.@id,scene.@name,scene.@map,scene.@music));
-			for(t in scene.transport) {
-				rs.registerTrigger( scene.@id, new JumpTrigger(
-						new Transport(scene.@id,t.@x.toInteger(),t.@y.toInteger(),
-								t.@toSence,t.@toX.toInteger(),t.@toY.toInteger())));
-			}
-		}
-		
-		
-	}
+//	public static void defScenes() {
+//		def scenes = new XmlParser().parse(GameMain.getFile("xml/scenes.xml"));
+//		def rs = ResourceStore.getInstance();
+//		for(scene in scenes.scene) {
+//			System.out.println "define scene: ${scene.@id}"
+//			rs.registerMap(new MapConfig(scene.@id,scene.@name,scene.@map,scene.@music));
+//			for(t in scene.transport) {
+//				rs.registerTrigger( scene.@id, new JumpTrigger(
+//						new Transport(scene.@id,t.@x.toInteger(),t.@y.toInteger(),
+//								t.@toSence,t.@toX.toInteger(),t.@toY.toInteger())));
+//			}
+//		}
+//		
+//		
+//	}
 
-	public static void defTalks() {
-		def talks = new XmlParser().parse(GameMain.getFile("xml/talks.xml"));
-		for (def t : talks.Scene.NPC.talk) {
-			TalkConfig talk;
-			if (t.text()) {
-				talk = new TalkConfig(t.text());
-			} else {
-				talk = new TalkConfig(t.text.text());
-				for (def link in t.link) {
-					talk.addLink(new LinkConfig(link.text(), link.@action, link.@value));
-				}
-			}
-			talk.setId(t.@id);
-			DataStore.addTalk(t.parent().@id,talk);
-		}
-				
-	}
+//	public static void defTalks() {
+//		def talks = new XmlParser().parse(GameMain.getFile("xml/talks.xml"));
+//		for (def t : talks.Scene.NPC.talk) {
+//			TalkConfig talk;
+//			if (t.text()) {
+//				talk = new TalkConfig(t.text());
+//			} else {
+//				talk = new TalkConfig(t.text.text());
+//				for (def link in t.link) {
+//					talk.addLink(new LinkConfig(link.text(), link.@action, link.@value));
+//				}
+//			}
+//			talk.setId(t.@id);
+//			DataStore.addTalk(t.parent().@id,talk);
+//		}
+//				
+//	}
 
 	public static void loadUI(String file) {
 		def dialogs = new XmlParser().parse(GameMain.getFile(file));

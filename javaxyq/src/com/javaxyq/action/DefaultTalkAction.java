@@ -7,9 +7,11 @@ import java.util.List;
 
 import com.javaxyq.config.TalkConfig;
 import com.javaxyq.core.GameMain;
+import com.javaxyq.core.ScriptManager;
 import com.javaxyq.data.DataStore;
 import com.javaxyq.event.PlayerAdapter;
 import com.javaxyq.event.PlayerEvent;
+import com.javaxyq.event.PlayerListener;
 import com.javaxyq.model.Task;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.widget.Player;
@@ -42,14 +44,18 @@ public class DefaultTalkAction extends PlayerAdapter {
 				if(TaskManager.instance.process(task))return;
 			}
 		}
-		
-		//对话
-		String talkId = evt.getArguments();
-		if (talkId == null)
-			talkId = "default";
-		TalkConfig talkCfg = DataStore.getTalk(npcId, talkId);
-		if (talkCfg != null) {
-			GameMain.doTalk(player, talkCfg);
+		//npc事件
+		PlayerListener listener = ScriptManager.getInstance().findListener(npcId);
+		if(listener!=null) {//处理事件
+			listener.talk(evt);
+		}else {//没有事件触发默认对话
+			String talkId = evt.getArguments();
+			if (talkId == null)
+				talkId = "default";
+			TalkConfig talkCfg = DataStore.getTalk(npcId, talkId);
+			if (talkCfg != null) {
+				GameMain.doTalk(player, talkCfg);
+			}
 		}
 	}
 }

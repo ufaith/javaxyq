@@ -26,6 +26,9 @@ import javax.swing.plaf.FontUIResource;
 import com.javaxyq.core.DialogFactory;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.core.GroovyScript;
+import com.javaxyq.event.Conditional;
+import com.javaxyq.event.EventDelegator;
+import com.javaxyq.event.EventDispatcher;
 import com.javaxyq.event.PanelEvent;
 import com.javaxyq.event.PanelListener;
 import com.javaxyq.graph.Canvas;
@@ -190,6 +193,23 @@ public class UIHelper {
 			canvas.add(dialog);
 			canvas.setComponentZOrder(dialog, 0);
 		}
+	}
+	public static void showModalDialog(final Panel dialog) {
+		System.out.println("showModalDialog: "+Thread.currentThread().getName());
+		Canvas canvas = GameMain.getGameCanvas();
+		if (dialog != null && dialog.getParent() != canvas) {
+			//阻塞执行初始化事件
+			dialog.handleEvent(new PanelEvent(dialog,"initial"));
+			canvas.add(dialog);
+			canvas.setComponentZOrder(dialog, 0);
+			EventDispatcher.pumpEvents(Thread.currentThread(), new Conditional() {
+				@Override
+				public boolean evaluate() {
+					return (dialog.getParent()!=null && dialog.isVisible());
+				}
+			});
+		}
+		System.out.println("exit showModalDialog: "+Thread.currentThread().getName());
 	}
 	
 	/**
