@@ -35,7 +35,7 @@ public class MoveActions extends BaseAction {
             return;
         }
         player.stepTo(direction);
-        player.moveOn();
+        player.setDirectionMoving(true);
     }
 
 }

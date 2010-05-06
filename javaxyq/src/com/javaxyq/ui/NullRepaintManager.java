@@ -1,4 +1,4 @@
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import javax.swing.JComponent;
 import javax.swing.RepaintManager;

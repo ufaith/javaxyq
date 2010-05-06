@@ -10,6 +10,7 @@ package com.javaxyq.tools;
 
 import com.javaxyq.util.ClassUtil;
 import com.javaxyq.util.ClosureTask;
+import com.javaxyq.ui.Panel;
 
 
 import com.javaxyq.config.ImageConfig;
@@ -39,8 +40,6 @@ import groovy.model.ValueModel;
 import groovy.swing.SwingBuilder;
 import groovy.swing.factory.TableModelFactory;
 import com.javaxyq.ui.XmlDialogBuilder;
-import com.javaxyq.graph.NullRepaintManager;
-import com.javaxyq.graph.Panel;
 import com.javaxyq.ui.*;
 import com.javaxyq.core.*;
 import groovy.util.*;
@@ -824,7 +823,7 @@ class UIMaker extends MouseAdapter implements KeyListener,ListSelectionListener,
 	}
 	private Component findTopPanel(Component c) {
 		for(;c!=null;) {
-			if (c instanceof com.javaxyq.graph.Panel) {
+			if (c instanceof com.javaxyq.ui.Panel) {
 				break;
 			}
 			c=c.parent

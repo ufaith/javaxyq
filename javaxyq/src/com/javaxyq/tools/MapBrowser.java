@@ -39,7 +39,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 
-import com.javaxyq.graph.CenterLayout;
+import com.javaxyq.ui.CenterLayout;
 import com.javaxyq.util.BrowserLauncher;
 import com.javaxyq.util.MapDecoder;
 import com.javaxyq.util.Utils;

@@ -8,8 +8,6 @@ import java.net.URISyntaxException;
 import com.javaxyq.core.DialogFactory;
 import com.javaxyq.core.GameMain;
 import com.javaxyq.event.ActionEvent;
-import com.javaxyq.graph.Panel;
-import com.javaxyq.graph.TextField;
 import com.javaxyq.util.BrowserLauncher;
 import com.javaxyq.widget.Player;
 import com.javaxyq.ui.*;

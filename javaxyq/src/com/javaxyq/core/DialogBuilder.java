@@ -3,7 +3,7 @@
  */
 package com.javaxyq.core;
 
-import com.javaxyq.graph.Panel;
+import com.javaxyq.ui.Panel;
 
 /**
  * @author dewitt

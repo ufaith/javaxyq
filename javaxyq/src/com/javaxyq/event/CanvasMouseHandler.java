@@ -7,7 +7,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import com.javaxyq.core.GameMain;
-import com.javaxyq.graph.SceneCanvas;
+import com.javaxyq.ui.SceneCanvas;
 import com.javaxyq.widget.Player;
 
 public class CanvasMouseHandler implements MouseListener, MouseMotionListener {

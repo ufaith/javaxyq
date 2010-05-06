@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.Color;
 import java.awt.Font;

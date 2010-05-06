@@ -7,6 +7,7 @@
 
 package com.javaxyq.event;
 
+import java.awt.Component;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +22,13 @@ public class EventDispatcher<S extends EventTarget, E extends EventObject> exten
 
 	/** 事件调度器实例表 */
 	private static final Map<Object, EventDispatcher> instances = new HashMap<Object, EventDispatcher>();
+	private static EventDispatcher dispatcher;
 
 	private BlockingQueue<E> eventQueue = new LinkedBlockingQueue<E>();
 
 	//private EventProcessor eventProcessor = null;
 	private static int processorCount;
+
     private static final int ANY_EVENT = -1;
 
 	private EventDispatcher() {
@@ -46,6 +49,13 @@ public class EventDispatcher<S extends EventTarget, E extends EventObject> exten
 		if (dispatcher == null) {
 			dispatcher = new EventDispatcher<T1, T2>();
 			instances.put(clazz1, dispatcher);
+			dispatcher.start();
+		}
+		return dispatcher;
+	}
+	synchronized public static EventDispatcher getInstance() {
+		if (dispatcher == null) {
+			dispatcher = new EventDispatcher();
 			dispatcher.start();
 		}
 		return dispatcher;
@@ -98,6 +108,7 @@ public class EventDispatcher<S extends EventTarget, E extends EventObject> exten
 			dispatcher.pumpEvents(cond);
 		}
 	}
+
 	
 /*	private class EventProcessor extends Thread {
 		public EventProcessor() {

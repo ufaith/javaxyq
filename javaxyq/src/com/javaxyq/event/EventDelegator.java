@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.util.EventObject;
 import java.util.Map;
 
-import com.javaxyq.graph.Panel;
+import com.javaxyq.ui.Panel;
 import com.javaxyq.ui.UIHelper;
 
 /**
@@ -22,8 +22,7 @@ import com.javaxyq.ui.UIHelper;
 public class EventDelegator implements EventTarget {
 
 	private static final EventDelegator instance = new EventDelegator();
-	private final EventDispatcher<EventDelegator, EventObject> dispatcher = EventDispatcher.getInstance(
-		EventDelegator.class, EventObject.class);
+	private final static EventDispatcher<EventDelegator, EventObject> dispatcher = EventDispatcher.getInstance();
 
 	private EventDelegator() {
 	}

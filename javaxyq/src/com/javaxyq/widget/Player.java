@@ -25,8 +25,8 @@ import com.javaxyq.event.EventException;
 import com.javaxyq.event.EventTarget;
 import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.event.PlayerListener;
-import com.javaxyq.graph.FloatPanel;
 import com.javaxyq.model.PlayerVO;
+import com.javaxyq.ui.FloatPanel;
 import com.javaxyq.util.Cheat;
 import com.javaxyq.util.MP3Player;
 import com.javaxyq.util.WASDecoder;
@@ -121,6 +121,8 @@ public class Player extends AbstractWidget implements EventTarget {
 	 * 单次效果动画
 	 */
 	private Animation onceEffect = null;
+
+	private boolean directionMoving;
 
 	public Player(String id, String name, String character) {
 		this.id = id;
@@ -360,6 +362,7 @@ public class Player extends AbstractWidget implements EventTarget {
 		} else {
 			this.movingOn = false;
 		}
+		this.directionMoving = false;
 		// this.setState(STATE_STAND);
 		// System.out.println("stop");
 	}
@@ -436,7 +439,7 @@ public class Player extends AbstractWidget implements EventTarget {
 			} else {
 				dy = Math.abs(dy);
 			}
-		} else if (this.movingOn) {// 遇到障碍物时，按住方向键移动
+		} else if (this.directionMoving) {// 遇到障碍物时，按住方向键移动
 			// TODO 修正移动的方向
 			// switch (this.direction) {
 			// case Sprite.DIRECTION_BOTTOM:
@@ -446,7 +449,7 @@ public class Player extends AbstractWidget implements EventTarget {
 			// default:
 			// break;
 			// }
-		} else if (!this.movingOn) {// 遇到障碍物时，松开方向键(没有继续移动)
+		} else if (!this.directionMoving) {// 遇到障碍物时，松开方向键(没有继续移动)
 			stopAction();
 		}
 		return new Point(dx, dy);
@@ -536,6 +539,14 @@ public class Player extends AbstractWidget implements EventTarget {
 
 	public boolean isMoving() {
 		return moving;
+	}
+
+	public boolean isDirectionMoving() {
+		return directionMoving;
+	}
+
+	public void setDirectionMoving(boolean directionMoving) {
+		this.directionMoving = directionMoving;
 	}
 
 	public void addPlayerListener(PlayerListener l) {
@@ -727,7 +738,7 @@ public class Player extends AbstractWidget implements EventTarget {
 	}
 
 	public void fireEvent(PlayerEvent e) {
-		EventDispatcher.getInstance(Player.class, PlayerEvent.class).dispatchEvent(e);
+		EventDispatcher.getInstance().dispatchEvent(e);
 	}
 
 	public Sprite getPerson() {

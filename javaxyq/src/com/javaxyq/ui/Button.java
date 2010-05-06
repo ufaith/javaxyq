@@ -1,4 +1,4 @@
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import groovy.text.SimpleTemplateEngine;
 import groovy.text.Template;
@@ -39,7 +39,7 @@ public class Button extends JButton {
 
 	private static final String uiClassID = "GameButtonUI";
 	static {
-		UIManager.put("GameButtonUI", "com.javaxyq.graph.GameButtonUI");
+		UIManager.put("GameButtonUI", "com.javaxyq.ui.GameButtonUI");
 	}
 
 	/**

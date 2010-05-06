@@ -40,8 +40,6 @@ import com.javaxyq.widget.Player;
  */
 public class DataStore {
 
-	private static Map<String, TalkConfig> talkMap = new HashMap<String, TalkConfig>();
-
 	public static String[] 人族门派 = { "大唐官府", "方寸山" ,"化生寺", "女儿村"};
 	public static String[] 魔族门派 = {  "阴曹地府", "魔王寨", "狮驼岭", "盘丝洞 "};
 	public static String[] 仙族门派 = {"天宫" ,"龙宫", "五庄观", "普陀山"};
@@ -61,7 +59,12 @@ public class DataStore {
 	
 	private static Random rand = new Random();
 	
-	public static TalkConfig getTalk(String npcId, String talkId) {
+	/**
+	 * 查找NPC闲聊内容
+	 * @param npcId
+	 * @return
+	 */
+	public static String findChat(String npcId) {
 		File file = GameMain.getFile("chat/"+npcId+".txt");
 		List<String> chats = new ArrayList<String>();
 		try {
@@ -83,19 +86,13 @@ public class DataStore {
 			index = (lastindex+1)%chats.size();
 		}
 		if(chats.size()>index) {
-			String text = chats.get(index);
-			TalkConfig talk = new TalkConfig(text);
+			String chat = chats.get(index);
 			lastchat = npcId+"_"+index;
-			return talk;
+			return chat;
 		}
 		return null;
-		//return talkMap.get(npcId + "@" + talkId);
 	}
 
-	public static void addTalk(String npcId, TalkConfig talk) {
-		talkMap.put(npcId + "@" + talk.getId(), talk);
-	}
-	
 	public static void addExp(Player player,int exp) {
 		PlayerVO vo = player.getData();
 		vo.exp += exp;

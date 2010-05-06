@@ -1,4 +1,4 @@
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.AWTKeyStroke;
 import java.awt.Color;
@@ -28,7 +28,6 @@ import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
 import com.javaxyq.event.DownloadEvent;
 import com.javaxyq.event.DownloadListener;
-import com.javaxyq.ui.UIHelper;
 import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Cursor;
@@ -362,7 +361,7 @@ public abstract class Canvas extends JPanel implements DownloadListener{
 	 * @param name
 	 * @return
 	 */
-	public Player findNpc(String name) {
+	public Player findNpcByName(String name) {
 		for (Player p : this.npcs) {
 			if (p.getName().equals(name)) {
 				return p;

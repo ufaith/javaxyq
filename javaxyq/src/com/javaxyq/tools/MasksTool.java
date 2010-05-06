@@ -32,7 +32,7 @@ import javax.swing.JSeparator;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
-import com.javaxyq.graph.CenterLayout;
+import com.javaxyq.ui.CenterLayout;
 import com.javaxyq.util.Utils;
 
 /**

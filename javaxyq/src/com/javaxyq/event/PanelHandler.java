@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.javaxyq.graph.Panel;
+import com.javaxyq.ui.Panel;
 import com.javaxyq.ui.UIHelper;
 
 /**

@@ -49,12 +49,9 @@ public class DefaultTalkAction extends PlayerAdapter {
 		if(listener!=null) {//处理事件
 			listener.talk(evt);
 		}else {//没有事件触发默认对话
-			String talkId = evt.getArguments();
-			if (talkId == null)
-				talkId = "default";
-			TalkConfig talkCfg = DataStore.getTalk(npcId, talkId);
-			if (talkCfg != null) {
-				GameMain.doTalk(player, talkCfg);
+			String chat = DataStore.findChat(npcId);
+			if (chat != null) {
+				GameMain.doTalk(player, chat);
 			}
 		}
 	}

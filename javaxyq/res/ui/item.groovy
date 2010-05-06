@@ -18,12 +18,8 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import com.javaxyq.core.SpriteFactory;
-import com.javaxyq.event.ItemEvent;
-import com.javaxyq.event.ItemListener;
 import com.javaxyq.event.PanelEvent;
 import com.javaxyq.event.PanelHandler;
-import com.javaxyq.graph.Label;
-import com.javaxyq.graph.Panel;
 import com.javaxyq.ui.*;
 import com.javaxyq.util.ClosureTask;
 import com.javaxyq.core.*;

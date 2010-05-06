@@ -5,7 +5,7 @@
  * please visit http://javaxyq.googlecode.com
  * or mail to kylixs@qq.com
  */
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.Point;
 import java.awt.event.WindowListener;

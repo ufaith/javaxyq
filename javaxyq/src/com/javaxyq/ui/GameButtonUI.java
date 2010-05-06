@@ -1,25 +1,25 @@
 /*
  * JavaXYQ Source Code 
- * GameLabelUI GameLabelUI.java
+ * GameButtonUI GameButtonUI.java
  * by kylixs 2009-10
  * All Rights Reserved.
  * Please see also http://javaxyq.cn or http://javaxyq.googlecode.com.
  * Please email to  javaxyq@qq.com.
  */
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.Dimension;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.basic.BasicLabelUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
  * @author dewitt
  * 
  */
-public class GameLabelUI extends BasicLabelUI {
-	private static final GameLabelUI instance = new GameLabelUI();
+public class GameButtonUI extends BasicButtonUI {
+	private static final GameButtonUI instance = new GameButtonUI();
 
 	public static ComponentUI createUI(JComponent c) {
 		return instance;

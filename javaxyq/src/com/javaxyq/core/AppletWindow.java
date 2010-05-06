@@ -23,9 +23,9 @@ import javax.swing.JFrame;
 import com.javaxyq.action.RandomMovementAction;
 import com.javaxyq.data.DataStore;
 import com.javaxyq.data.XmlDataLoader;
-import com.javaxyq.graph.Canvas;
-import com.javaxyq.graph.GameWindow;
 import com.javaxyq.task.TaskManager;
+import com.javaxyq.ui.Canvas;
+import com.javaxyq.ui.GameWindow;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
 

@@ -3,18 +3,13 @@ package ui_script;
 import com.javaxyq.event.ActionEvent;
 import com.javaxyq.event.PanelEvent;
 import com.javaxyq.event.PanelHandler;
-import com.javaxyq.util.AudioPlayer;
 import com.javaxyq.util.ClosureTask;
 import com.javaxyq.util.MP3Player;
 import java.awt.Color;
 import java.util.Timer;
 
-import com.javaxyq.core.DialogFactory;
 import com.javaxyq.data.DataStore;
 import com.javaxyq.core.GameMain;
-import com.javaxyq.graph.Button;
-import com.javaxyq.graph.Label;
-import com.javaxyq.graph.Panel;
 import com.javaxyq.model.*;
 import com.javaxyq.widget.*;
 import com.javaxyq.ui.*;

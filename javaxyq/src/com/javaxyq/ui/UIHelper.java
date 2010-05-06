@@ -31,10 +31,6 @@ import com.javaxyq.event.EventDelegator;
 import com.javaxyq.event.EventDispatcher;
 import com.javaxyq.event.PanelEvent;
 import com.javaxyq.event.PanelListener;
-import com.javaxyq.graph.Canvas;
-import com.javaxyq.graph.LightweightToolTipManager;
-import com.javaxyq.graph.Panel;
-import com.javaxyq.graph.TalkPanel;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Cursor;
 
@@ -59,8 +55,8 @@ public class UIHelper {
 		UIManager.put("ToolTip.font", new FontUIResource(GameMain.TEXT_FONT));
 		//UIManager.put("ToolTipUI", "com.javaxyq.ui.TranslucentTooltipUI");
 		
-		UIManager.put("GameLabelUI", "com.javaxyq.graph.GameLabelUI");
-		UIManager.put("GameButtonUI", "com.javaxyq.graph.GameButtonUI");
+		UIManager.put("GameLabelUI", "com.javaxyq.ui.GameLabelUI");
+		UIManager.put("GameButtonUI", "com.javaxyq.ui.GameButtonUI");
 		
 		colors.put("black", Color.black);
 		colors.put("blue", Color.blue);
@@ -190,8 +186,7 @@ public class UIHelper {
 		if (dialog != null && dialog.getParent() != canvas) {
 			//阻塞执行初始化事件
 			dialog.handleEvent(new PanelEvent(dialog,"initial"));
-			canvas.add(dialog);
-			canvas.setComponentZOrder(dialog, 0);
+			canvas.add(dialog,0);
 		}
 	}
 	public static void showModalDialog(final Panel dialog) {
@@ -208,6 +203,7 @@ public class UIHelper {
 					return (dialog.getParent()!=null && dialog.isVisible());
 				}
 			});
+			//TODO need to interrupt pump after close the panel!
 		}
 		System.out.println("exit showModalDialog: "+Thread.currentThread().getName());
 	}

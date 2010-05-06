@@ -10,7 +10,7 @@ import java.util.WeakHashMap;
 import java.util.Map.Entry;
 
 import com.javaxyq.event.PanelListener;
-import com.javaxyq.graph.Panel;
+import com.javaxyq.ui.Panel;
 import com.javaxyq.ui.XmlDialogBuilder;
 
 public class DialogFactory {
@@ -29,6 +29,9 @@ public class DialogFactory {
 
 	private static DialogBuilder builder = new XmlDialogBuilder();
 
+	public static Panel getDialog(String id) {
+		return getDialog(id, false);
+	}
 	/**
 	 * 获得对话框实例
 	 * @param id

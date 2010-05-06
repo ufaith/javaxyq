@@ -7,7 +7,7 @@
  */
 package com.javaxyq.event;
 
-import com.javaxyq.graph.Panel;
+import com.javaxyq.ui.Panel;
 
 
 /**
