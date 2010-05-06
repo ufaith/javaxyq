@@ -24,10 +24,12 @@ import javax.swing.JLabel;
 import com.javaxyq.config.LabelConfig;
 import com.javaxyq.config.LinkConfig;
 import com.javaxyq.config.TalkConfig;
-import com.javaxyq.graph.Label;
-import com.javaxyq.graph.LinkLabel;
-import com.javaxyq.graph.Panel;
-import com.javaxyq.graph.RichLabel;
+import com.javaxyq.model.Option;
+import com.javaxyq.ui.Label;
+import com.javaxyq.ui.LinkLabel;
+import com.javaxyq.ui.OptionLabel;
+import com.javaxyq.ui.Panel;
+import com.javaxyq.ui.RichLabel;
 
 /**
  * @author ¹¨µÂÎ°
@@ -69,8 +71,14 @@ public class Toolkit {
             i++;
         }
     }
-
-    private LinkLabel createLinkLabel(int x, int y, int width, int height, String text,
+    
+    public OptionLabel createOptionLabel(int x, int y, int width, int height, Option option) {
+    	OptionLabel label = new OptionLabel(option);
+    	label.setLocation(x, y);
+    	label.setSize(width, height);
+    	return label;
+    }
+    public LinkLabel createLinkLabel(int x, int y, int width, int height, String text,
             String action, String arguments) {
         LinkLabel label = new LinkLabel(text, action, arguments);
         label.setLocation(x, y);

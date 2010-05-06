@@ -1,4 +1,4 @@
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;

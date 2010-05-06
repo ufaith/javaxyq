@@ -8,6 +8,7 @@
 package com.javaxyq.core;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.Font;
@@ -52,18 +53,20 @@ import com.javaxyq.data.ItemInstance;
 import com.javaxyq.data.XmlDataLoader;
 import com.javaxyq.event.ActionEvent;
 import com.javaxyq.event.Listener;
+import com.javaxyq.event.PlayerEvent;
 import com.javaxyq.event.SceneEvent;
 import com.javaxyq.event.SceneListener;
-import com.javaxyq.graph.Canvas;
-import com.javaxyq.graph.DesktopWindow;
-import com.javaxyq.graph.GameWindow;
-import com.javaxyq.graph.LoadingCanvas;
-import com.javaxyq.graph.Panel;
-import com.javaxyq.graph.SceneCanvas;
-import com.javaxyq.graph.TalkPanel;
 import com.javaxyq.io.CacheManager;
 import com.javaxyq.model.ItemTypes;
+import com.javaxyq.model.Option;
 import com.javaxyq.task.TaskManager;
+import com.javaxyq.ui.Canvas;
+import com.javaxyq.ui.DesktopWindow;
+import com.javaxyq.ui.GameWindow;
+import com.javaxyq.ui.LoadingCanvas;
+import com.javaxyq.ui.Panel;
+import com.javaxyq.ui.SceneCanvas;
+import com.javaxyq.ui.TalkPanel;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
@@ -220,15 +223,7 @@ public final class GameMain {
 		showCopyright();
 		UIHelper.init();
 		
-		updateLoading("loading groovy ...");
-//		try {
-//			JarFile jarfile = new JarFile(getFile("lib/groovy-all-1.6.5.jar"));
-//			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
+		//updateLoading("loading groovy ...");
 		
 		updateLoading("loading actions ...");
 		XmlDataLoader.defActions();
@@ -252,23 +247,23 @@ public final class GameMain {
 		updateLoading("starting game ...");
 		stopLoading();
 		
-		DataStore.addHp(getPlayer(), -200);
-		DataStore.addMp(getPlayer(), -200);
-		ItemInstance item = DataStore.createItem("血色茶花");
-		item.setAmount(1);
-		DataStore.addItemToPlayer(getPlayer(), item);
-		item = DataStore.createItem("龙之心屑");
-		item.setAmount(1);
-		DataStore.addItemToPlayer(getPlayer(), item);
-		item = DataStore.createItem("金创药");
-		item.setAmount(1);
-		DataStore.addItemToPlayer(getPlayer(), item);
-		item = DataStore.createItem("金香玉");
-		item.setAmount(1);
-		DataStore.addItemToPlayer(getPlayer(), item);
-		item = DataStore.createItem("九转回魂丹");
-		item.setAmount(1);
-		DataStore.addItemToPlayer(getPlayer(), item);
+//		DataStore.addHp(getPlayer(), -200);
+//		DataStore.addMp(getPlayer(), -200);
+//		ItemInstance item = DataStore.createItem("血色茶花");
+//		item.setAmount(1);
+//		DataStore.addItemToPlayer(getPlayer(), item);
+//		item = DataStore.createItem("龙之心屑");
+//		item.setAmount(1);
+//		DataStore.addItemToPlayer(getPlayer(), item);
+//		item = DataStore.createItem("金创药");
+//		item.setAmount(1);
+//		DataStore.addItemToPlayer(getPlayer(), item);
+//		item = DataStore.createItem("金香玉");
+//		item.setAmount(1);
+//		DataStore.addItemToPlayer(getPlayer(), item);
+//		item = DataStore.createItem("九转回魂丹");
+//		item.setAmount(1);
+//		DataStore.addItemToPlayer(getPlayer(), item);
 		//setPlayingMusic(false);//debug
 	}
 
@@ -540,11 +535,15 @@ public final class GameMain {
         }
         getGameCanvas().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, canvasInputMap);
         getGameCanvas().setActionMap(getActionMap());
-        
+        Component[] precedingComps = getGameCanvas().getComponents();
         for (int i = 0; i < uiComponents.size(); i++) {
         	Panel c = uiComponents.get(i);
         	UIHelper.showDialog(c);
         }
+        //还原先前打开的面板等
+        for (int i = 0; i < precedingComps.length; i++) {
+        	getGameCanvas().add(precedingComps[i],0);
+		}
         installListener();
 	}
 
@@ -640,21 +639,35 @@ public final class GameMain {
 	 * 
 	 * @param npc
 	 */
-	public static void doTalk(Player npc, TalkConfig talk) {
-		talker = npc;
+	public static void doTalk(Player p,String chat) {
+		doTalk(p, chat, null);
+	}
+
+	/**
+	 * 触发与npc的对话
+	 * @param options TODO
+	 * @param npc
+	 */
+	public static Option doTalk(Player p,String chat, Option[] options) {
+		if(p!=null) {
+			talker = p;
+		}
 		TalkPanel dlg = (TalkPanel) DialogFactory.getDialog("npctalk", true);
-		Toolkit.getInstance().createTalk(dlg, talk);
-		dlg.setTalker(npc);
+		if(dlg.isShowing()) {
+			dlg.close();//确保先关闭
+//			try {
+//				Thread.sleep(500);//等待执行
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+		}
+		dlg.initTalk(chat,options);
+		//Toolkit.getInstance().createTalk(dlg,new TalkConfig(chat));
+		dlg.setTalker(talker);
 		//UIHelper.showDialog(dlg);
 		UIHelper.showModalDialog(dlg);
-		//System.out.println("talk panel closed");
-		//TODO return user's select
-	}
-	
-	public static void doTalk(Player p,String chat) {
-		if(p==null)p = talker;
-		TalkConfig cfg = new TalkConfig(chat);
-		doTalk(p, cfg);
+		Option result = dlg.getResult();
+		return result;
 	}
 
 	public static Player getTalker() {

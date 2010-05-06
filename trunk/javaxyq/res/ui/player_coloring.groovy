@@ -14,10 +14,10 @@ import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.event.ActionEvent;
 import com.javaxyq.event.PanelEvent;
 import com.javaxyq.event.PanelHandler;
-import com.javaxyq.graph.Button;
-import com.javaxyq.graph.Label;
-import com.javaxyq.graph.Panel;
-import com.javaxyq.graph.ToggleButton;
+import com.javaxyq.ui.Button 
+import com.javaxyq.ui.Label 
+import com.javaxyq.ui.Panel 
+import com.javaxyq.ui.ToggleButton 
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Animation;
 import com.javaxyq.widget.Player;

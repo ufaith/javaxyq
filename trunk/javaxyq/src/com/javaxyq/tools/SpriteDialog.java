@@ -29,8 +29,8 @@ import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationActionMap;
 
-import com.javaxyq.graph.CenterLayout;
-import com.javaxyq.graph.Label;
+import com.javaxyq.ui.CenterLayout;
+import com.javaxyq.ui.Label;
 import com.javaxyq.widget.Sprite;
 import com.jidesoft.dialog.ButtonPanel;
 import com.jidesoft.swing.JideButton;

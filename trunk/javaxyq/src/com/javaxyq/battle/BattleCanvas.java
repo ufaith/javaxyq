@@ -30,13 +30,14 @@ import com.javaxyq.core.GameMain;
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.data.DataStore;
 import com.javaxyq.data.ItemInstance;
-import com.javaxyq.graph.Canvas;
-import com.javaxyq.graph.Label;
 import com.javaxyq.model.Item;
 import com.javaxyq.model.Item;
 import com.javaxyq.model.PlayerVO;
+import com.javaxyq.ui.Canvas;
 import com.javaxyq.ui.ItemDetailLabel;
 import com.javaxyq.ui.ItemLabel;
+import com.javaxyq.ui.Label;
+import com.javaxyq.ui.Panel;
 import com.javaxyq.ui.UIHelper;
 import com.javaxyq.util.MP3Player;
 import com.javaxyq.widget.Animation;
@@ -184,8 +185,8 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 * 取消选择法术
 	 */
 	public void cancelSelectMagic() {
-		UIHelper.showDialog(BATTLE_ROLE_CMD);
 		UIHelper.hideDialog(BATTLE_WARMAGIC10);
+		UIHelper.showDialog(BATTLE_ROLE_CMD);
 		selectingTarget = false;
 		selectingMagic = false;
 	}
@@ -221,8 +222,8 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	 * 取消选择道具
 	 */
 	public void cancelSelectItem() {
-		UIHelper.showDialog(BATTLE_ROLE_CMD);
 		UIHelper.hideDialog(BATTLE_USEITEM);
+		UIHelper.showDialog(BATTLE_ROLE_CMD);
 		selectingTarget = false;
 		selectingMagic = false;
 		selectingItem = false;
@@ -453,20 +454,20 @@ public class BattleCanvas extends Canvas implements MouseListener, MouseMotionLi
 	private void initItems() {
 		BattleCanvas canvas = GameMain.getBattleCanvas();
 		ItemInstance[] items = DataStore.getPlayerItems(canvas.getPlayer());
+		Panel dialog = DialogFactory.getDialog(BATTLE_USEITEM,true);
 		// 设置显示的道具
 		for (int i = 0; i < items.length; i++) {
-			ItemLabel label = (ItemLabel) DialogFactory.getDialog(BATTLE_USEITEM, true).findCompByName("item" + (i + 1));
+			ItemLabel label = (ItemLabel) dialog.findCompByName("item" + (i + 1));
 			label.setItem(items[i]);
-			if (!installItemListener) {
-				label.addMouseListener(itemMouseHandler);
-				label.addMouseMotionListener(itemMouseHandler);
-			}
+			//避免重复添加监听器
+			label.removeMouseListener(itemMouseHandler);
+			label.removeMouseMotionListener(itemMouseHandler);
+			label.addMouseListener(itemMouseHandler);
+			label.addMouseMotionListener(itemMouseHandler);
 		}
-		installItemListener = true;
 	}
 
 	private ItemMouseHandler itemMouseHandler = new ItemMouseHandler();
-	private boolean installItemListener = false;
 	private Animation soltAnim;
 	private Animation emptysoltAnim;
 	private boolean ranked;

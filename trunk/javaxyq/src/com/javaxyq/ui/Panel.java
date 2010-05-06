@@ -1,6 +1,5 @@
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
-import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -9,9 +8,7 @@ import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -23,16 +20,14 @@ import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
 import com.javaxyq.config.ImageConfig;
-import com.javaxyq.core.GameMain;
 import com.javaxyq.core.ResourceStore;
 import com.javaxyq.event.ActionEvent;
-import com.javaxyq.event.EventDispatcher;
+import com.javaxyq.event.EventDelegator;
 import com.javaxyq.event.EventException;
 import com.javaxyq.event.EventTarget;
 import com.javaxyq.event.PanelEvent;
 import com.javaxyq.event.PanelListener;
 import com.javaxyq.widget.SpriteImage;
-import com.javaxyq.ui.*;
 
 //FIXME SpriteImage的处理有问题，Image后跟着Sprite，无法出现
 /**
@@ -62,40 +57,33 @@ public class Panel extends JPanel implements EventTarget {
 
 	private MouseAdapter mouseHandler = new MouseAdapter() {
 		public void mousePressed(MouseEvent e) {
+			if(deliverMouseEvent(e)) {return;}
+
+			Panel dlg = Panel.this;
+			Container parent = dlg.getParent();
+			Point p = e.getPoint();
 			if (e.getButton() == MouseEvent.BUTTON1) {
-				Panel dlg = Panel.this;
-				Container parent = dlg.getParent();
-				// 如果点击在有效区域
-				Point p = e.getPoint();
-				if (isValid(p)) {
-					if (clickClosabled) {
-						UIHelper.hideDialog(Panel.this);
-					} else {
-						lastPosition = p;
-						parent.setComponentZOrder(dlg, 0);// 移到最上层
-					}
+				if (clickClosabled) {
+					UIHelper.hideDialog(Panel.this);
 				} else {
-					// 如果点击的是穿透的区域,把事件传递给父容器
-					int x = dlg.getX();
-					int y = dlg.getY();
-					MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), e
-							.getModifiers(), x + p.x, y + p.y, 1, false);
-					parent.dispatchEvent(event);
+					lastPosition = p;
+					parent.setComponentZOrder(dlg, 0);// 移到最上层
 				}
 				e.consume();
 			} else if (e.getButton() == MouseEvent.BUTTON3) {// 右击关闭
 				if (closable) {
-					UIHelper.hideDialog(Panel.this);
+					Panel.this.close();
 				}
 			}
 		}
 
 		public void mouseReleased(MouseEvent e) {
+			if(deliverMouseEvent(e)) {return;}
 			lastPosition = null;
-
 		}
 
 		public void mouseDragged(MouseEvent e) {// 移动面板
+			if(deliverMouseEvent(e)) {return;}
 			if (lastPosition != null && movable) {
 				Point location = Panel.this.getLocation();
 				location.translate(e.getX() - lastPosition.x, e.getY() - lastPosition.y);
@@ -104,20 +92,20 @@ public class Panel extends JPanel implements EventTarget {
 		}
 
 		public void mouseMoved(MouseEvent e) {
-			Point p = e.getPoint();
 			Panel dlg = Panel.this;
 			Container parent = dlg.getParent();
+			Point p = e.getPoint();
 			int x = dlg.getX();
 			int y = dlg.getY();
 			// 如果点击的是穿透的区域,把事件传递给父容器
 			if (!isValid(p)) {
 				MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), e
-						.getModifiers(), x + p.x, y + p.y, 1, false);
+					.getModifiers(), x + p.x, y + p.y, e.getClickCount(), false);
 				parent.dispatchEvent(event);
+				return;
 			} else {
 				MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), e
-						.getModifiers(), x + p.x, y + p.y, 1, false);
-
+						.getModifiers(), x + p.x, y + p.y, e.getClickCount(), false);
 				parent.dispatchEvent(event);
 			}
 		}
@@ -136,11 +124,32 @@ public class Panel extends JPanel implements EventTarget {
 			} else {
 				MouseEvent event = new MouseEvent(parent, MouseEvent.MOUSE_EXITED, System.currentTimeMillis(), e
 						.getModifiers(), x + p.x, y + p.y, 1, false);
-
 				parent.dispatchEvent(event);
 			}
 		}
+		public void mouseClicked(MouseEvent e) {
+			if(deliverMouseEvent(e)) {return;}
+		}
+		
+		public void mouseExited(MouseEvent e) {
+			
+		}
 
+//		public void mouseWheelMoved(java.awt.event.MouseWheelEvent e) {
+//			Panel dlg = Panel.this;
+//			Container parent = dlg.getParent();
+//			Point p = e.getPoint();
+//			// 如果点击的是穿透的区域,把事件传递给父容器
+//			if (!isValid(p)) {
+//				int x = dlg.getX();
+//				int y = dlg.getY();
+//				
+//				MouseWheelEvent event = new MouseWheelEvent(parent, e.getID(), System.currentTimeMillis(), e
+//					.getModifiers(), x + p.x, y + p.y, e.getClickCount(), false,e.getScrollType(),e.getScrollAmount(),e.getWheelRotation());
+//				parent.dispatchEvent(event);
+//				return;
+//			}
+//		}
 	};
 
 	/** 是否可以拖动 */
@@ -164,8 +173,7 @@ public class Panel extends JPanel implements EventTarget {
 	 * 关闭此面板/对话框
 	 */
 	public void close() {
-		Container p = Panel.this.getParent();
-		p.remove(Panel.this);
+		UIHelper.hideDialog(this);
 	}
 
 	/**
@@ -230,7 +238,8 @@ public class Panel extends JPanel implements EventTarget {
 	}
 
 	public void fireEvent(PanelEvent e) {
-		EventDispatcher.getInstance(Panel.class, PanelEvent.class).dispatchEvent(e);
+		//EventDispatcher.getInstance(Panel.class, PanelEvent.class).dispatchEvent(e);
+		EventDelegator.getInstance().delegateEvent(e);
 	}
 
 	/**
@@ -439,6 +448,22 @@ public class Panel extends JPanel implements EventTarget {
 
 	public void setClickClosabled(boolean clickClosabled) {
 		this.clickClosabled = clickClosabled;
+	}
+
+	protected boolean deliverMouseEvent(MouseEvent e) {
+		Panel dlg = Panel.this;
+		Container parent = dlg.getParent();
+		Point p = e.getPoint();
+		// 如果点击的是穿透的区域,把事件传递给父容器
+		if (!isValid(p)) {
+			int x = dlg.getX();
+			int y = dlg.getY();
+			MouseEvent event = new MouseEvent(parent, e.getID(), System.currentTimeMillis(), e
+				.getModifiers(), x + p.x, y + p.y, e.getClickCount(), false);
+			parent.dispatchEvent(event);
+			return true;
+		}
+		return false;
 	}
 
 }

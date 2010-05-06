@@ -11,9 +11,9 @@ import java.awt.Point;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import com.javaxyq.graph.Canvas;
-import com.javaxyq.graph.SceneCanvas;
 import com.javaxyq.resources.DefaultTileMapProvider;
+import com.javaxyq.ui.Canvas;
+import com.javaxyq.ui.SceneCanvas;
 import com.javaxyq.widget.TileMap;
 
 /**

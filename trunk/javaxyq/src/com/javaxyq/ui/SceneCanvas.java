@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,7 +34,6 @@ import com.javaxyq.search.Searcher;
 import com.javaxyq.task.TaskManager;
 import com.javaxyq.trigger.JumpTrigger;
 import com.javaxyq.trigger.Trigger;
-import com.javaxyq.ui.UIHelper;
 import com.javaxyq.widget.Cursor;
 import com.javaxyq.widget.Player;
 import com.javaxyq.widget.Sprite;
@@ -557,11 +556,8 @@ public class SceneCanvas extends Canvas {
 			GameMain.revisePlayerSceneLocation(player);
 
 			// 2. ´¥·¢µØÍ¼Ìø×ª
-			if (triggerList == null) {
-				return;
-			}
 			Point p = getPlayerSceneLocation();
-			for (int i = 0; i < triggerList.size(); i++) {
+			for (int i = 0; triggerList!=null && i < triggerList.size(); i++) {
 				Trigger t = triggerList.get(i);
 				if (t.hit(p)) {
 					t.doAction();

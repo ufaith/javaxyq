@@ -1,4 +1,4 @@
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import groovy.text.SimpleTemplateEngine;
 import groovy.text.Template;
@@ -31,7 +31,7 @@ public class Label extends JLabel {
 	private static final long serialVersionUID = 7814113439988128271L;
 
 	static {
-		UIManager.put("GameLabelUI", "com.javaxyq.graph.GameLabelUI");
+		UIManager.put("GameLabelUI", "com.javaxyq.ui.GameLabelUI");
 	}
 	private Animation anim;
 

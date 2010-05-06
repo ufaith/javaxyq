@@ -6,7 +6,7 @@
  * Please see also http://javaxyq.cn or http://javaxyq.googlecode.com.
  * Please email to  javaxyq@qq.com.
  */
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.Component;
 import java.awt.Container;

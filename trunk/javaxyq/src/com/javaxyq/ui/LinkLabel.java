@@ -5,7 +5,7 @@
  * http://www.javaxyq.com
  */
 
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

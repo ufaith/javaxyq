@@ -53,7 +53,7 @@ public class SchoolTaskCoolie extends TaskCoolie {
 			task.setFinished(true);
 			rounds = task.getInt("rounds");
 			times = task.getInt("times");
-			GameMain.doTalk(target,new TalkConfig("我已收到你师傅的来信，赶快回去禀报吧。"));
+			GameMain.doTalk(target,"我已收到你师傅的来信，赶快回去禀报吧。", null);
 			return true;
 		}else {
 			System.out.println("任务已完成？"+task);
@@ -204,7 +204,9 @@ public class SchoolTaskCoolie extends TaskCoolie {
 		Task task = new Task("school","patrol",sender,sender);
 		task.setAutoSpark(false);
 		//FIXME 根据门派设置巡逻的场景id
-		task.set("sceneId","wzg");
+		if("镇元大仙".equals(sender)) {
+			task.set("sceneId","1146");
+		}
 		task.set("battle",0);
 		
 		this.times ++;

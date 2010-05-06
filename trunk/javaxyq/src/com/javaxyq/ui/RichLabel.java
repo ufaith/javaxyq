@@ -1,4 +1,4 @@
-package com.javaxyq.graph;
+package com.javaxyq.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

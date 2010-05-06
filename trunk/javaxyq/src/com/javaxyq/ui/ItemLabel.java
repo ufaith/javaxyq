@@ -13,7 +13,6 @@ import java.awt.Font;
 
 import com.javaxyq.core.SpriteFactory;
 import com.javaxyq.data.ItemInstance;
-import com.javaxyq.graph.Label;
 import com.javaxyq.model.Item;
 import com.javaxyq.widget.Animation;
 
