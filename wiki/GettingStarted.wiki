@@ -42,8 +42,8 @@
 
 
  ==Groovy-Eclipse==
- [http://groovy.codehaus.org/Install+GroovyEclipse+Plugin 官方安装教程]<br>
- GroovyEclipse update site for Eclipse 3.5.n,M1 build:  http://dist.springsource.org/milestone/GRECLIPSE/e3.5/ <br>
+ [http://groovy.codehaus.org/Install+Groovy-Eclipse+Plugin 官方安装教程]<br>
+ 下载地址:  http://groovy.codehaus.org/Download <br>
   
  
  =开发JavaXYQ=
