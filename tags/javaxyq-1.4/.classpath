@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" output="tmp" path="res/ui"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jl1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jide-oss-2.7.4.jar" sourcepath="D:/open-source/jide-oss-src-2.7.4.zip"/>
+	<classpathentry kind="lib" path="lib/jide.jar"/>
+	<classpathentry kind="lib" path="lib/appFramework-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar" sourcepath="E:/open-source/commons-lang-2.4-src.zip"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.6.5.jar" sourcepath="D:/TDDownload/Source/groovy-src-1.6.5.zip"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-core-1.8.2.jar" sourcepath="E:/open-source/commons-beanutils-1.8.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/eclipselink-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/eclipselink-javax.persistence-2.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/Derby Embedded JDBC Driver"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
