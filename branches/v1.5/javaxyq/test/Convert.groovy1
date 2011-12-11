@@ -1,0 +1,39 @@
+/*
+ * JavaXYQ Source Code
+ * by kylixs
+ * at 2009-11-24
+ * please visit http://javaxyq.googlecode.com
+ * or mail to kylixs@qq.com
+ */
+
+/**
+ * @author dewitt
+ * @date 2009-11-24 create
+ */
+class Convert {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		def inputfile = new File('res/scene/1146.msk');
+		def outputfile = new File('res/scene/1146-1.msk');
+		def lines = [];
+		inputfile.eachLine{ line->
+			lines << line;
+		}
+		def width = lines.size();
+		def height = lines[0].size();
+		println "width=$width, height=$height"
+		outputfile.write('');
+		for(int y=0;y<height;y++) {
+			println "convert line $y ..."
+			for(int x=0;x<width;x++) {
+				outputfile << lines[x][y];
+			}
+			outputfile << '\n';
+		}
+		println 'convert finished'
+	}
+
+}
