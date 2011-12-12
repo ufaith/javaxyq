@@ -2,11 +2,11 @@
 <!-- You may freely edit this file. See commented blocks below for -->
 <!-- some examples of how to customize the build. -->
 <!-- (If you delete it and reopen the project it will be recreated.) -->
-<project name="JavaXYQ" default="default" basedir="." >
+<project name="javaxyq-1.5" default="default" basedir="." >
 	<description>Builds, tests, and runs the project JavaXYQ.</description>
 	<buildnumber file="build.properties" />
 	<property name="project_name" value="JavaXYQ" />
-	<property name="version" value="1.4_m2" />
+	<property name="version" value="1.5.0" />
 	<property environment="env" />
 	<property name="publisher" value="gongdewei" />
 	<property name="computer" value="${env.COMPUTERNAME}" />
@@ -34,16 +34,14 @@
 	</target>
 		
 	<target name="jar" depends="init">
-		<echo message="${build_dir}/JavaXYQ.jar"></echo>
-		<delete file="${build_dir}/JavaXYQ.jar"></delete>
-		<jar destfile="${build_dir}/JavaXYQ.jar" update="true">
+		<echo message="Jar JavaXYQ.jar"></echo>
+		<delete file="${build_dir}/lib/JavaXYQ.jar"></delete>
+		<jar destfile="${build_dir}/lib/JavaXYQ.jar" update="true">
 			<manifest>
 				<attribute name="Version" value="${version}_${builddate}_${build.number}" />
 				<attribute name="Created-By" value="${publisher}" />
 				<attribute name="Computer-Name" value="${computer}" />
 				<attribute name="Created-Time" value="${buildtime}" />
-				<attribute name="Class-Path" value="lib/jl1.0.jar lib/groovy-all-1.6.5.jar" />
-				<attribute name="Main-Class" value="com.javaxyq.core.Main" />
 			</manifest>
 
 			<fileset dir="${class_dir}">
@@ -57,12 +55,6 @@
 		<delete>
 			<fileset dir="${build_dir}" includes="**/**" />
 		</delete>
-		<exec executable="cmd">
-			<arg value="/c" />
-			<arg value="echo java -Xmx128m -jar JavaXYQ.jar" />
-			<arg value=">" />
-			<arg value="${build_dir}/run.bat" />
-		</exec>
 		<copy todir="${build_dir}">
 			<fileset dir="${res_dir}">
 				<include name="**" />
@@ -72,11 +64,22 @@
 				<exclude name="**/*.log" />
 				<exclude name="**/*.bat" />
 			</fileset>
-			<fileset dir="${project}">
-				<include name="lib/jl1.0.jar" />
-				<include name="lib/groovy-all-1.6.5.jar" />
+			<fileset dir="${res_dir}">
+				<include name="javaxyq.bat" />
 			</fileset>
 		</copy>
+		<copy todir="${build_dir}/lib">
+			<fileset dir="${project}/lib">
+				<include name="javaxyq-common.jar" />
+				<include name="jl1.0.jar" />
+				<include name="groovy-all-1.6.5.jar" />
+				<include name="commons-dbutils-1.3.jar" />
+				<include name="commons-jexl-2.0.1.jar" />
+				<include name="commons-logging-1.1.1.jar" />
+				<include name="commons-beanutils-core-1.8.2.jar" />
+				<include name="derby.jar" />
+			</fileset>
+		</copy>		
 		<antcall target="jar"></antcall> 
 	</target>
 
