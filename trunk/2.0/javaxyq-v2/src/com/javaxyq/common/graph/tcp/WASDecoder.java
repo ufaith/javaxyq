@@ -432,11 +432,8 @@ public class WASDecoder {
 		} else {
 			byte[] buf2 = new byte[in.available() + buf.length];
 			System.arraycopy(buf, 0, buf2, 0, buf.length);
-			int a = 0, count = buf.length;
-			while (in.available() > 0) {
-				a = in.read(buf2, count, in.available());
-				count += a;
-			}
+			int count = buf.length;
+			in.read(buf2, count, in.available());
 			// construct a new seekable stream
 			randomIn = new RandomAcessInputStream(buf2);
 		}
