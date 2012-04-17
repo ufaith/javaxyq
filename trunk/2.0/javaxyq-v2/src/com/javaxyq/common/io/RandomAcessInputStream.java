@@ -35,7 +35,7 @@ public class RandomAcessInputStream extends ByteArrayInputStream {
 		System.gc();
 	}
 
-	public int readInt() throws IOException {
+	public int readInt() {
 		int ch1 = read();
 		int ch2 = read();
 		int ch3 = read();
@@ -43,7 +43,7 @@ public class RandomAcessInputStream extends ByteArrayInputStream {
 		return (ch1 + (ch2 << 8) + (ch3 << 16) + (ch4 << 24));
 	}
 
-	public short readUnsignedShort() throws IOException {
+	public short readUnsignedShort() {
 		int ch1 = read();
 		int ch2 = read();
 		return (short) ((ch2 << 8) + ch1);
