@@ -1,50 +1,51 @@
 package com.javaxyq.android.common.graph.tcp;
 
 public class WASFrame {
-	
-	public WASFrame(int x, int y, int width, int height, int delay,int frameOffset,int []lineOffset) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.delay = delay;
-        this.frameOffset = frameOffset;
-        this.lineOffsets = lineOffset;
-    }
-	
+
+	public WASFrame(int x, int y, int width, int height, int delay,
+			int frameOffset, int[] lineOffset) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.delay = delay;
+		this.frameOffset = frameOffset;
+		this.lineOffsets = lineOffset;
+	}
+
 	public WASFrame() {
-        // TODO Auto-generated constructor stub
-    }
-	
-	/** Êı¾İÖ¡Æ«ÒÆ */
+		// TODO Auto-generated constructor stub
+	}
+
+	/** æ•°æ®å¸§åç§» */
 	private int frameOffset;
-	
-	/** ĞĞÊı¾İÆ«ÒÆ */
+
+	/** è¡Œæ•°æ®åç§» */
 	private int[] lineOffsets;
-	
-	/** ÑÓÊ±Ö¡Êı */
+
+	/** å»¶æ—¶å¸§æ•° */
 	private int delay = 1;
-	
-	/** ¸ß¶È */
+
+	/** é«˜åº¦ */
 	private int height;
-	
-	/** ¿í¶È */
+
+	/** å®½åº¦ */
 	private int width;
-	
-	/** Í¼ÏñÆ«ÒÆx */
+
+	/** å›¾åƒåç§»x */
 	private int x;
-	
-	/** Í¼ÏñÆ«ÒÆy */
+
+	/** å›¾åƒåç§»y */
 	private int y;
-	
+
 	/**
-	 * Í¼ÏñÔ­Ê¼Êı¾İ<br>
-	 * 0-15Î»RGBÑÕÉ«£¨565£©<br>
-	 * 16-20ÎªalphaÖµ<br>
+	 * å›¾åƒåŸå§‹æ•°æ®<br>
+	 * 0-15ä½RGBé¢œè‰²ï¼ˆ565ï¼‰<br>
+	 * 16-20ä¸ºalphaå€¼<br>
 	 * pixels[x+y*width]
 	 */
 	private int[] pixels;
-	
+
 	public int getFrameOffset() {
 		return frameOffset;
 	}

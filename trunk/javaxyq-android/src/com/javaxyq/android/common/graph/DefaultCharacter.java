@@ -2,19 +2,19 @@ package com.javaxyq.android.common.graph;
 
 import java.util.LinkedList;
 
-import com.javaxyq.android.common.graph.widget.Sprite;
-
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Point;
+
+import com.javaxyq.android.common.graph.widget.Sprite;
 
 public class DefaultCharacter implements Character {
 	
 	private String id;
 	
-	/** 精灵 *///TODO private
+	/** 绮剧伒 *///TODO private
 	public Sprite sprite;
 	
-	/** 角色动作  */
+	/** 瑙掕壊鍔ㄤ綔  */
 	private String action = CharacterActions.STAND;
 	
 	private LinkedList<Point> footmark;
@@ -23,10 +23,10 @@ public class DefaultCharacter implements Character {
 	
 	private int direction;
 	
-	private Activity activity;
+	private Context context;
 	
-	public DefaultCharacter(Activity activity,String id) {
-		this.activity = activity;
+	public DefaultCharacter(Context context,String id) {
+		this.context = context;
 		this.id = id;
 		footmark = new LinkedList<Point>();
 		track = new LinkedList<Point>();
@@ -53,7 +53,7 @@ public class DefaultCharacter implements Character {
 	synchronized public void refresh() {
 		String resId = id + "-" + action;
 		if(null == sprite || !sprite.getResId().equals(resId)) {
-			sprite = SpriteFactory.getSprite(activity, id, action);
+			sprite = SpriteFactory.getSprite(context, id, action);
 		}
 		if(null != null && sprite.getDirection() != direction) {
 			sprite.setDirection(direction);

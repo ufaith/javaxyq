@@ -1,14 +1,12 @@
 package com.javaxyq.android.common.graph.tcp;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,67 +14,67 @@ import android.graphics.Color;
 import com.javaxyq.android.common.io.RandomAcessInputStream;
 
 /**
- * was(tcp/tca)½âÂëÆ÷
+ * was(tcp/tca)è§£ç å™¨
  * @author chenyang
  *
  */
 public class WASDecoder {
 	
-	static final int TYPE_ALPHA = 0x00;// Ç°2Î»
+	static final int TYPE_ALPHA = 0x00;// å‰2ä½
 
-	static final int TYPE_ALPHA_PIXEL = 0x20;// Ç°3Î» 0010 0000
+	static final int TYPE_ALPHA_PIXEL = 0x20;// å‰3ä½ 0010 0000
 
-	static final int TYPE_ALPHA_REPEAT = 0x00;// Ç°3Î»
+	static final int TYPE_ALPHA_REPEAT = 0x00;// å‰3ä½
 
-	static final int TYPE_FLAG = 0xC0;// 2½øÖÆÇ°2Î» 1100 0000
+	static final int TYPE_FLAG = 0xC0;// 2è¿›åˆ¶å‰2ä½ 1100 0000
 
-	static final int TYPE_PIXELS = 0x40;// ÒÔÏÂÇ°2Î» 0100 0000
+	static final int TYPE_PIXELS = 0x40;// ä»¥ä¸‹å‰2ä½ 0100 0000
 
 	static final int TYPE_REPEAT = 0x80;// 1000 0000
 
 	static final int TYPE_SKIP = 0xC0; // 1100 0000
 	
-	/** WASÎÄ¼şÍ·±êÊ¶ */
+	/** WASæ–‡ä»¶å¤´æ ‡è¯† */
 	private static final String WAS_FILE_TAG = "SP";
 	
-	/** TCPÎÄ¼şÍ·´óĞ¡ */
+	/** TCPæ–‡ä»¶å¤´å¤§å° */
 	static final int TCP_HEADER_SIZE = 12;
 	
-	/** ½ÇÉ«ÎÄ¼ş¶ÁÈ¡Á÷ */
+	/** è§’è‰²æ–‡ä»¶è¯»å–æµ */
 	private RandomAcessInputStream randomIn;
 	
-	/** ÎÄ¼şÍ·´óĞ¡ */
+	/** æ–‡ä»¶å¤´å¤§å° */
 	private int headerSize;
 	
-	/** °üº¬µÄ¶¯»­¸öÊı */
+	/** åŒ…å«çš„åŠ¨ç”»ä¸ªæ•° */
 	private int animCount;
 	
-	/** ¶¯»­µÄÖ¡Êı */
+	/** åŠ¨ç”»çš„å¸§æ•° */
 	private int frameCount;
 	
-	/** ¾«Áé¿í¶È */
+	/** ç²¾çµå®½åº¦ */
 	private int width;
 	
-	/** ¾«Áé¸ß¶È */
+	/** ç²¾çµé«˜åº¦ */
 	private int height;
 	
 	private int[] schemeIndexs;
 	
-	/** Ğü¹Òµãx×ø±ê */
+	/** æ‚¬æŒ‚ç‚¹xåæ ‡ */
 	private int refPixelX;
 	
-	/** Ğü¹Òµãx×ø±ê */
+	/** æ‚¬æŒ‚ç‚¹xåæ ‡ */
 	private int refPixelY;
 	
-	/** Ô­Ê¼µ÷É«°å */
+	/** åŸå§‹è°ƒè‰²æ¿ */
 	private short[] originPalette;
 	
-	/** µ±Ç°µ÷É«°å */
+	/** å½“å‰è°ƒè‰²æ¿ */
 	private short[] palette;
 	
 	private Section[] sections;
 	
-	/** Ö¡¼¯ºÏ */
+	/** å¸§é›†åˆ */
 	private List<WASFrame> frames;
 	
 	public Section[] getSections() {
@@ -269,9 +267,9 @@ public class WASDecoder {
 		return pixels;
 	}
 	/**
-	 * ×¼±¸ÎÄ¼şĞ´ÈëÁ÷
-	 * @param in Ğ´ÈëÁ÷
-	 * @return ¿ÉÌøµ½ÖÆ¶¨Î»ÖÃµÄ×Ö½ÚÁ÷
+	 * å‡†å¤‡æ–‡ä»¶å†™å…¥æµ
+	 * @param in å†™å…¥æµ
+	 * @return å¯è·³åˆ°åˆ¶å®šä½ç½®çš„å­—èŠ‚æµ
 	 * @throws IOException
 	 */
 	private RandomAcessInputStream prepareInputStream(InputStream in) throws IOException {
@@ -284,7 +282,7 @@ public class WASDecoder {
 		String flag = new String(buf,0,2);
 		System.out.println("filehead:"+flag);
 		if(!WASDecoder.WAS_FILE_TAG.equals(flag)) {
-			throw new IllegalStateException("ÎÄ¼şÍ·±êÖ¾´íÎó£º" + print(buf));
+			throw new IllegalStateException("æ–‡ä»¶å¤´æ ‡å¿—é”™è¯¯ï¼š" + print(buf));
 		}
 		
 		if(in instanceof RandomAcessInputStream) {
@@ -314,7 +312,7 @@ public class WASDecoder {
 	public void load(InputStream in) throws IOException {
 		randomIn = prepareInputStream(in);
 		
-		// was ĞÅÏ¢
+		// was ä¿¡æ¯
 		headerSize = randomIn.readUnsignedShort();
 		animCount = randomIn.readUnsignedShort();
 		frameCount = randomIn.readUnsignedShort();
@@ -323,26 +321,26 @@ public class WASDecoder {
 		refPixelX = randomIn.readUnsignedShort();
 		refPixelY = randomIn.readUnsignedShort();
 		
-		//¶ÁÈ¡Ö¡ÑÓÊ±ĞÅÏ¢
+		//è¯»å–å¸§å»¶æ—¶ä¿¡æ¯
 		int len = headerSize - WASDecoder.TCP_HEADER_SIZE;
 		if(len < 0) {
-			throw new IllegalStateException("Ö¡ÑÓÊ±ĞÅÏ¢´íÎó£º" + len);
+			throw new IllegalStateException("å¸§å»¶æ—¶ä¿¡æ¯é”™è¯¯ï¼š" + len);
 		}
 		int[] delays = new int[len];
 		for( int i = 0 ; i < len ; i ++ ) {
 			delays[i] = randomIn.read();
 		}
 		
-		// ¶ÁÈ¡µ÷É«°å
+		// è¯»å–è°ƒè‰²æ¿
 		randomIn.seek(headerSize + 4);
 		for ( int i = 0 ; i < 256 ; i ++ ) {
 			originPalette[i] = randomIn.readUnsignedShort();
 		}
 		
-		//¸´ÖÆµ÷É«°å
+		//å¤åˆ¶è°ƒè‰²æ¿
 		System.arraycopy(originPalette, 0, palette, 0, 256);
 		
-		// Ö¡Æ«ÒÆÁĞ±í
+		// å¸§åç§»åˆ—è¡¨
 		int[] frameOffsets = new int[animCount * frameCount];
 		randomIn.seek(headerSize + 4 + 512);
 		for(int i = 0 ; i <animCount ; i ++) {
@@ -351,7 +349,7 @@ public class WASDecoder {
 			}
 		}
 		
-		// Ö¡ĞÅÏ¢
+		// å¸§ä¿¡æ¯
 		int frameX, frameY, frameWidth, frameHeight;
 		for(int i = 0 ; i < animCount ; i ++) {
 			for( int j = 0 ; j < frameCount ; j ++) {
@@ -364,13 +362,13 @@ public class WASDecoder {
 				frameY = randomIn.readInt();
 				frameWidth = randomIn.readInt();
 				frameHeight = randomIn.readInt();
-				// ĞĞÏñËØÊı¾İÆ«ÒÆ
+				// è¡Œåƒç´ æ•°æ®åç§»
 				int[] lineOffsets = new int[frameHeight];
 				for(int l = 0 ; l < frameHeight ; l ++) {
 					lineOffsets[l] = randomIn.readInt();
 				}
 				
-				// ´´½¨Ö¡¶ÔÏó
+				// åˆ›å»ºå¸§å¯¹è±¡
 				int delay = 1;
 				if( i < delays.length) {
 					delay = delays[i];
@@ -382,8 +380,8 @@ public class WASDecoder {
 		}
 	}
 	
-	public void loadColorationProfile(Activity activity,String fileName) throws IOException {
-		AssetManager assetManager = activity.getAssets();
+	public void loadColorationProfile(Context context,String fileName) throws IOException {
+		AssetManager assetManager = context.getAssets();
 		InputStream is = assetManager.open(fileName);
 		Scanner scanner = new Scanner(is);
 		scanner.useDelimiter("(\r\n)|(\n\r)|[\n\r=]");
@@ -391,7 +389,7 @@ public class WASDecoder {
 		String strLine = scanner.next();
 		String[] values = strLine.split(" ");
 		int sectionCount = Integer.parseInt(values[0]);
-		//section Çø¼ä
+		//section åŒºé—´
 		int[] sectionBounds = new int[sectionCount + 1];
 		for(int i = 0 ; i < sectionBounds.length; i ++) {
 			sectionBounds[i] = Integer.parseInt(values[i + 1]);
@@ -416,7 +414,7 @@ public class WASDecoder {
 	}
 	
 	/**
-	 * ĞŞ¸ÄÄ³¸öÇø¶ÎµÄ×ÅÉ«
+	 * ä¿®æ”¹æŸä¸ªåŒºæ®µçš„ç€è‰²
 	 * 
 	 * @param sectionIndex
 	 * @param schemeIndex
@@ -433,7 +431,7 @@ public class WASDecoder {
 	}
 	
 	/**
-	 * ÉèÖÃ×ÅÉ«·½°¸
+	 * è®¾ç½®ç€è‰²æ–¹æ¡ˆ
 	 */
 	public void coloration(int[] schemeIndexs) {
 		for (int i = 0; i < schemeIndexs.length; i++) {
@@ -452,7 +450,7 @@ public class WASDecoder {
 			e.printStackTrace();
 			return null;
 		}
-		if(this.frameCount == 1) {//ĞŞÕıµ¥Ö¡¶¯»­µÄÆ«ÒÆÎÊÌâ
+		if(this.frameCount == 1) {//ä¿®æ­£å•å¸§åŠ¨ç”»çš„åç§»é—®é¢˜
 			return createImage(refPixelX, refPixelY, frame.getWidth(), frame.getHeight(), frame.getPixels());
 		} else {
 			return createImage(frame.getX(), frame.getY(), frame.getWidth(), frame.getHeight(), frame.getPixels());

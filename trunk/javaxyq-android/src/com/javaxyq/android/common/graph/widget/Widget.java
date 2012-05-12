@@ -3,28 +3,29 @@ package com.javaxyq.android.common.graph.widget;
 import java.io.Serializable;
 
 /**
- * ÓÎÏ·ÖĞÊ¹ÓÃµÄUI¹¹½¨½Ó¿Ú
+ * æ¸¸æˆä¸­ä½¿ç”¨çš„UIæ„å»ºæ¥å£
+ * 
  * @author chenyang
- *
+ * 
  */
 public interface Widget extends Serializable {
-	
-	void draw(int x,int y);//TODO È±ÉÙÒ»¸ö²ÎÊı
-	
-	void draw(int x,int y, int width , int height);//TODO È±ÉÙÒ»¸ö²ÎÊı
-	
-	void draw();//TODO È±ÉÙÁ½¸ö²ÎÊı
-	
+
+	void draw(int x, int y);// TODO ç¼ºå°‘ä¸€ä¸ªå‚æ•°
+
+	void draw(int x, int y, int width, int height);// TODO ç¼ºå°‘ä¸€ä¸ªå‚æ•°
+
+	void draw();// TODO ç¼ºå°‘ä¸¤ä¸ªå‚æ•°
+
 	void fadeIn(long t);
 
-    void fadeOut(long t);
+	void fadeOut(long t);
 
-    void dispose();
+	void dispose();
 
-    int getWidth();
+	int getWidth();
 
-    int getHeight();
-    
-    boolean contains(int x, int y);
-	
+	int getHeight();
+
+	boolean contains(int x, int y);
+
 }
