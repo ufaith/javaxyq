@@ -3,91 +3,101 @@ package com.javaxyq.android.common.graph;
 import android.graphics.Point;
 
 /**
- * 角色
+ * 瑙掕壊
+ * 
  * @author chenyang
- *
+ * 
  */
 public interface Character {
-	
+
 	String getId();
-	
+
 	boolean isReady();
-	
+
 	void initialize();
-	
+
 	/**
-	 * 更新动画
+	 * 鏇存柊鍔ㄧ敾
+	 * 
 	 * @param elapsedTime
 	 */
 	void update(long elapsedTime);
-	
+
 	/**
-	 * 绘制到画布上（缺少参数）
+	 * 缁樺埗鍒扮敾甯冧笂锛堢己灏戝弬鏁帮級
 	 */
-	void draw(); 
-	// TODO 需要补参数
-	
+	void draw();
+
+	// TODO 闇�瑕佽ˉ鍙傛暟
+
 	/**
-	 * UI绘制坐标位置
+	 * UI缁樺埗鍧愭爣浣嶇疆
+	 * 
 	 * @return
 	 */
 	Point getLocation();
-	
+
 	/**
-	 * 将角色移动到指定坐标
+	 * 灏嗚鑹茬Щ鍔ㄥ埌鎸囧畾鍧愭爣
+	 * 
 	 * @param x
 	 * @param y
 	 */
-	void moveTo(int x,int y);
-	
+	void moveTo(int x, int y);
+
 	/**
-	 * 移动增量
+	 * 绉诲姩澧為噺
+	 * 
 	 * @param x
 	 * @param y
 	 */
-	void moveBy(int x,int y);
-	
+	void moveBy(int x, int y);
+
 	/**
-	 * 行走
+	 * 琛岃蛋
 	 */
 	void walk();
-	
+
 	/**
-	 * 奔跑
+	 * 濂旇窇
 	 */
 	void rush();
-	
+
 	/**
-	 * 站立
+	 * 绔欑珛
 	 */
 	void stand();
-	
+
 	/**
-	 * 转向
+	 * 杞悜
+	 * 
 	 * @param direction
 	 */
 	void turn(int direction);
-	
+
 	void turn();
-	
+
 	int getDirection();
-	
+
 	/**
-	 * 设置人物动作
+	 * 璁剧疆浜虹墿鍔ㄤ綔
+	 * 
 	 * @param key
 	 */
 	void action(String key);
-	
+
 	/**
-	 * 是否继续移动
+	 * 鏄惁缁х画绉诲姩
+	 * 
 	 * @return
 	 */
 	boolean isMoveOn();
-	
+
 	/**
-	 * 设置是否连续移动
+	 * 璁剧疆鏄惁杩炵画绉诲姩
+	 * 
 	 * @param moveon
 	 */
 	void setMoveon(boolean moveon);
-	
+
 }

@@ -4,55 +4,56 @@ import java.util.Vector;
 import android.graphics.Bitmap;
 
 public class Animation extends AbstractWidget {
-	
+
 	private Object UPDATE_LOCK = new Object();
 
 	private Vector<Frame> frames;
 
-	private int repeat = -1;// ²¥·Å´ÎÊı£¬-1±íÊ¾Ñ­»·
+	private int repeat = -1;// æ’­æ”¾æ¬¡æ•°ï¼Œ-1è¡¨ç¤ºå¾ªç¯
 
-	private int index;// µ±Ç°¶¯»­ĞòºÅ
+	private int index;// å½“å‰åŠ¨ç”»åºå·
 
-	private Frame currFrame;// µ±Ç°Ö¡
+	private Frame currFrame;// å½“å‰å¸§
 
-	private long animTime;// ¶¯»­ÒÑ²¥·ÅÊ±¼ä(1ÖÜÆÚÄÚ)
+	private long animTime;// åŠ¨ç”»å·²æ’­æ”¾æ—¶é—´(1å‘¨æœŸå†…)
 
-	private long totalDuration;// ×Ü¹²³ÖĞøÊ±¼ä
+	private long totalDuration;// æ€»å…±æŒç»­æ—¶é—´
 
 	private int frameCount;
-	
+
 	public Animation() {
 		frames = new Vector<Frame>();
 	}
-	
-	public synchronized void addFrame(Bitmap image, long duration, int centerX, int centerY) {
+
+	public synchronized void addFrame(Bitmap image, long duration, int centerX,
+			int centerY) {
 		totalDuration += duration;
 		Frame frame = new Frame(image, totalDuration, centerX, centerY);
 		frames.add(frame);
 		currFrame = frame;
 		frameCount = frames.size();
 	}
-	
+
 	/**
-	 * ´ÓÍ·¿ªÊ¼²¥·ÅÕâ¸ö¶¯»­
+	 * ä»å¤´å¼€å§‹æ’­æ”¾è¿™ä¸ªåŠ¨ç”»
 	 */
 	public synchronized void reset() {
 		animTime = 0;
 		index = 0;
 		currFrame = frames.size() > 0 ? frames.get(0) : null;
 	}
-	
+
 	public void setRepeat(int repeat) {
 		if (this.repeat != repeat) {
 			this.repeat = repeat;
 			this.reset();
 		}
 	}
-	
+
 	public Vector<Frame> getFrames() {
 		return frames;
 	}
-	
+
 	public void setIndex(int index) {
 		this.index = index;
 		this.currFrame = frames.get(index);

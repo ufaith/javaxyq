@@ -2,7 +2,7 @@ package com.javaxyq.android.common.graph;
 
 import java.io.InputStream;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 
@@ -11,24 +11,24 @@ import com.javaxyq.android.common.graph.widget.Animation;
 import com.javaxyq.android.common.graph.widget.Sprite;
 
 /**
- * ¾«Áé¹¤³§Àà<br>
+ * ç²¾çµå·¥å‚ç±»<br>
  * @author chenyang
  *
  */
 public class SpriteFactory {
 	
 	/**
-	 * ¶¯»­²¥·ÅÃ¿Ö¡µÄ¼ä¸ô(ms)
+	 * åŠ¨ç”»æ’­æ”¾æ¯å¸§çš„é—´éš”(ms)
 	 */
 	public static final int ANIMATION_INTERVAL = 100;
 	
-	public static Sprite getSprite(Activity activity, String id, String action) {
-		Sprite sprite = loadSprite(activity, "shape/char/"+id+"/"+action+".tcp", null);
+	public static Sprite getSprite(Context context, String id, String action) {
+		Sprite sprite = loadSprite(context, "shape/char/"+id+"/"+action+".tcp", null);
 		sprite.setResId(id+"-"+action);
 		return sprite;
 	}
 	
-	public static Sprite loadSprite(Activity activity,String filename,int[] colorations) {
+	public static Sprite loadSprite(Context context,String filename,int[] colorations) {
 		
 		if(null == filename || filename.trim().length() == 0) {
 			return null;
@@ -36,12 +36,12 @@ public class SpriteFactory {
 		
 		try{
 			WASDecoder decoder = new WASDecoder();
-			AssetManager assetManager = activity.getAssets();
+			AssetManager assetManager = context.getAssets();
 			InputStream in = assetManager.open(filename);
 			decoder.load(in);
 			if(null != colorations) {
 				String ppFile = filename.replaceFirst("(\\w)*.tcp", "00.pp");
-				decoder.loadColorationProfile(activity, ppFile);
+				decoder.loadColorationProfile(context, ppFile);
 				decoder.coloration(colorations);
 			}
 			Sprite s = createSprite(decoder);
@@ -50,7 +50,7 @@ public class SpriteFactory {
 			}
 			return s;
 		} catch(Exception e) {
-			System.err.println("¼ÓÔØ¾«ÁéÊ§°Ü:" + filename);
+			System.err.println("åŠ è½½ç²¾çµå¤±è´¥:" + filename);
 			e.printStackTrace();
 		}
 		
@@ -79,10 +79,10 @@ public class SpriteFactory {
 					j += delay;
 				} catch (Exception e) {
 					if (e instanceof IndexOutOfBoundsException) {
-						System.err.println("½âÎö¾«Áé³ö´í£ºframeCount´óÓÚÊµ¼ÊÖµ  " + frameCount + " > " + anim.getFrames().size());
+						System.err.println("è§£æç²¾çµå‡ºé”™ï¼šframeCountå¤§äºå®é™…å€¼  " + frameCount + " > " + anim.getFrames().size());
 						break;
 					}
-					System.err.println("½âÎö¾«Áé×ÊÔ´ÎÄ¼şÊ§°Ü£¡");
+					System.err.println("è§£æç²¾çµèµ„æºæ–‡ä»¶å¤±è´¥ï¼");
 					e.printStackTrace();
 					j++;
 				}

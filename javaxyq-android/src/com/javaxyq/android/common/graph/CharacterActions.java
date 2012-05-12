@@ -1,9 +1,10 @@
 package com.javaxyq.android.common.graph;
 
 /**
- * ½ÇÉ«¶¯×÷½Ó¿Ú
+ * è§’è‰²åŠ¨ä½œæ¥å£
+ * 
  * @author chenyang
- *
+ * 
  */
 public interface CharacterActions {
 
@@ -17,10 +18,10 @@ public interface CharacterActions {
 	String MAGIC = "magic";
 	String RUSHA = "rusha";
 	String RUSHB = "rushb";
-	String SAD = "±¯ÉË";
-	String MAD = "·¢Å­";
-	String INTIMACY = "Ç×½ü";
-	String DANCE = "Îèµ¸";
-	String REST = "ĞİÏ¢";
-	String GREETING = "ÕĞºô";
+	String SAD = "æ‚²ä¼¤";
+	String MAD = "å‘æ€’";
+	String INTIMACY = "äº²è¿‘";
+	String DANCE = "èˆè¹ˆ";
+	String REST = "ä¼‘æ¯";
+	String GREETING = "æ‹›å‘¼";
 }

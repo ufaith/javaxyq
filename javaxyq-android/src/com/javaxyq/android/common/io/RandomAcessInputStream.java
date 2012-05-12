@@ -3,31 +3,31 @@ package com.javaxyq.android.common.io;
 import java.io.ByteArrayInputStream;
 
 /**
- * 可跳到指定位置的ByteArrayInputStrem<br>
+ * 鍙烦鍒版寚瀹氫綅缃殑ByteArrayInputStrem<br>
  * seek(int pos)
  * 
  * @author chenyang
- *
+ * 
  */
 public class RandomAcessInputStream extends ByteArrayInputStream {
 
 	public RandomAcessInputStream(byte[] buf) {
 		super(buf);
 	}
-	
+
 	public void seek(int pos) {
-		if(pos < 0 || pos > this.count) {
+		if (pos < 0 || pos > this.count) {
 			throw new IndexOutOfBoundsException("" + pos + ":" + this.count);
 		}
 		this.pos = pos;
- 	}
-	
+	}
+
 	public short readUnsignedShort() {
 		int ch1 = read();
 		int ch2 = read();
 		return (short) ((ch2 << 8) + ch1);
 	}
-	
+
 	public int readInt() {
 		int ch1 = read();
 		int ch2 = read();
