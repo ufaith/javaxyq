@@ -2,6 +2,9 @@ package com.javaxyq.android.common.graph.widget;
 
 import java.io.Serializable;
 
+import android.graphics.Canvas;
+import android.graphics.Rect;
+
 /**
  * 游戏中使用的UI构建接口
  * 
@@ -10,11 +13,11 @@ import java.io.Serializable;
  */
 public interface Widget extends Serializable {
 
-	void draw(int x, int y);// TODO 缺少一个参数
+	void draw(Canvas canvas,int x, int y);
 
-	void draw(int x, int y, int width, int height);// TODO 缺少一个参数
+	void draw(Canvas canbas,int x, int y, int width, int height);
 
-	void draw();// TODO 缺少两个参数
+	void draw(Canvas canvas,Rect rect);
 
 	void fadeIn(long t);
 

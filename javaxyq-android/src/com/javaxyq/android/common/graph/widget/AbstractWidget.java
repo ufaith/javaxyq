@@ -1,5 +1,14 @@
 package com.javaxyq.android.common.graph.widget;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+
+/**
+ * Widget 的抽象类
+ * 
+ * @author 陈洋
+ */
 public abstract class AbstractWidget implements Widget {
 	
 	private float alpha = 1.0f;
@@ -25,22 +34,25 @@ public abstract class AbstractWidget implements Widget {
 	}
 
 	@Override
-	public void draw(int x, int y) {
-		// TODO Auto-generated method stub
+	public void draw(Canvas canvas,int x, int y) {
+		
+		this.draw(canvas, x, y, this.width, this.height);
 
 	}
 
 	@Override
-	public void draw(int x, int y, int width, int height) {
-		// TODO Auto-generated method stub
+	public void draw(Canvas canvas,int x, int y, int width, int height) {
+		doDraw(canvas, x, y, width, height);
 
 	}
 
 	@Override
-	public void draw() {
-		// TODO Auto-generated method stub
+	public void draw(Canvas canvas,Rect rect) {
+		this.draw(canvas, rect.left, rect.top, rect.width(), rect.height());
 
 	}
+	
+	protected abstract void doDraw(Canvas canvas, int x, int y, int width, int height);
 
 	@Override
 	public void fadeIn(long t) {
