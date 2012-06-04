@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+
 public class Sprite extends AbstractWidget {
 
 	public static final int DIR_DOWN = 0x4;
@@ -22,7 +26,7 @@ public class Sprite extends AbstractWidget {
 
 	public static final int DIR_UP_RIGHT = 0x3;
 
-	// TODO private
+	//TODO private
 	public Vector<Animation> animations;
 
 	/** 自动(循环)播放 */
@@ -36,7 +40,7 @@ public class Sprite extends AbstractWidget {
 	/** 精灵着色 */
 	private List<Integer> colorations;
 
-	// TODO private
+	//TODO private
 	public Animation currAnimation;
 
 	// 当前是第几个动画（哪个方向）
@@ -119,5 +123,29 @@ public class Sprite extends AbstractWidget {
 
 	public synchronized void resetFrames() {
 		this.currAnimation.setIndex(0);
+	}
+
+	@Override
+	protected void doDraw(Canvas canvas, int x, int y, int width, int height) {
+		x -= currAnimation.getRefPixelX();
+		y -= currAnimation.getRefPixelY();
+		canvas.drawBitmap(currAnimation.getImage(),new Rect(0, 0, width, height), new Rect(x, y, x + width, y + height), new Paint());
+	}
+	
+	public void update(long elapsedTime) {
+		currAnimation.update(elapsedTime);
+	}
+	
+	public Animation getCurrAnimation() {
+		if(currAnimation == null) {
+			setDirection(this.direction);
+		}
+		return currAnimation;
+	}
+	
+	public void reset() {
+		direction = 0;
+		currAnimation = animations.get(0);
+		resetFrames();
 	}
 }

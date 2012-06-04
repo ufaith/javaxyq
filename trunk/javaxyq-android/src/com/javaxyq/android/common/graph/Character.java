@@ -1,5 +1,6 @@
 package com.javaxyq.android.common.graph;
 
+import android.graphics.Canvas;
 import android.graphics.Point;
 
 /**
@@ -24,11 +25,9 @@ public interface Character {
 	void update(long elapsedTime);
 
 	/**
-	 * 绘制到画布上（缺少参数）
+	 * 绘制到画布上
 	 */
-	void draw();
-
-	// TODO 需要补参数
+	void draw(Canvas canvas);
 
 	/**
 	 * UI绘制坐标位置
